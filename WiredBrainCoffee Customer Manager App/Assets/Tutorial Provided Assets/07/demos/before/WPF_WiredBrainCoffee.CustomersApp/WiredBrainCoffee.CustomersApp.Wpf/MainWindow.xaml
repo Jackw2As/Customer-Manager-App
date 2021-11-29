@@ -1,0 +1,62 @@
+﻿<Window x:Class="WiredBrainCoffee.CustomersApp.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WiredBrainCoffee.CustomersApp.Wpf"
+        xmlns:controls="clr-namespace:WiredBrainCoffee.CustomersApp.Wpf.Controls"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" FontSize="20">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition/>
+      <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+
+    <!--Header-->
+    <StackPanel Grid.ColumnSpan="3" Background="#F05A28" Orientation="Horizontal">
+      <Image Source="Images/logo.png" Height="90" Margin="5"/>
+      <TextBlock Text="Coffee Customers" 
+                 FontSize="30"
+                 FontWeight="ExtraBold" 
+                 Foreground="White"
+                 VerticalAlignment="Bottom"
+                 Margin="20"/>
+      <TextBlock Text="Version 1.0" 
+                 Foreground="#333333"
+                 VerticalAlignment="Bottom"
+                 Margin="0 0 0 25"/>
+    </StackPanel>
+
+    <!-- Customer list -->
+    <Grid Grid.Row="1"
+          x:Name="customerListGrid"
+          Background="#EEEEEE">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition/>
+      </Grid.RowDefinitions>
+
+      <StackPanel Orientation="Horizontal">
+        <Button Content="Move" Margin="10" Click="ButtonMove_Click"/>
+        <Button Content="Add" Margin="10" Click="ButtonAddCustomer_Click"/>
+        <Button Content="Delete" Margin="10" Click="ButtonDeleteCustomer_Click"/>
+      </StackPanel>
+
+      <ListView Grid.Row="1" Background="Transparent" BorderBrush="Transparent"
+                x:Name="customerListView"
+                DisplayMemberPath="FirstName"
+                SelectionChanged="CustomerListView_SelectionChanged"/>
+    </Grid>
+
+    <!-- Customer detail -->
+    <controls:CustomerDetailControl Grid.Row="1" Grid.Column="1"
+                                    x:Name="customerDetailControl"/>
+
+  </Grid>
+</Window>
