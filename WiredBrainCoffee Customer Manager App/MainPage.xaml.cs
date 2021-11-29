@@ -33,5 +33,11 @@ namespace WiredBrainCoffee_Customer_Manager_App
             var messageDialog = new MessageDialog("Customer Added!");
             await messageDialog.ShowAsync();
         }
+
+        private async void ButtonRemoveCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            var messageDialog = new MessageDialog("Customer Removed!");
+            await messageDialog.ShowAsync();
+        }
     }
 }

@@ -9,13 +9,26 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Button VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50" Click="ButtonAddCustomer_Click">
-            <Button.Content>
-                <StackPanel Margin="5" Orientation="Horizontal">
-                    <SymbolIcon Symbol="AddFriend"/>
-                    <TextBlock Text="Add Customer" Margin="5 0 0 0"/>
-                </StackPanel>
-            </Button.Content>
-        </Button>
+
+        <StackPanel  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="75,100,0,0">
+            <Button Margin="50" Click="ButtonAddCustomer_Click" Width="169">
+                <Button.Content>
+                    <StackPanel Margin="5" Orientation="Horizontal">
+                        <SymbolIcon Symbol="AddFriend" RenderTransformOrigin="0.25,-0.05"/>
+                        <TextBlock Text="Add Customer" Margin="5 0 0 0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button Margin="50" Click="ButtonRemoveCustomer_Click">
+                <Button.Content>
+                    <StackPanel Margin="5" Orientation="Horizontal">
+                        <SymbolIcon Symbol="Remove" RenderTransformOrigin="0.25,-0.05"/>
+                        <TextBlock Text="Remove Customer" Margin="5 0 0 0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+        </StackPanel>
+
     </Grid>
 </Page>
