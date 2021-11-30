@@ -9,26 +9,50 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
-        <StackPanel  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="75,100,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <!--#Header-->
+        <StackPanel Background="#F05A28" Orientation="Horizontal">
+            <Image Source="Images/Logo.png" />
+            <TextBlock Text="Coffee Customers"
+                               FontSize="30"
+                       FontWeight="ExtraBold"
+                       Foreground="White"/>
+            <TextBlock  Text="Version 0.1" Foreground="#333333"/>
+        </StackPanel>
+        
+        
+        <!--#Customer List -->
+        <StackPanel Background="#EEEEEE">
             <Button Margin="50" Click="ButtonAddCustomer_Click" Width="169">
-                <Button.Content>
-                    <StackPanel Margin="5" Orientation="Horizontal">
-                        <SymbolIcon Symbol="AddFriend" RenderTransformOrigin="0.25,-0.05"/>
-                        <TextBlock Text="Add Customer" Margin="5 0 0 0"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-            <Button Margin="50" Click="ButtonRemoveCustomer_Click">
-                <Button.Content>
-                    <StackPanel Margin="5" Orientation="Horizontal">
-                        <SymbolIcon Symbol="Remove" RenderTransformOrigin="0.25,-0.05"/>
-                        <TextBlock Text="Remove Customer" Margin="5 0 0 0"/>
-                    </StackPanel>
-                </Button.Content>
+                <StackPanel Margin="5" Orientation="Horizontal">
+                    <SymbolIcon Symbol="AddFriend" RenderTransformOrigin="0.25,-0.05"/>
+                    <TextBlock Text="Add Customer" Margin="5 0 0 0"/>
+                </StackPanel>
             </Button>
 
+            <ListView>
+                <ListViewItem>Thomas</ListViewItem>
+                <ListViewItem>Julia</ListViewItem>
+                <ListViewItem>Anna</ListViewItem>
+            </ListView>
+            
+        </StackPanel>
+        
+        <!--#Customer detail -->
+        <StackPanel>
+            <TextBlock Text="Firstname" Margin="10"/>
+            <TextBlock Text="Lastname" Margin="10"/>
+            <CheckBox Content="Is developer" Margin="10" />
         </StackPanel>
 
+     
     </Grid>
 </Page>
