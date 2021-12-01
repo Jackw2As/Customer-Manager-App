@@ -39,7 +39,6 @@ namespace WiredBrainCoffee_Customer_Manager_App
             var messageDialog = new MessageDialog("Customer Removed!");
             await messageDialog.ShowAsync();
         }
-A
         private void ButtonMove_Click(object sender, RoutedEventArgs e)
         {
             int column = Grid.GetColumn(customerListGrid);
