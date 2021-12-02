@@ -35,10 +35,7 @@ namespace WiredBrainCoffee_Customer_Manager_App
             customerData = new CustomerDataJsonLoader();
         }
 
-        
-
-        //event fired when this object is loaded.
-        private async void MainPage_Loaded(object sender, RoutedEventArgs e)
+        private async void LoadCustomerData()
         {
             CustomerList.Items.Clear();
 
@@ -54,6 +51,14 @@ namespace WiredBrainCoffee_Customer_Manager_App
             await customerData.SaveCustomerAsync(CustomerList.Items.OfType<Customer>());
         }
 
+        //event fired when this object is loaded.
+        private async void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadCustomerData();
+        }
+
+        
+
         //Saves Customer List when App becomes suspended.
         private void App_Suspending(object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
@@ -62,16 +67,22 @@ namespace WiredBrainCoffee_Customer_Manager_App
             deferral.Complete();
         }
 
-        private async void ButtonAddCustomer_Click(object sender, RoutedEventArgs e)
+        private void ButtonAddCustomer_Click(object sender, RoutedEventArgs e)
         {
-            var messageDialog = new MessageDialog("Customer Added!");
-            await messageDialog.ShowAsync();
+            var customer = new Customer("", "", false);
+            CustomerList.Items.Add(customer);
+            CustomerList.SelectedItem = customer;
         }
 
         private async void ButtonRemoveCustomer_Click(object sender, RoutedEventArgs e)
         {
-            var messageDialog = new MessageDialog("Customer Removed!");
-            await messageDialog.ShowAsync();
+            if(CustomerList.SelectedItem as Customer == null)
+            {
+                var messageDialog = new MessageDialog("No Customer Selected!");
+                await messageDialog.ShowAsync();
+                return;
+            }
+            CustomerList.Items.Remove(CustomerList.SelectedItem);
         }
         private void ButtonMove_Click(object sender, RoutedEventArgs e)
         {
@@ -81,5 +92,34 @@ namespace WiredBrainCoffee_Customer_Manager_App
             Grid.SetColumn(customerListGrid, newColumn);
             moveSymbolIcon.Symbol = newColumn == 0 ? Symbol.Forward : Symbol.Back;
         }
+
+        private void CustomerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var customer = CustomerList.SelectedItem as Customer;
+            cdFirstName.Text = customer?.FirstName ?? "";
+            cdLastName.Text = customer?.LastName ?? "";
+            cdisDeveloper.IsChecked = customer?.IsDeveloper ?? false;
+        }
+
+        private async void  cd_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateCustomer();
+        }
+
+        private void cd_isDeveloperChanged(object sender, RoutedEventArgs e)
+        {
+            UpdateCustomer();
+        }
+        private void UpdateCustomer()
+        {
+            var customer = CustomerList.SelectedItem as Customer;
+            if (customer != null)
+            {
+                customer.FirstName = cdFirstName.Text;
+                customer.LastName = cdLastName.Text;
+                customer.IsDeveloper = cdisDeveloper.IsChecked.GetValueOrDefault();
+            }
+        }
+
     }
 }

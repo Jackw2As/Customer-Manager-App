@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WiredBrainCoffee_Customer_Manager_App.Model
 {
-    public class Customer
+    public class Customer : INotifyPropertyChanged
     {
+        private string firstName;
+        private string lastName;
+        private bool isDeveloper;
+
         public Customer(string firstName, string lastName, bool isDeveloper = false)
         {
             FirstName = firstName;
@@ -15,12 +21,43 @@ namespace WiredBrainCoffee_Customer_Manager_App.Model
             IsDeveloper = isDeveloper;
         }
 
-        public string FirstName { get; set; }
+        public string FirstName
+        {
+            get => firstName; 
+            set
+            {
+                firstName = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public string LastName { get; set; }
+        public string LastName
+        {
+            get => lastName; 
+            set
+            {
+                lastName = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public bool IsDeveloper { get; set; }
+        public bool IsDeveloper
+        {
+            get => isDeveloper; 
+            set
+            {
+                isDeveloper = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string DisplayName { get => FirstName + " " + LastName; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
