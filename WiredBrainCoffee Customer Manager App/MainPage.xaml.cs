@@ -25,39 +25,49 @@ namespace WiredBrainCoffee_Customer_Manager_App
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private ICustomerDataLoaderService customerData;
+        private ICustomerDataLoaderService CustomerData;
 
         public MainPage()
         {
             this.InitializeComponent();
             this.Loaded += MainPage_Loaded;
             App.Current.Suspending += App_Suspending;
-            customerData = new CustomerDataJsonLoader();
+            CustomerData = new CustomerDataJsonLoader();
         }
 
         private async void LoadCustomerData()
         {
-            CustomerList.Items.Clear();
-
-            var customers = await customerData.LoadCustomersAsync() as List<Customer>;
-            foreach (var customer in customers)
-            {
-                CustomerList.Items.Add(customer);
-            }
+            var customers = await CustomerData.LoadCustomersAsync() as List<Customer>;
+            customerNameList.SetDisplayedCustomerData(customers);
         }
 
         private async void SaveCustomerData()
         {
-            await customerData.SaveCustomerAsync(CustomerList.Items.OfType<Customer>());
+            var customerData = customerNameList.GetDisplayedCustomerData();
+            await CustomerData.SaveCustomerAsync(customerData);
         }
 
         //event fired when this object is loaded.
-        private async void MainPage_Loaded(object sender, RoutedEventArgs e)
+        private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             LoadCustomerData();
+
+            customerNameList.MoveLocation += CustomerNameList_MoveLocation;
+            customerNameList.CustomerDetailsChanged += CustomerNameList_CustomerDetailsChanged;
         }
 
-        
+        private void CustomerNameList_CustomerDetailsChanged(Customer customerDetails)
+        {
+            CustomerDetailControl.Customer = customerDetails;
+        }
+
+        private void CustomerNameList_MoveLocation(object sender, RoutedEventArgs e, SymbolIcon symbolIcon)
+        {
+            int column = Grid.GetColumn(customerNameList);
+            int newColumn = column == 0 ? 2 : 0;
+            symbolIcon.Symbol = newColumn == 0 ? Symbol.Forward : Symbol.Back;
+            Grid.SetColumn(customerNameList, newColumn);
+        }
 
         //Saves Customer List when App becomes suspended.
         private void App_Suspending(object sender, Windows.ApplicationModel.SuspendingEventArgs e)
@@ -65,38 +75,6 @@ namespace WiredBrainCoffee_Customer_Manager_App
             var deferral = e.SuspendingOperation.GetDeferral();
             SaveCustomerData();
             deferral.Complete();
-        }
-
-        private void ButtonAddCustomer_Click(object sender, RoutedEventArgs e)
-        {
-            var customer = new Customer("", "", false);
-            CustomerList.Items.Add(customer);
-            CustomerList.SelectedItem = customer;
-        }
-
-        private async void ButtonRemoveCustomer_Click(object sender, RoutedEventArgs e)
-        {
-            if(CustomerList.SelectedItem as Customer == null)
-            {
-                var messageDialog = new MessageDialog("No Customer Selected!");
-                await messageDialog.ShowAsync();
-                return;
-            }
-            CustomerList.Items.Remove(CustomerList.SelectedItem);
-        }
-        private void ButtonMove_Click(object sender, RoutedEventArgs e)
-        {
-            int column = Grid.GetColumn(customerListGrid);
-            int newColumn = column == 0 ? 2 : 0;
-            
-            Grid.SetColumn(customerListGrid, newColumn);
-            moveSymbolIcon.Symbol = newColumn == 0 ? Symbol.Forward : Symbol.Back;
-        }
-        
-        private void CustomerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var customer = CustomerList.SelectedItem as Customer;
-            CustomerDetailControl.Customer = customer;
         }
     }
 }

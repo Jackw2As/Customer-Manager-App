@@ -122,6 +122,12 @@
     <Compile Include="Controls\CustomerDetailControl.xaml.cs">
       <DependentUpon>CustomerDetailControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CustomerNameListControl.xaml.cs">
+      <DependentUpon>CustomerNameListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Header.xaml.cs">
+      <DependentUpon>Header.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -196,6 +202,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Controls\CustomerDetailControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CustomerNameListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Header.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

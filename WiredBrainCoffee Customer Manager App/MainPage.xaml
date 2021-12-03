@@ -21,50 +21,15 @@
         </Grid.ColumnDefinitions>
         
         <!--#Header-->
-        <StackPanel Grid.ColumnSpan="3" Background="#F05A28" Orientation="Horizontal">
-            <Image Source="Images/Logo.png" Height="90" Margin="5"/>
-            <TextBlock Text="Coffee Customers"
-                               FontSize="30"
-                               FontWeight="ExtraBold"
-                               Foreground="White"
-                               HorizontalTextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,5,0"/> 
-            <TextBlock  Text="Version 0.1" Foreground="#333333" VerticalAlignment="Center" Margin="20,0,20,0" FlowDirection="LeftToRight"/>
-        </StackPanel>
-        
-        
+        <controls:Header Grid.ColumnSpan="3"/>
+
+
         <!--#Customer List -->
-        <Grid x:Name="customerListGrid" Background="#EEEEEE" Grid.Row="1" HorizontalAlignment="Stretch">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-
-            <StackPanel Orientation="Horizontal">
-                <Button Margin="10" Click="ButtonMove_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <SymbolIcon x:Name="moveSymbolIcon" Symbol="Forward" />
-                </Button>
-                <Button Margin="10" Click="ButtonAddCustomer_Click"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <StackPanel Margin="5" Orientation="Horizontal">
-                        <SymbolIcon Symbol="AddFriend" />
-                        <TextBlock Text="Add Customer" Margin="5 0 0 0"/>
-                    </StackPanel>
-                </Button>
-                <Button Margin="10" Click="ButtonRemoveCustomer_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <StackPanel Margin="5" Orientation="Horizontal">
-                        <SymbolIcon Symbol="Delete" />
-                        <TextBlock Text="Remove Customer" Margin="5 0 0 0"/>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
-
-
-            <ListView Grid.Row="1" x:Name="CustomerList" 
-                      DisplayMemberPath="DisplayName" 
-                      SelectionChanged="CustomerList_SelectionChanged"/>
-        </Grid>
+        <controls:CustomerNameListControl   Grid.Row="1" 
+                                                                   x:Name="customerNameList" />
         <!--#Customer detail -->
         <controls:CustomerDetailControl Grid.Row="1" Grid.Column="1"
-                                        x:Name="CustomerDetailControl"/>
+                                                            x:Name="CustomerDetailControl"/>
 
 
     </Grid>
