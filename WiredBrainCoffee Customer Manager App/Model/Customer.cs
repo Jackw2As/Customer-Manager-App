@@ -28,6 +28,7 @@ namespace WiredBrainCoffee_Customer_Manager_App.Model
             {
                 firstName = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayName));
             }
         }
 
@@ -38,6 +39,7 @@ namespace WiredBrainCoffee_Customer_Manager_App.Model
             {
                 lastName = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayName));
             }
         }
 

@@ -4,7 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:WiredBrainCoffee_Customer_Manager_App"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:controls="using:WiredBrainCoffee_Customer_Manager_App.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -62,12 +63,9 @@
                       SelectionChanged="CustomerList_SelectionChanged"/>
         </Grid>
         <!--#Customer detail -->
-            <StackPanel Grid.Row="1" Grid.Column="1">
-            <TextBox Header="Firstname" Margin="10" x:Name="cdFirstName" TextChanged="cd_TextChanged"/>
-            <TextBox Header="Lastname" Margin="10" x:Name="cdLastName" TextChanged="cd_TextChanged"/>
-            <CheckBox Content="Is developer" Margin="10" x:Name="cdisDeveloper" Checked="cd_isDeveloperChanged" Unchecked="cd_isDeveloperChanged" />
-            </StackPanel>
-        
+        <controls:CustomerDetailControl Grid.Row="1" Grid.Column="1"
+                                        x:Name="CustomerDetailControl"/>
+
 
     </Grid>
 </Page>

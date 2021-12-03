@@ -92,34 +92,11 @@ namespace WiredBrainCoffee_Customer_Manager_App
             Grid.SetColumn(customerListGrid, newColumn);
             moveSymbolIcon.Symbol = newColumn == 0 ? Symbol.Forward : Symbol.Back;
         }
-
+        
         private void CustomerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var customer = CustomerList.SelectedItem as Customer;
-            cdFirstName.Text = customer?.FirstName ?? "";
-            cdLastName.Text = customer?.LastName ?? "";
-            cdisDeveloper.IsChecked = customer?.IsDeveloper ?? false;
+            CustomerDetailControl.Customer = customer;
         }
-
-        private async void  cd_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            UpdateCustomer();
-        }
-
-        private void cd_isDeveloperChanged(object sender, RoutedEventArgs e)
-        {
-            UpdateCustomer();
-        }
-        private void UpdateCustomer()
-        {
-            var customer = CustomerList.SelectedItem as Customer;
-            if (customer != null)
-            {
-                customer.FirstName = cdFirstName.Text;
-                customer.LastName = cdLastName.Text;
-                customer.IsDeveloper = cdisDeveloper.IsChecked.GetValueOrDefault();
-            }
-        }
-
     }
 }
