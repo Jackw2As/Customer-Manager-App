@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.Backend.Model
 {
-    public class Customer : INotifyPropertyChanged
+    public class Customer
     {
         private string firstName;
         private string lastName;
@@ -27,8 +27,6 @@ namespace CustomerManagerApp.Backend.Model
             set
             {
                 firstName = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(DisplayName));
             }
         }
 
@@ -38,8 +36,6 @@ namespace CustomerManagerApp.Backend.Model
             set
             {
                 lastName = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(DisplayName));
             }
         }
 
@@ -49,17 +45,10 @@ namespace CustomerManagerApp.Backend.Model
             set
             {
                 isDeveloper = value;
-                OnPropertyChanged();
             }
         }
 
         public string DisplayName { get => FirstName + " " + LastName; }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
