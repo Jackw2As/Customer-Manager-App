@@ -12,5 +12,7 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
         Task<IEnumerable<Customer>> LoadCustomersAsync();
 
         Task SaveCustomerAsync(IEnumerable<Customer> customers);
+
+        void DeleteStorageFile();
     }
 }

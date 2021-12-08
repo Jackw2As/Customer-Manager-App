@@ -12,7 +12,7 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
     //Using NewtonSoft Json seraliser to read and write to a Json File for storing Customer List.
     //Json is used because this is a Demo Project in a real project i'd use a database probably stored on an Azure or AWS service with the data accessed through some kind of secure service.
 
-    class CustomerDataJsonLoader : ICustomerDataLoaderService
+    public class CustomerDataJsonLoader : ICustomerDataLoaderService
     {
         //Hard Coded File Name for storage because load/saving from sperate customer lists isn't supported.
         private static readonly string CustomersFileName = "customers.json";
@@ -24,7 +24,7 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
                     new Customer("John", "Aalders", true),
                     new Customer("Sarah", "Spear", false)
                 };
-        public CustomerDataJsonLoader(string DirectoryName = "Json", IEnumerable<Customer>? DefaultCustomerList)
+        public CustomerDataJsonLoader(string DirectoryName = "Json", IEnumerable<Customer>? DefaultCustomerList = null)
         {
             jsonStorageDirectory = ConstructJsonStorageDirectory();
             directoryName = DirectoryName;
@@ -33,7 +33,6 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
                 defaultCustomerList = DefaultCustomerList;
             }
         }
-
         private DirectoryInfo ConstructJsonStorageDirectory()
         {
             DirectoryInfo applicationRootDirectory = new(Directory.GetCurrentDirectory());
@@ -86,6 +85,15 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
             using (var file = File.Create(jsonStorageDirectory.FullName + "/" + CustomersFileName))
             {
                 await JsonSerializer.SerializeAsync(file, customers);
+            }
+        }
+
+        public void DeleteStorageFile()
+        {
+            var files = jsonStorageDirectory.GetFiles(CustomersFileName);
+            foreach (FileInfo file in files)
+            { 
+                File.Delete(file.FullName); 
             }
         }
     }
