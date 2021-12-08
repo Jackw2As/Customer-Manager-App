@@ -13,12 +13,10 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using WiredBrainCoffee_Customer_Manager_App.Model;
-using WiredBrainCoffee_Customer_Manager_App.Services.CustomerDataLoader;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace WiredBrainCoffee_Customer_Manager_App
+namespace CustomerManagerApp.UWP
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.

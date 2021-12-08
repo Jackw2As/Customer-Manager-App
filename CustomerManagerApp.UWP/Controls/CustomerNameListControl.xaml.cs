@@ -13,12 +13,10 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using WiredBrainCoffee_Customer_Manager_App.Model;
-using WiredBrainCoffee_Customer_Manager_App.Services.CustomerDataLoader;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace WiredBrainCoffee_Customer_Manager_App.Controls
+namespace CustomerManagerApp.UWP.Controls
 {
     public delegate void MoveLocationHandler(object sender, RoutedEventArgs e, SymbolIcon symbolIcon);
     public delegate void ChangeCustomerDetailsViewedHandler(Customer customerDetails);

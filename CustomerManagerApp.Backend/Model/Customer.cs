@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WiredBrainCoffee_Customer_Manager_App.Model
+namespace CustomerManagerApp.Backend.Model
 {
     public class Customer : INotifyPropertyChanged
     {
@@ -23,7 +23,7 @@ namespace WiredBrainCoffee_Customer_Manager_App.Model
 
         public string FirstName
         {
-            get => firstName; 
+            get => firstName;
             set
             {
                 firstName = value;
@@ -34,7 +34,7 @@ namespace WiredBrainCoffee_Customer_Manager_App.Model
 
         public string LastName
         {
-            get => lastName; 
+            get => lastName;
             set
             {
                 lastName = value;
@@ -45,7 +45,7 @@ namespace WiredBrainCoffee_Customer_Manager_App.Model
 
         public bool IsDeveloper
         {
-            get => isDeveloper; 
+            get => isDeveloper;
             set
             {
                 isDeveloper = value;
@@ -55,9 +55,9 @@ namespace WiredBrainCoffee_Customer_Manager_App.Model
 
         public string DisplayName { get => FirstName + " " + LastName; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
