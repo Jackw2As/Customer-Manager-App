@@ -17,10 +17,21 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
         //Hard Coded File Name for storage because load/saving from sperate customer lists isn't supported.
         private static readonly string CustomersFileName = "customers.json";
         private DirectoryInfo jsonStorageDirectory;
-
-        public CustomerDataJsonLoader()
+        private string directoryName;
+        private IEnumerable<Customer> defaultCustomerList = new List<Customer>
+                {
+                    new Customer("Jack", "Aalders", true),
+                    new Customer("John", "Aalders", true),
+                    new Customer("Sarah", "Spear", false)
+                };
+        public CustomerDataJsonLoader(string DirectoryName = "Json", IEnumerable<Customer>? DefaultCustomerList)
         {
             jsonStorageDirectory = ConstructJsonStorageDirectory();
+            directoryName = DirectoryName;
+            if(DefaultCustomerList != null)
+            {
+                defaultCustomerList = DefaultCustomerList;
+            }
         }
 
         private DirectoryInfo ConstructJsonStorageDirectory()
@@ -33,7 +44,7 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
                 return CreateStorageDirectories();
             }
 
-            DirectoryInfo? _jsonStorageDirectory = dataDirectory.GetDirectories("Json").FirstOrDefault();
+            DirectoryInfo? _jsonStorageDirectory = dataDirectory.GetDirectories(directoryName).FirstOrDefault();
             if (_jsonStorageDirectory == null)
             {
                 return CreateStorageDirectories();
@@ -47,7 +58,7 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
             var applicationFolderPath = Directory.GetCurrentDirectory();
             Directory.CreateDirectory(applicationFolderPath + "/Data");
             Directory.CreateDirectory(applicationFolderPath + "/Data/Images");
-            return Directory.CreateDirectory(applicationFolderPath + "/Data/Json");
+            return Directory.CreateDirectory(applicationFolderPath + "/Data/" + directoryName);
         }
 
         public async Task<IEnumerable<Customer>> LoadCustomersAsync()
@@ -57,12 +68,7 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
             if (file is null)
             {
                 //Generate some random test values
-                return new List<Customer>
-                {
-                    new Customer("Jack", "Aalders", true),
-                    new Customer("John", "Aalders", true),
-                    new Customer("Sarah", "Spear", false)
-                };
+                return defaultCustomerList;
             }
 
             List<Customer>? customers;
