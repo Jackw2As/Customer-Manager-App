@@ -13,12 +13,14 @@ namespace CustomerManagerApp.Backend.Model
         private string firstName;
         private string lastName;
         private bool isDeveloper;
+        public Guid id { get; set; }
 
-        public Customer(string firstName, string lastName, bool isDeveloper = false)
+        public Customer(string firstName, string lastName, bool isDeveloper = false, Guid guid = new())
         {
-            FirstName = firstName;
-            LastName = lastName;
+            this.firstName = firstName;
+            this.lastName = lastName;
             IsDeveloper = isDeveloper;
+            id = guid;
         }
 
         public string FirstName
@@ -50,5 +52,19 @@ namespace CustomerManagerApp.Backend.Model
 
         public string DisplayName { get => FirstName + " " + LastName; }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj != null && obj.GetType() == this.GetType())
+            {
+                Customer Othercustomer = (Customer)obj;
+                return this.id == Othercustomer.id;
+            }
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+          return base.GetHashCode();
+        }
     }
 }
