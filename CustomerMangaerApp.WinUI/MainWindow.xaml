@@ -19,17 +19,19 @@
         </Grid.ColumnDefinitions>
             
             <!-- Header -->
-        <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" Background="Orange">
-            <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="70" Margin="30" Source="Assets\Square150x150Logo.scale-200.png" />
+        <Border Grid.ColumnSpan="3" Background="#F05A28">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="90" Margin="10" Source="Assets\StoreLogo.png" />
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontWeight="ExtraBold" FontSize="40" Text="Customer Manager" />
-        </StackPanel>
+            </StackPanel>
+        </Border>
         
             <!-- List View -->
-        <StackPanel Grid.Row="1" Background="Beige">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="List View" FontWeight="Bold" />
+        <StackPanel Grid.Row="1" Background="Beige" HorizontalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center" Text="List View" FontWeight="Bold" FontSize="18" Margin="0 5 0 5" />
             
             <StackPanel>
-                <Button HorizontalAlignment="Stretch">Refresh</Button>
+                <Button HorizontalAlignment="Stretch" FontWeight="Bold" >Refresh</Button>
             </StackPanel>
             
             <ListView MinWidth="200" Margin="10">
@@ -41,21 +43,20 @@
             <!-- Editor View -->
         <StackPanel Grid.Row="1" Grid.Column="1" Background="ForestGreen">
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Editor View" FontWeight="Bold" />
-            
-            <RelativePanel>
-                <TextBlock Text="First Name" Margin="0 0 10 0" RelativePanel.LeftOf="FirstName"/>
-                <TextBox HorizontalAlignment="Center" x:Name="FirstName" />
 
-                <TextBlock Text="Last Name" Margin="0 0 10 0" RelativePanel.LeftOf="LastName"/>
-                <TextBox HorizontalAlignment="Center" x:Name="LastName"  RelativePanel.Below="FirstName"  />
+            <StackPanel Width="Auto"  HorizontalAlignment="Center" Margin="0 20 0 0">
+                <TextBox x:Name="FirstName" Header="First Name"/>
 
-                <TextBlock Text="Is Developer" Margin="0 0 10 0" RelativePanel.LeftOf="isDeveloper"/>
-                <CheckBox HorizontalAlignment="Center" x:Name="isDeveloper" RelativePanel.Below="LastName"  />
+                <TextBox x:Name="LastName" Header="Last Name" Margin="10"/>
 
-                <TextBlock Text="Faviourte Drink" Margin="0 0 10 0" RelativePanel.LeftOf="DrinkDropDown" />
-                <DropDownButton HorizontalAlignment="Center" x:Name="DrinkDropDown" RelativePanel.Below="isDeveloper"   />
-            </RelativePanel>
-            
+                <DatePicker x:Name="Date" Header="First Time" Margin="10"/>
+
+                <CheckBox x:Name="isDeveloper" Content="Is Developer" Margin="10"/>
+
+                <ComboBox x:Name="DrinkDropDown" Header="Faviourte Drink" Margin="10" HorizontalAlignment="Stretch"/>
+
+                <Button Content="Save" HorizontalAlignment="Stretch"/>
+            </StackPanel>
         </StackPanel>
         
     </Grid>

@@ -26,7 +26,7 @@ namespace CustomerManagerApp.Backend.Model
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool IsDeveloper { get; set; }
-        public DateTimeOffset EntryDate { get; set; }
+        public DateTimeOffset FirstTime { get; set; }
         public string JobRolesID { get; set; }
         public string DisplayName { get => FirstName + " " + LastName; }
         
