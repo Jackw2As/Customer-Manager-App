@@ -11,6 +11,9 @@
     <UseWinUI>true</UseWinUI>
     <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
     <DefaultLanguage>en-gb</DefaultLanguage>
+    <PackageCertificateThumbprint>2268A5D44EB311CBF9468A09F3D3807AD4FD0213</PackageCertificateThumbprint>
+    <PackageCertificateKeyFile>CustomerMangaerApp.WinUI_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
   </PropertyGroup>
 
   <ItemGroup>
