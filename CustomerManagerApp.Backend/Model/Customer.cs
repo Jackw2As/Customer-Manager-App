@@ -10,61 +10,35 @@ namespace CustomerManagerApp.Backend.Model
 {
     public class Customer
     {
-        private string firstName;
-        private string lastName;
-        private bool isDeveloper;
-        public Guid id { get; set; }
-
-        public Customer(string firstName, string lastName, bool isDeveloper = false, Guid guid = new())
+        public Customer(string firstName, string lastName, bool isDeveloper = false, string? id = null)
         {
-            this.firstName = firstName;
-            this.lastName = lastName;
+            FirstName = firstName;
+            LastName = lastName;
             IsDeveloper = isDeveloper;
-            id = guid;
-        }
-
-        public string FirstName
-        {
-            get => firstName;
-            set
+            if (id == null)
             {
-                firstName = value;
+                Id = Guid.NewGuid().ToString();
             }
-        }
+            else { Id = (id); }
 
-        public string LastName
-        {
-            get => lastName;
-            set
-            {
-                lastName = value;
-            }
         }
-
-        public bool IsDeveloper
-        {
-            get => isDeveloper;
-            set
-            {
-                isDeveloper = value;
-            }
-        }
-
+        //ID is a Guid. The Reason we return a string instead of GUID object
+        // is because the Json Seralizer doesn't work well with GUID objects.
+        public string Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public bool IsDeveloper { get; set; }
         public string DisplayName { get => FirstName + " " + LastName; }
+        
 
         public override bool Equals(object? obj)
         {
             if (obj != null && obj.GetType() == this.GetType())
             {
                 Customer Othercustomer = (Customer)obj;
-                return this.id == Othercustomer.id;
+                return Id == Othercustomer.Id;
             }
             return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-          return base.GetHashCode();
         }
     }
 }

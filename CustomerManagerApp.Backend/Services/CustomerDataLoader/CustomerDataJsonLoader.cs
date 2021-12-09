@@ -26,12 +26,13 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
                 };
         public CustomerDataJsonLoader(string DirectoryName = "Json", IEnumerable<Customer>? DefaultCustomerList = null)
         {
-            jsonStorageDirectory = ConstructJsonStorageDirectory();
+            
             directoryName = DirectoryName;
             if(DefaultCustomerList != null)
             {
                 defaultCustomerList = DefaultCustomerList;
             }
+            jsonStorageDirectory = ConstructJsonStorageDirectory();
         }
         private DirectoryInfo ConstructJsonStorageDirectory()
         {
@@ -62,22 +63,31 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
 
         public async Task<IEnumerable<Customer>> LoadCustomersAsync()
         {
-            FileInfo? file = jsonStorageDirectory.GetFiles(CustomersFileName).First();
+            FileInfo? file = null;
+            var files = jsonStorageDirectory.GetFiles(CustomersFileName).ToList();
+            if (files.Count > 0)
+            {
+                file = files?.First();
+            }
 
-            if (file is null)
+            if (file == null)
             {
                 //Generate some random test values
                 return defaultCustomerList;
             }
 
-            List<Customer>? customers;
+            List<Customer> customers = new();
 
             //List<Customer> customers = JsonConvert.DeserializeObject<List<Customer>>(File.ReadAllText());
             using (FileStream reader = file.OpenRead())
             {
-                customers = ( await JsonSerializer.DeserializeAsync(reader, typeof(List<Customer>)) as List<Customer>);
+                var DeserializationResults = await JsonSerializer.DeserializeAsync(reader, typeof(List<Customer>)) as List<Customer>;
+                if (DeserializationResults != null)
+                {
+                    customers.AddRange(DeserializationResults);
+                }
             }
-            return customers ?? new();
+            return customers;
         }
 
         public async Task SaveCustomerAsync(IEnumerable<Customer> customers)
