@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.ViewModel
 {
-    internal class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase
     {
         private CustomerViewModel selectedEmployee;
         private readonly IDrinkLoaderService drinkData;
