@@ -1,1 +1,0 @@
-No changes were made to the Coffee Customers application in this module.
