@@ -15,6 +15,11 @@
     <PackageCertificateKeyFile>CustomerMangaerApp.WinUI_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Controls\HeaderControl.xaml" />
+    <None Remove="Controls\ListView.xaml" />
+    <None Remove="Controls\UserEditView.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -41,6 +46,18 @@
     <ProjectReference Include="..\CustomerManagerApp.Backend\CustomerManagerApp.Backend.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\" />
+    <Page Update="Controls\ListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Controls\UserEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Controls\HeaderControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

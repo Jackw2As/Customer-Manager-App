@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CustomerMangaerApp.WinUI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:CustomerMangaerApp.WinUI.Controls"
     mc:Ignorable="d">
 
     <Grid>
@@ -19,45 +19,13 @@
         </Grid.ColumnDefinitions>
             
             <!-- Header -->
-        <Border Grid.ColumnSpan="3" Background="#F05A28">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Image VerticalAlignment="Center" HorizontalAlignment="Center" Height="90" Margin="10" Source="Assets\StoreLogo.png" />
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontWeight="ExtraBold" FontSize="40" Text="Customer Manager" />
-            </StackPanel>
-        </Border>
+        <controls:HeaderControl Grid.ColumnSpan="3"/>
         
             <!-- List View -->
-        <StackPanel Grid.Row="1" Background="Beige" HorizontalAlignment="Center">
-            <TextBlock HorizontalAlignment="Center" Text="List View" FontWeight="Bold" FontSize="18" Margin="0 5 0 5" />
-            
-            <StackPanel>
-                <Button HorizontalAlignment="Stretch" FontWeight="Bold" >Refresh</Button>
-            </StackPanel>
-            
-            <ListView MinWidth="200" Margin="10">
-                <ListViewItem>Sarah Jane</ListViewItem>
-                <ListViewItem>Jack Aalders</ListViewItem>
-                <ListViewItem>Steve From Accounting</ListViewItem>
-            </ListView>
-        </StackPanel>
-            <!-- Editor View -->
-        <StackPanel Grid.Row="1" Grid.Column="1" Background="ForestGreen">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Editor View" FontWeight="Bold" />
-
-            <StackPanel Width="Auto"  HorizontalAlignment="Center" Margin="0 20 0 0">
-                <TextBox x:Name="FirstName" Header="First Name" Margin="10"/>
-
-                <TextBox x:Name="LastName" Header="Last Name" Margin="10"/>
-
-                <DatePicker x:Name="Date" Header="First Time" Margin="10" HorizontalAlignment="Stretch"/>
-
-                <CheckBox x:Name="isDeveloper" Content="Is Developer" Margin="10"/>
-
-                <ComboBox x:Name="DrinkDropDown" Header="Faviourte Drink" Margin="10" HorizontalAlignment="Stretch"/>
-
-                <Button Content="Save" HorizontalAlignment="Stretch"/>
-            </StackPanel>
-        </StackPanel>
+        <controls:ListView Grid.Row="1"/>
         
+            <!-- Editor View -->
+        <controls:UserEditView Grid.Row="1" Grid.Column="1"/>
+
     </Grid>
 </Window>
