@@ -3,18 +3,35 @@ using Xunit;
 using CustomerManagerApp.Backend.Services;
 using CustomerManagerApp.Backend.Model;
 using System.Collections.Generic;
+using CustomerManagerApp.Backend.Services.DrinkRoleLoader;
 
 namespace CustomerManagerApp.Test
 {
     public class CustomerDataLoaderTests
     {
-        List<Customer> MockDefaultCustomersList = new List<Customer>
+        public CustomerDataLoaderTests()
+        {
+            var List = new MockDrinkTypesLoader().LoadDrinkTypes() as List<Drink>;
+            if (List != null) drinksTypes = List;
+            else drinksTypes = new();
+
+            mockDefaultCustomersList = new List<Customer>
             {
-                new("John", "1"),
-                new("John", "2"),
-                new("Susan", "1", true),
-                new("Susan", "2")
+                new("John", "1", drinksTypes[0].Id),
+                new("John", "2", drinksTypes[0].Id),
+                new("Susan", "1", drinksTypes[0].Id, true),
+                new("Susan", "2", drinksTypes[0].Id)
             };
+
+            
+        }
+
+        private List<Drink> drinksTypes
+        {
+            get; init;
+        }
+
+        private List<Customer> mockDefaultCustomersList;
 
 
         private ICustomerDataLoaderService CreateMock()
@@ -23,7 +40,7 @@ namespace CustomerManagerApp.Test
             var Loader = new CustomerDataJsonLoader("Tests");
             Loader.DeleteStorageFile();
             //create new test file
-            return new CustomerDataJsonLoader("Tests", MockDefaultCustomersList);
+            return new CustomerDataJsonLoader("Tests", mockDefaultCustomersList);
 
             
         }
@@ -68,7 +85,7 @@ namespace CustomerManagerApp.Test
             List<Customer> collection2 = new();
             collection2.AddRange(collection);
 
-            Customer customer = new("Zack", "0", true);
+            Customer customer = new("Zack", "0", drinksTypes[0].Id, true);
             collection2.Add(customer);
             await Loader.SaveCustomerAsync(collection2);
 

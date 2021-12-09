@@ -18,12 +18,7 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
         private static readonly string CustomersFileName = "customers.json";
         private DirectoryInfo jsonStorageDirectory;
         private string directoryName;
-        private IEnumerable<Customer> defaultCustomerList = new List<Customer>
-                {
-                    new Customer("Jack", "Aalders", true),
-                    new Customer("John", "Aalders", true),
-                    new Customer("Sarah", "Spear", false)
-                };
+        private IEnumerable<Customer> defaultCustomerList;
         public CustomerDataJsonLoader(string DirectoryName = "Json", IEnumerable<Customer>? DefaultCustomerList = null)
         {
             
@@ -31,6 +26,16 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
             if(DefaultCustomerList != null)
             {
                 defaultCustomerList = DefaultCustomerList;
+            }
+            else
+            {
+                var drinks = new DrinkRoleLoader.MockDrinkTypesLoader().LoadDrinkTypes() as List<Drink>;
+                defaultCustomerList = new List<Customer>
+                {
+                    new Customer("Jack", "Aalders", drinks[0].Id, true),
+                    new Customer("John", "Aalders", drinks[0].Id, true),
+                    new Customer("Sarah", "Spear", drinks[0].Id, false)
+                };
             }
             jsonStorageDirectory = ConstructJsonStorageDirectory();
         }
