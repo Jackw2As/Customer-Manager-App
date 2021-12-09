@@ -70,10 +70,10 @@ namespace CustomerManagerApp.ViewModel
             get => customer.DrinkID;
             set
             {
-                if (value != null)
+                if (value != null && value != DrinkId)
                 {
-                    customer.FirstName = value;
-                    PropertyHasChanged(nameof(FirstName));
+                    customer.DrinkID = value;
+                    //PropertyHasChanged();
                 }
             }
         }
@@ -87,8 +87,13 @@ namespace CustomerManagerApp.ViewModel
                 {
                     //Model Validation Logic
                     if (!string.IsNullOrWhiteSpace(FirstName))
+                    {
                         if (!string.IsNullOrWhiteSpace(LastName))
+                        {
+                            PropertyHasChanged();
                             return true;
+                        }
+                    }
                 }
                 return false;
             }

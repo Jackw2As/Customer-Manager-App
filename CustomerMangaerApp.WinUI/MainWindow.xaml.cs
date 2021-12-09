@@ -13,6 +13,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using CustomerManagerApp.ViewModel;
+using CustomerManagerApp.Backend.Services.CustomerDataLoader;
+using CustomerManagerApp.Backend.Services.DrinkRoleLoader;
 
 
 // To learn more about WinUI, the WinUI project structure,
@@ -25,10 +27,26 @@ namespace CustomerManagerApp.WinUI
     /// </summary>
     public sealed partial class MainWindow : Window
     {
+        public MainWindowViewModel ViewModel { get; set; }
         public MainWindow()
         {
             this.InitializeComponent();
-            ViewModel = new MainViewModel;
+            ViewModel = new MainWindowViewModel(new CustomerDataJsonLoader(), new MockDrinkTypesLoader());
+            this.Activated += MainWindow_Activated;
+            this.Closed += MainWindow_Closed;
+        }
+
+        private void MainWindow_Closed(object sender, WindowEventArgs args)
+        {
+            ViewModel.SaveToStorage();
+        }
+
+        private void MainWindow_Activated(object sender, WindowActivatedEventArgs args)
+        {
+            if(ViewModel.Customers.Count == 0)
+            {
+                ViewModel.Load();
+            }
         }
     }
 }

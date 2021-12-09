@@ -12,18 +12,29 @@
     <StackPanel  Background="ForestGreen">
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Editor View" FontWeight="Bold" />
 
-        <StackPanel Width="Auto"  HorizontalAlignment="Center" Margin="0 20 0 0">
-            <TextBox x:Name="FirstName" Header="First Name" Margin="10"/>
+        <StackPanel Width="Auto"  HorizontalAlignment="Center" Margin="0 20 0 0" Visibility="{x:Bind ViewModel.IsCustomerSelected, Mode=OneWay}">
+            <TextBox x:Name="FirstName" Header="First Name" Margin="10" Text="{x:Bind ViewModel.SelectedCustomer.FirstName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 
-            <TextBox x:Name="LastName" Header="Last Name" Margin="10"/>
+            <TextBox x:Name="LastName" Header="Last Name" Margin="10" Text="{x:Bind ViewModel.SelectedCustomer.LastName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 
-            <DatePicker x:Name="Date" Header="First Time" Margin="10" HorizontalAlignment="Stretch"/>
+            <DatePicker x:Name="Date" Header="First Time" Margin="10" HorizontalAlignment="Stretch" SelectedDate="{x:Bind ViewModel.SelectedCustomer.FirstTime,Mode=TwoWay}"/>
 
-            <CheckBox x:Name="isDeveloper" Content="Is Developer" Margin="10"/>
+            <CheckBox x:Name="isDeveloper" Content="Is Developer" Margin="10" IsChecked="{x:Bind ViewModel.SelectedCustomer.IsDeveloper,Mode=TwoWay}"/>
 
-            <ComboBox x:Name="DrinkDropDown" Header="Faviourte Drink" Margin="10" HorizontalAlignment="Stretch"/>
+            <ComboBox x:Name="DrinkDropDown" Header="Faviourte Drink" Margin="10" HorizontalAlignment="Stretch" 
+                      ItemsSource="{x:Bind ViewModel.DrinkTypes, Mode=OneWay}"
+                      DisplayMemberPath="Name"   
+                      SelectedValuePath="Id"
+                      SelectedValue="{x:Bind ViewModel.SelectedCustomer.DrinkId, Mode=TwoWay}"
+                      />
 
-            <Button Content="Save" HorizontalAlignment="Stretch"/>
+            <StackPanel>
+                <Button Content="Save" HorizontalAlignment="Stretch" Click="{x:Bind ViewModel.SelectedCustomer.SaveCustomer}"
+                        IsEnabled="{x:Bind ViewModel.SelectedCustomer.CanSave, Mode=OneWay}"
+                        />
+                <Button Content="Remove" HorizontalAlignment="Stretch" Click="{x:Bind ViewModel.RemoveSelectedCustomer}"/>
+                
+            </StackPanel>
         </StackPanel>
     </StackPanel>
 </UserControl>

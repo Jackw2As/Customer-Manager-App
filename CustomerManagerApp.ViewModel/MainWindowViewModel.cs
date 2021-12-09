@@ -69,5 +69,22 @@ namespace CustomerManagerApp.ViewModel
             IsLoading = false;
         }
 
+        public void AddCustomer()
+        {
+            Customer customer = new("new customer", "", DrinkTypes[0].Id);
+            var defualtCustomer = new CustomerViewModel(customer, customerData);
+            Customers.Add(defualtCustomer);
+        }
+
+        public void RemoveSelectedCustomer()
+        {
+            Customers.Remove(SelectedCustomer);
+            SelectedCustomer = null;
+        }
+
+        public void SaveToStorage()
+        {
+            customerData.HardSave();
+        }
     }
 }

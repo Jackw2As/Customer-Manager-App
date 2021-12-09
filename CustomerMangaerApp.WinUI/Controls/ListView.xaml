@@ -11,13 +11,16 @@
         <TextBlock HorizontalAlignment="Center" Text="List View" FontWeight="Bold" FontSize="18" Margin="0 5 0 5" />
 
         <StackPanel>
-            <Button HorizontalAlignment="Stretch" FontWeight="Bold" >Refresh</Button>
+            <Button HorizontalAlignment="Stretch" FontWeight="Bold" Click="{x:Bind ViewModel.Load}" >Refresh</Button>
+            <Button HorizontalAlignment="Stretch" FontWeight="Bold" Click="{x:Bind ViewModel.AddCustomer}" >New Customer</Button>
         </StackPanel>
 
-        <ListView MinWidth="200" Margin="10">
-            <ListViewItem>Sarah Jane</ListViewItem>
-            <ListViewItem>Jack Aalders</ListViewItem>
-            <ListViewItem>Steve From Accounting</ListViewItem>
-        </ListView>
+        <ListView MinWidth="200" Margin="10" 
+                  ItemsSource="{x:Bind ViewModel.Customers, Mode=OneWay}"
+                  SelectedItem="{x:Bind ViewModel.SelectedCustomer, Mode=TwoWay}"
+                  DisplayMemberPath="DisplayName"
+                  />
+
+
     </StackPanel>
 </UserControl>

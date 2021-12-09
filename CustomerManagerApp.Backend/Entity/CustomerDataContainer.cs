@@ -21,7 +21,7 @@ namespace CustomerManagerApp.Backend.Entity
             HardLoad();
         }
 
-        private List<Customer> Customers { get; set; }
+        private List<Customer> Customers { get; set; } = new();
 
         ///<summary>
         /// Save Data to Persistant Storage.

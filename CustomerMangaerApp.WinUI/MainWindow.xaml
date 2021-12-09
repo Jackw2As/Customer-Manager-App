@@ -23,10 +23,14 @@
         <controls:HeaderControl Grid.ColumnSpan="3"/>
         
             <!-- List View -->
-        <controls:ListView Grid.Row="1"/>
+        <controls:ListView  Grid.Row="1" 
+                            ViewModel="{x:Bind ViewModel}" DataContext="ViewModel"
+                            />
         
             <!-- Editor View -->
-        <controls:UserEditView Grid.Row="1" Grid.Column="1"/>
+        <controls:UserEditView Grid.Row="1" Grid.Column="1"
+                               ViewModel="{x:Bind ViewModel}"
+                               />
 
     </Grid>
 </Window>
