@@ -10,14 +10,14 @@ namespace CustomerManagerApp.Backend.Model
 {
     public class Customer
     {
-        public Customer(string firstName, string lastName, string jobRolesId, bool isDeveloper = false, string? id = null)
+        public Customer(string firstName, string lastName, string DrinkId, bool isDeveloper = false, string? id = null)
         {
             FirstName = firstName;
             LastName = lastName;
             IsDeveloper = isDeveloper;
             if (id == null) {   Id = Guid.NewGuid().ToString(); }
             else { Id = (id); }
-            JobRolesID = jobRolesId;
+            DrinkID = DrinkId;
 
         }
         //ID is a Guid. The Reason we return a string instead of GUID object
@@ -27,8 +27,7 @@ namespace CustomerManagerApp.Backend.Model
         public string LastName { get; set; }
         public bool IsDeveloper { get; set; }
         public DateTimeOffset FirstTime { get; set; }
-        public string JobRolesID { get; set; }
-        public string DisplayName { get => FirstName + " " + LastName; }
+        public string DrinkID { get; set; }
         
 
         public override bool Equals(object? obj)
