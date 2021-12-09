@@ -21,9 +21,7 @@ namespace CustomerManagerApp.Test
                 new("John", "2", drinksTypes[0].Id),
                 new("Susan", "1", drinksTypes[0].Id, true),
                 new("Susan", "2", drinksTypes[0].Id)
-            };
-
-            
+            };  
         }
 
         private List<Drink> drinksTypes
@@ -41,8 +39,6 @@ namespace CustomerManagerApp.Test
             Loader.DeleteStorageFile();
             //create new test file
             return new CustomerDataJsonLoader("Tests", mockDefaultCustomersList);
-
-            
         }
 
 
