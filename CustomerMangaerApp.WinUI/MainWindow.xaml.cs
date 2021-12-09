@@ -12,11 +12,13 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using CustomerManagerApp.ViewModel;
+
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace CustomerMangaerApp.WinUI
+namespace CustomerManagerApp.WinUI
 {
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
@@ -26,6 +28,7 @@ namespace CustomerMangaerApp.WinUI
         public MainWindow()
         {
             this.InitializeComponent();
+            ViewModel = new MainViewModel;
         }
     }
 }

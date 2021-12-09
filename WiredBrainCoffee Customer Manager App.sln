@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerManagerApp.Backend"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerManagerApp.Test", "CustomerManagerApp.Test\CustomerManagerApp.Test.csproj", "{6E16EE47-04AD-4715-9444-FCFEB2290C56}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerMangaerApp.WinUI", "CustomerMangaerApp.WinUI\CustomerMangaerApp.WinUI.csproj", "{B9A79B40-7AC0-45F8-A00F-BA6F5DEA3F15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerManagerApp.WinUI", "CustomerMangaerApp.WinUI\CustomerManagerApp.WinUI.csproj", "{B9A79B40-7AC0-45F8-A00F-BA6F5DEA3F15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagerApp.ViewModel", "CustomerManagerApp.ViewModel\CustomerManagerApp.ViewModel.csproj", "{22983EC3-A454-4AE0-80C7-68FF72155BB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerManagerApp.ViewModel", "CustomerManagerApp.ViewModel\CustomerManagerApp.ViewModel.csproj", "{22983EC3-A454-4AE0-80C7-68FF72155BB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
