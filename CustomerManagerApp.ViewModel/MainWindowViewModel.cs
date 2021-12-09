@@ -13,7 +13,7 @@ namespace CustomerManagerApp.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private CustomerViewModel selectedEmployee;
+        private CustomerViewModel selectedCustomer;
         private readonly IDrinkLoaderService drinkData;
 
         private readonly CustomerDataContainer customerData;
@@ -27,20 +27,20 @@ namespace CustomerManagerApp.ViewModel
         }
         public ObservableCollection<CustomerViewModel> Customers { get; } = new();
         public ObservableCollection<Drink> DrinkTypes { get; } = new();
-        public CustomerViewModel SelectedEmployee
+        public CustomerViewModel SelectedCustomer
         {
-            get { return selectedEmployee; }
+            get { return selectedCustomer; }
             set {
-                if (selectedEmployee != value)
+                if (selectedCustomer != value)
                 {
-                    selectedEmployee = value;
+                    selectedCustomer = value;
                     PropertyHasChanged();
-                    PropertyHasChanged(nameof(IsEmployeeeSeelected));
+                    PropertyHasChanged(nameof(IsCustomerSelected));
                 }
             }
         }
 
-        public bool IsEmployeeeSeelected => SelectedEmployee != null;
+        public bool IsCustomerSelected => SelectedCustomer != null;
 
         public bool IsLoading { get; private set; }  = false;
 
