@@ -92,8 +92,12 @@ namespace CustomerManagerApp.ViewModel
         public string FilterValue = "";
         public void Filter()
         {
+            foreach (var customer in Customers)
+            {
+                customer.SaveCustomer();
+            }
             var customers = customerData.Load();
-
+            
             Customers.Clear();
             filteredList.Clear();
             Parallel.ForEach(customers, customer => FilterByName(FilterValue, customer));
