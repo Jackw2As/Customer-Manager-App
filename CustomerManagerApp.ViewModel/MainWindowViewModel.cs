@@ -88,5 +88,36 @@ namespace CustomerManagerApp.ViewModel
         {
             customerData.HardSave();
         }
+
+        public string FilterValue = "";
+        public void Filter()
+        {
+            var customers = customerData.Load();
+
+            Customers.Clear();
+            filteredList.Clear();
+            Parallel.ForEach(customers, customer => FilterByName(FilterValue, customer));
+
+            foreach (var item in filteredList)
+            {
+                Customers.Add(item);
+            }
+            
+        }
+        private List<CustomerViewModel> filteredList = new();
+        private void FilterByName(string FilterText, Customer customer)
+        {
+            if (customer.FirstName.Contains(FilterText) == false && customer.LastName.Contains(FilterText) == false)
+            {
+                return;
+            }
+
+            var model = new CustomerViewModel(customer, customerData);
+            if(!filteredList.Contains(model))
+            {
+                filteredList.Add(model);
+            }
+        }
+        
     }
 }

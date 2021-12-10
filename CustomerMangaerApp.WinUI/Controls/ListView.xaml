@@ -7,12 +7,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel  Background="Beige" HorizontalAlignment="Center">
-        <TextBlock HorizontalAlignment="Center" Text="List View" FontWeight="Bold" FontSize="18" Margin="0 5 0 5" />
+    <StackPanel HorizontalAlignment="Center" BorderBrush="#F05A28" BorderThickness="0 0 5 0">
 
-        <StackPanel>
+        <StackPanel Margin="10">
             <Button HorizontalAlignment="Stretch" FontWeight="Bold" Click="{x:Bind ViewModel.Load}" >Refresh</Button>
-            <Button HorizontalAlignment="Stretch" FontWeight="Bold" Click="{x:Bind ViewModel.AddCustomer}" >New Customer</Button>
+            <Button Margin="0 3 0 0" HorizontalAlignment="Stretch" FontWeight="Bold" Click="{x:Bind ViewModel.AddCustomer}" >New Customer</Button>
+            <TextBox Margin="0 3 0 0" TextChanged="{x:Bind ViewModel.Filter}" Text="{x:Bind ViewModel.FilterValue, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </StackPanel>
 
         <ListView MinWidth="200" Margin="10" 
