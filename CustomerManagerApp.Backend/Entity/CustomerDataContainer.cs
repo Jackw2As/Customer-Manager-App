@@ -97,5 +97,10 @@ namespace CustomerManagerApp.Backend.Entity
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
+        public void Remove(Customer selectedCustomer)
+        {
+            Customers.Remove(selectedCustomer);
+        }
     }
 }

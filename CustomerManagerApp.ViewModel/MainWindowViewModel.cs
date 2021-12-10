@@ -78,8 +78,10 @@ namespace CustomerManagerApp.ViewModel
 
         public void RemoveSelectedCustomer()
         {
+            SelectedCustomer.Remove();
             Customers.Remove(SelectedCustomer);
             SelectedCustomer = null;
+            
         }
 
         public void SaveToStorage()

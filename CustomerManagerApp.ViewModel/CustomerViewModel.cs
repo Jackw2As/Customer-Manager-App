@@ -90,7 +90,6 @@ namespace CustomerManagerApp.ViewModel
                     {
                         if (!string.IsNullOrWhiteSpace(LastName))
                         {
-                            PropertyHasChanged();
                             return true;
                         }
                     }
@@ -100,6 +99,11 @@ namespace CustomerManagerApp.ViewModel
         }
 
         public bool IsSaving { get; private set; } = false;
+
+        internal void Remove()
+        {
+            CustomerLoader.Remove(customer);
+        }
 
         public void SaveCustomer()
         {
