@@ -26,7 +26,9 @@ namespace CustomerManagerApp.ViewModel
             this.customerData = new(customerData);
         }
         public ObservableCollection<CustomerViewModel> Customers { get; } = new();
+
         public ObservableCollection<Drink> DrinkTypes { get; } = new();
+
         public CustomerViewModel SelectedCustomer
         {
             get { return selectedCustomer; }
