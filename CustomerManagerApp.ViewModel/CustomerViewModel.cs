@@ -24,10 +24,11 @@ namespace CustomerManagerApp.ViewModel
             get => customer.FirstName; 
             set
             {
-                if(value != null)
+                if(value != null && value != customer.FirstName)
                 {
                     customer.FirstName = value;
                     PropertyHasChanged();
+                    PropertyHasChanged(nameof(DisplayName));
                 }
             } 
         }
@@ -37,10 +38,11 @@ namespace CustomerManagerApp.ViewModel
             get => customer.LastName;
             set
             {
-                if (value != null)
+                if (value != null && value != customer.LastName)
                 {
                     customer.LastName = value;
                     PropertyHasChanged();
+                    PropertyHasChanged(nameof(DisplayName));
                 }
             }
         }
@@ -50,8 +52,12 @@ namespace CustomerManagerApp.ViewModel
             get => customer.IsDeveloper;
             set
             {
-                customer.IsDeveloper = value;
-                PropertyHasChanged();
+                if (value != customer.IsDeveloper)
+                {
+                    customer.IsDeveloper = value;
+                    PropertyHasChanged();
+                    PropertyHasChanged(nameof(CanSave));
+                }
             }
         }
 
@@ -60,8 +66,12 @@ namespace CustomerManagerApp.ViewModel
             get => customer.FirstTime;
             set
             {
-                customer.FirstTime = value;
-                PropertyHasChanged();
+                if (value != customer.FirstTime)
+                {
+                    customer.FirstTime = value;
+                    PropertyHasChanged();
+                    PropertyHasChanged(nameof(CanSave));
+                }
             }
         }
 
@@ -73,7 +83,6 @@ namespace CustomerManagerApp.ViewModel
                 if (value != null && value != DrinkId)
                 {
                     customer.DrinkID = value;
-                    //PropertyHasChanged();
                 }
             }
         }

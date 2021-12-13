@@ -50,8 +50,8 @@ namespace CustomerManagerApp.ViewModel
         {
             //stops multiple refreshes firing at once.
             if (IsLoading) return;
-
             IsLoading = true;
+
             var customers = customerData.Load();
             var drinkTypes = await drinkData.LoadDrinkTypesAsync();
 
