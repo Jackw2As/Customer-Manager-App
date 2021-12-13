@@ -1,0 +1,41 @@
+﻿<UserControl
+    x:Class="CustomerManagerApp.Wpf.Controls.UserEditView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CustomerManagerApp.Wpf.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel VerticalAlignment="Stretch" Height="600">
+        <StackPanel VerticalAlignment="Bottom" Width="Auto" HorizontalAlignment="Center" Margin="0 50 0 20" Visibility="{Binding IsCustomerSelected, Mode=OneWay}">
+
+            <TextBlock Text="First Name" />
+            <TextBox x:Name="FirstName" Margin="10" Text="{Binding SelectedCustomer.FirstName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Text="Last Name" />
+            <TextBox x:Name="LastName" Margin="10" Text="{Binding SelectedCustomer.LastName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Text="First Time" />
+            <DatePicker x:Name="Date" Margin="10" HorizontalAlignment="Stretch" SelectedDate="{Binding SelectedCustomer.FirstTime,Mode=TwoWay}"/>
+
+            <CheckBox x:Name="isDeveloper" Content="Is Developer" Margin="10" IsChecked="{Binding SelectedCustomer.IsDeveloper,Mode=TwoWay}"/>
+
+            <TextBlock Text="Faviourte Drink" />
+            <ComboBox x:Name="DrinkDropDown" Margin="10" HorizontalAlignment="Stretch" 
+                      ItemsSource="{Binding DrinkTypes, Mode=OneWay}"
+                      DisplayMemberPath="Name"   
+                      SelectedValuePath="Id"
+                      SelectedValue="{Binding SelectedCustomer.DrinkId, Mode=TwoWay}"
+                      />
+
+            <StackPanel>
+                <Button Content="Save" HorizontalAlignment="Stretch" Click="{Binding SelectedCustomer.SaveCustomer}"
+                        IsEnabled="{Binding SelectedCustomer.CanSave, Mode=OneWay}"
+                        />
+                <Button Content="Remove" HorizontalAlignment="Stretch" Click="{Binding RemoveSelectedCustomer}"/>
+                
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</UserControl>
