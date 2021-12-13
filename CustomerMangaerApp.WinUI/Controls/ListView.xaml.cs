@@ -18,11 +18,10 @@ namespace CustomerManagerApp.WinUI.Controls
 {
     public sealed partial class ListView : UserControl
     {
-        public MainWindowViewModel ViewModel { get; set; }
+        public ListViewModel ViewModel { get; set; }
         public ListView()
         {
             this.InitializeComponent();
-            this.DataContext = ViewModel;
         }
     }
 }

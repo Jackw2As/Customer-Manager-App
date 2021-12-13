@@ -15,6 +15,7 @@ using Windows.Foundation.Collections;
 using CustomerManagerApp.ViewModel;
 using CustomerManagerApp.Backend.Services.CustomerDataLoader;
 using CustomerManagerApp.Backend.Services.DrinkRoleLoader;
+using CustomerManagerApp.Backend.Entity;
 
 
 // To learn more about WinUI, the WinUI project structure,
@@ -30,10 +31,11 @@ namespace CustomerManagerApp.WinUI
         public MainWindowViewModel ViewModel { get; set; }
         public MainWindow()
         {
-            this.InitializeComponent();
-            ViewModel = new MainWindowViewModel(new CustomerDataJsonLoader(), new MockDrinkTypesLoader());
+            var dataContainer = new CustomerDataContainer(new CustomerDataJsonLoader());
+            ViewModel = new MainWindowViewModel(dataContainer, new MockDrinkTypesLoader());
             this.Activated += MainWindow_Activated;
             this.Closed += MainWindow_Closed;
+            this.InitializeComponent();
         }
 
         private void MainWindow_Closed(object sender, WindowEventArgs args)
@@ -41,9 +43,11 @@ namespace CustomerManagerApp.WinUI
             ViewModel.SaveToStorage();
         }
 
+        //When the Window is activated we load the Customer Data
         private void MainWindow_Activated(object sender, WindowActivatedEventArgs args)
         {
-            if(ViewModel.Customers.Count == 0)
+            //Returns Null here for some reason on launch I need to work out why.
+            if(ViewModel.DrinkTypes?.Count == 0)
             {
                 ViewModel.Load();
             }

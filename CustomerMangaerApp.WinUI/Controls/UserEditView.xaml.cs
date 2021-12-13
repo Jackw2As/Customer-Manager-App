@@ -18,7 +18,8 @@ namespace CustomerManagerApp.WinUI.Controls
 {
     public sealed partial class UserEditView : UserControl
     {
-        public MainWindowViewModel ViewModel { get; set; }
+        public EditViewModel ViewModel { get; set; }
+        
         public UserEditView()
         {
             this.InitializeComponent();

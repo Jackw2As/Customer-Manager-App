@@ -44,6 +44,8 @@ namespace CustomerManagerApp.WinUI
         {
             m_window = new MainWindow();
             m_window.Activate();
+
+            m_window.Title = "Customer Manager App";
         }
 
         private Window m_window;
