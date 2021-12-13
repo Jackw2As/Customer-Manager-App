@@ -11,16 +11,16 @@ namespace CustomerManagerApp.Backend.Services.DrinkRoleLoader
     {
         public IEnumerable<Drink> LoadDrinkTypes()
         {
-            return CreateJobsList();
+            return CreateDrinksList();
         }
 
         public Task<IEnumerable<Drink>> LoadDrinkTypesAsync()
         {
-            var jobs = CreateJobsList();
+            var jobs = CreateDrinksList();
             return Task<IEnumerable<Drink>>.Factory.StartNew(() => jobs);
         }
 
-        private IEnumerable<Drink> CreateJobsList()
+        private IEnumerable<Drink> CreateDrinksList()
         {
             return new List<Drink>() {
             new("English Breakfast"),
