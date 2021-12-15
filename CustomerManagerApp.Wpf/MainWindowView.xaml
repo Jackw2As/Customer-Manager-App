@@ -26,11 +26,12 @@
         <controls:ListView  Grid.Row="1" 
                             Grid.RowSpan="2"
                             ViewModel="{Binding ListViewModel}"
+                            DataContext="ListViewModel"
                             />
 
         <!-- Editor View -->
         <controls:UserEditView Grid.Row="1" Grid.Column="1"
-                               ViewModel="{Binding EditViewModel}"
+                               DataContext="{local: EditViewModel}"
                                />
 
         <StackPanel Grid.Column="1" Grid.Row="3" Background="#F05A28" Margin="0 50 0 0"></StackPanel>

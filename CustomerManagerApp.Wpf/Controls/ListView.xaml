@@ -17,11 +17,9 @@
             <Button Margin="0 3 0 0" 
                     HorizontalAlignment="Stretch" 
                     FontWeight="Bold" 
-                    Click="{Binding AddCustomer}" >
-                New Customer
+                    Content="New Customer">
             </Button>
             <TextBox Margin="0 3 0 0" 
-                     TextChanged="{Binding Filter}" 
                      Text="{Binding FilterValue, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 
             </TextBox>

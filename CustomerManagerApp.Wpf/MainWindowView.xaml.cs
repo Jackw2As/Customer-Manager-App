@@ -27,10 +27,16 @@ namespace CustomerManagerApp.Wpf
         MainWindowViewModel viewModel;
         public MainWindowView()
         {
-            InitializeComponent();
             var customerData = new CustomerDataContainer(new CustomerDataJsonLoader());
             viewModel = new(customerData, new MockDrinkTypesLoader());
             DataContext = viewModel;
+            this.Loaded += MainWindowView_Loaded;
+            InitializeComponent();
+        }
+
+        private void MainWindowView_Loaded(object sender, RoutedEventArgs e)
+        {
+            viewModel.Load();
         }
     }
 }
