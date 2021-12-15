@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.Backend.Repository.Customer
 {
-    internal class MockCustomerRepository : ICustomerRepository
+    public class MockCustomerRepository : ICustomerRepository
     {
         private List<CustomerValueObject> _customerList = new();
         private List<CustomerValueObject> _defaultList = new();

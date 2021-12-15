@@ -1,20 +1,16 @@
 ﻿using CustomerManagerApp.Backend.Repository.Drink;
-using CustomerManagerApp.Backend.Services.DrinkRoleLoader;
 using CustomerManagerApp.Backend.ValueObjects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace CustomerManagerApp.Test.Backend_Tests
 {
-    public class DrinkTypeLoaderTests
+    public class DrinkRepositoryTests
     {
-        public DrinkTypeLoaderTests()
+        public DrinkRepositoryTests()
         {
-            IDrinkLoaderService loaderService = new MockDrinkRepository();
+            IDrinkRepository loaderService = new MockDrinkRepository();
             DefaultDrinkList = loaderService.LoadDrinkTypes() as List<DrinkValueObject>;
             if (DefaultDrinkList == null)
             {
@@ -25,7 +21,7 @@ namespace CustomerManagerApp.Test.Backend_Tests
         }
         private List<DrinkValueObject> DefaultDrinkList { get; init; }
 
-        private IDrinkLoaderService ConstructLoaderService()
+        private IDrinkRepository constructMockRepository()
         {
             return new MockDrinkRepository();
         }
@@ -33,20 +29,20 @@ namespace CustomerManagerApp.Test.Backend_Tests
         [Fact(DisplayName = "Load Drinks Sync")]
         public void LoadDrinksSync()
         {
-            var jobsLoader = ConstructLoaderService();
-            var jobs = jobsLoader.LoadDrinkTypes();
-            Assert.NotNull(jobs);
-            Assert.NotEmpty(jobs);
-            Assert.Equal(DefaultDrinkList, jobs);
+            var drinksRepo = constructMockRepository();
+            var drinks = drinksRepo.LoadDrinkTypes();
+            Assert.NotNull(drinks);
+            Assert.NotEmpty(drinks);
+            Assert.Equal(DefaultDrinkList, drinks);
         }
         [Fact(DisplayName = "Load Drinks Async")]
-        public async void LoadJobsAsync()
+        public async void LoadDrinksAsync()
         {
-            var jobsLoader = ConstructLoaderService();
-            var jobs = await jobsLoader.LoadDrinkTypesAsync();
-            Assert.NotNull(jobs);
-            Assert.NotEmpty(jobs);
-            Assert.Equal(DefaultDrinkList, jobs);
+            var drinksRepo = constructMockRepository();
+            var drinks = await drinksRepo.LoadDrinkTypesAsync();
+            Assert.NotNull(drinks);
+            Assert.NotEmpty(drinks);
+            Assert.Equal(DefaultDrinkList, drinks);
         }
 
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.Backend.Repository.Drink
 {
-    internal interface IDrinkRepository
+    public interface IDrinkRepository
     {
         public IEnumerable<DrinkValueObject> LoadDrinkTypes();
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.Backend.Repository.Customer
 {
-    internal interface ICustomerRepository
+    public interface ICustomerRepository
     {
         Task<IEnumerable<CustomerValueObject>> LoadCustomersAsync();
 

@@ -13,7 +13,7 @@ namespace CustomerManagerApp.Backend.Repository.Customer
     //Using NewtonSoft Json seraliser to read and write to a Json File for storing Customer List.
     //Json is used because this is a Demo Project in a real project i'd use a database probably stored on an Azure or AWS service with the data accessed through some kind of secure service.
 
-    internal class JsonCustomerRepository : ICustomerRepository
+    public class JsonCustomerRepository : ICustomerRepository
     {
         //Hard Coded File Name for storage because load/saving from sperate customer lists isn't supported.
         private static readonly string CustomersFileName = "customers.json";

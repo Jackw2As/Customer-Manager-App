@@ -1,18 +1,16 @@
-using CustomerManagerApp.Backend.Services.CustomerDataLoader;
 using Xunit;
-using CustomerManagerApp.Backend.Services;
 using System.Collections.Generic;
-using CustomerManagerApp.Backend.Services.DrinkRoleLoader;
 using CustomerManagerApp.Backend.Repository.Customer;
 using CustomerManagerApp.Backend.ValueObjects;
+using CustomerManagerApp.Backend.Repository.Drink;
 
 namespace CustomerManagerApp.Test
 {
-    public class CustomerDataLoaderTests
+    public class CustomerRepositoryTests
     {
-        public CustomerDataLoaderTests()
+        public CustomerRepositoryTests()
         {
-            var List = new MockDrinkTypesLoader().LoadDrinkTypes() as List<DrinkValueObject>;
+            var List = new MockDrinkRepository().LoadDrinkTypes() as List<DrinkValueObject>;
             if (List != null) drinksTypes = List;
             else drinksTypes = new();
 
@@ -36,10 +34,10 @@ namespace CustomerManagerApp.Test
         private ICustomerRepository CreateMock()
         {
             //clear old test file
-            var Loader = new CustomerDataJsonLoader("Tests");
+            var Loader = new JsonCustomerRepository("Tests");
             Loader.DeleteStorageFile();
             //create new test file
-            return new CustomerDataJsonLoader("Tests", mockDefaultCustomersList);
+            return new JsonCustomerRepository("Tests", mockDefaultCustomersList);
         }
 
 
