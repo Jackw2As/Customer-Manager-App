@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.Backend.Repository.Drink
 {
-    internal class MockDrinkRepository : IDrinkLoaderService
+    internal class MockDrinkRepository : IDrinkRepository
     {
         public IEnumerable<DrinkValueObject> LoadDrinkTypes()
         {
