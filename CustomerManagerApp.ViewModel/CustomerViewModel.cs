@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using CustomerManagerApp.Backend.Entity;
+using CustomerManagerApp.Backend.Service;
 using CustomerManagerApp.Backend.ValueObjects;
 
 namespace CustomerManagerApp.ViewModel
@@ -10,13 +10,13 @@ namespace CustomerManagerApp.ViewModel
     public class CustomerViewModel : ViewModelBase
     {
         private CustomerValueObject customer { get; init; }
-        private CustomerDataContainer CustomerLoader { get; }
+        private DataService customerData { get; }
 
-        public CustomerViewModel(   CustomerValueObject Customer,  
-                                    CustomerDataContainer customerLoader)
+        public CustomerViewModel(   CustomerValueObject Customer,
+                                    DataService DataService)
         {
             customer = Customer;
-            CustomerLoader = customerLoader;
+            customerData = DataService;
         }
 
         public string FirstName 
@@ -109,16 +109,16 @@ namespace CustomerManagerApp.ViewModel
 
         public bool IsSaving { get; private set; } = false;
 
-        internal void Remove()
+        internal async void Remove()
         {
-            CustomerLoader.Remove(customer);
+            await customerData.RemoveCustomerAsync(customer);
         }
 
-        public void SaveCustomer()
+        public async void SaveCustomer()
         {
             IsSaving = true;
 
-            CustomerLoader.Save(customer);
+            await customerData.AddCustomerAsync(customer);
 
             IsSaving = false;
         }

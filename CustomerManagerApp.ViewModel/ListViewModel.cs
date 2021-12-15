@@ -1,5 +1,5 @@
-﻿using CustomerManagerApp.Backend.Entity;
-using CustomerManagerApp.Backend.Repository.Drink;
+﻿using CustomerManagerApp.Backend.Repository.Drink;
+using CustomerManagerApp.Backend.Service;
 using CustomerManagerApp.Backend.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -16,8 +16,7 @@ namespace CustomerManagerApp.ViewModel
     {
         public ObservableCollection<CustomerViewModel> Customers { get; } = new();
         public ObservableCollection<DrinkValueObject> DrinkTypes { get; } = new();
-        private CustomerDataContainer CustomerData { get; }
-        public IDrinkLoaderService DrinkData { get; init; }
+        private DataService Data { get; }
 
         
 
@@ -45,15 +44,14 @@ namespace CustomerManagerApp.ViewModel
             }
         }
 
-        public ListViewModel(CustomerDataContainer customerData, IDrinkLoaderService drinkData)
+        public ListViewModel(DataService DataService)
         {
-            CustomerData = customerData;
-            DrinkData = drinkData;
+            Data = DataService;
         }
         public void CustomerAdd()
         {
             CustomerValueObject customer = new("new customer", "", DrinkTypes[0].Id);
-            var defualtCustomer = new CustomerViewModel(customer, CustomerData);
+            var defualtCustomer = new CustomerViewModel(customer, Data);
             Customers.Add(defualtCustomer);
         }
 
@@ -68,13 +66,13 @@ namespace CustomerManagerApp.ViewModel
         }
 
         public string FilterValue = "";
-        public void Filter()
+        public async void Filter()
         {
             foreach (var customer in Customers)
             {
                 customer.SaveCustomer();
             }
-            var customers = CustomerData.Load();
+            var customers = await Data.GetCustomersAsync();
 
             Customers.Clear();
             filteredList.Clear();
@@ -97,7 +95,7 @@ namespace CustomerManagerApp.ViewModel
                 return;
             }
 
-            var model = new CustomerViewModel(customer, CustomerData);
+            var model = new CustomerViewModel(customer, Data);
             if (!filteredList.Contains(model))
             {
                 filteredList.Add(model);
