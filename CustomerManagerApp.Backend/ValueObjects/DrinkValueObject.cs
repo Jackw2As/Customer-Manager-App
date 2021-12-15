@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomerManagerApp.Backend.Model
+namespace CustomerManagerApp.Backend.ValueObjects
 {
-    public class Drink
+    public class DrinkValueObject
     {
-        public Drink(string name)
+        public DrinkValueObject(string name)
         {
             Name = name;
 
@@ -24,10 +24,10 @@ namespace CustomerManagerApp.Backend.Model
 
         public override bool Equals(object? obj)
         {
-            Drink? other = obj as Drink;
+            DrinkValueObject? other = obj as DrinkValueObject;
             if (other == null) return false;
             if (Id == other.Id) return true;
-            else  {   return false;   }
+            else { return false; }
         }
     }
 }

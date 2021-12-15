@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using CustomerManagerApp.Backend.Entity;
-using CustomerManagerApp.Backend.Model;
+using CustomerManagerApp.Backend.ValueObjects;
 
 namespace CustomerManagerApp.ViewModel
 {
     public class CustomerViewModel : ViewModelBase
     {
-        private Customer customer { get; init; }
+        private CustomerValueObject customer { get; init; }
         private CustomerDataContainer CustomerLoader { get; }
 
-        public CustomerViewModel(   Customer Customer,  
+        public CustomerViewModel(   CustomerValueObject Customer,  
                                     CustomerDataContainer customerLoader)
         {
             customer = Customer;

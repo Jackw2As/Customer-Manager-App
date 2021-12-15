@@ -1,4 +1,4 @@
-﻿using CustomerManagerApp.Backend.Model;
+﻿using CustomerManagerApp.Backend.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,9 +11,9 @@ namespace CustomerManagerApp.ViewModel
     public delegate void RemoveSelectedCustomer(CustomerViewModel customer);
     public class EditViewModel : ViewModelBase
     {
-        public ObservableCollection<Drink> DrinkTypes { get; init; } = new();
+        public ObservableCollection<DrinkValueObject> DrinkTypes { get; init; } = new();
 
-        public EditViewModel(ObservableCollection<Drink> drinkTypes)
+        public EditViewModel(ObservableCollection<DrinkValueObject> drinkTypes)
         {
             if (drinkTypes == null)
             {

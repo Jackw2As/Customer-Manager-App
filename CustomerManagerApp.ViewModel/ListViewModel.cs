@@ -1,6 +1,6 @@
 ﻿using CustomerManagerApp.Backend.Entity;
-using CustomerManagerApp.Backend.Model;
-using CustomerManagerApp.Backend.Services.DrinkRoleLoader;
+using CustomerManagerApp.Backend.Repository.Drink;
+using CustomerManagerApp.Backend.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +15,7 @@ namespace CustomerManagerApp.ViewModel
     public class ListViewModel : ViewModelBase
     {
         public ObservableCollection<CustomerViewModel> Customers { get; } = new();
-        public ObservableCollection<Drink> DrinkTypes { get; } = new();
+        public ObservableCollection<DrinkValueObject> DrinkTypes { get; } = new();
         private CustomerDataContainer CustomerData { get; }
         public IDrinkLoaderService DrinkData { get; init; }
 
@@ -52,7 +52,7 @@ namespace CustomerManagerApp.ViewModel
         }
         public void CustomerAdd()
         {
-            Customer customer = new("new customer", "", DrinkTypes[0].Id);
+            CustomerValueObject customer = new("new customer", "", DrinkTypes[0].Id);
             var defualtCustomer = new CustomerViewModel(customer, CustomerData);
             Customers.Add(defualtCustomer);
         }
@@ -90,7 +90,7 @@ namespace CustomerManagerApp.ViewModel
 
 
 
-        private void FilterByName(string FilterText, Customer customer)
+        private void FilterByName(string FilterText, CustomerValueObject customer)
         {
             if (customer.FirstName.Contains(FilterText) == false && customer.LastName.Contains(FilterText) == false)
             {

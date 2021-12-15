@@ -1,5 +1,6 @@
-﻿using CustomerManagerApp.Backend.Model;
+﻿using CustomerManagerApp.Backend.Repository.Drink;
 using CustomerManagerApp.Backend.Services.DrinkRoleLoader;
+using CustomerManagerApp.Backend.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,8 @@ namespace CustomerManagerApp.Test.Backend_Tests
     {
         public DrinkTypeLoaderTests()
         {
-            IDrinkLoaderService loaderService = new MockDrinkTypesLoader();
-            DefaultDrinkList = loaderService.LoadDrinkTypes() as List<Drink>;
+            IDrinkLoaderService loaderService = new MockDrinkRepository();
+            DefaultDrinkList = loaderService.LoadDrinkTypes() as List<DrinkValueObject>;
             if (DefaultDrinkList == null)
             {
                 throw new NullReferenceException
@@ -22,11 +23,11 @@ namespace CustomerManagerApp.Test.Backend_Tests
             }
                 
         }
-        private List<Drink> DefaultDrinkList { get; init; }
+        private List<DrinkValueObject> DefaultDrinkList { get; init; }
 
         private IDrinkLoaderService ConstructLoaderService()
         {
-            return new MockDrinkTypesLoader();
+            return new MockDrinkRepository();
         }
 
         [Fact(DisplayName = "Load Drinks Sync")]

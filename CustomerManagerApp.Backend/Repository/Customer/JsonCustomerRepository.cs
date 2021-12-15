@@ -1,4 +1,5 @@
-﻿using CustomerManagerApp.Backend.Model;
+﻿using CustomerManagerApp.Backend.Repository.Drink;
+using CustomerManagerApp.Backend.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,34 +8,34 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
+namespace CustomerManagerApp.Backend.Repository.Customer
 {
     //Using NewtonSoft Json seraliser to read and write to a Json File for storing Customer List.
     //Json is used because this is a Demo Project in a real project i'd use a database probably stored on an Azure or AWS service with the data accessed through some kind of secure service.
 
-    public class CustomerDataJsonLoader : ICustomerDataLoaderService
+    internal class JsonCustomerRepository : ICustomerRepository
     {
         //Hard Coded File Name for storage because load/saving from sperate customer lists isn't supported.
         private static readonly string CustomersFileName = "customers.json";
         private DirectoryInfo jsonStorageDirectory;
         private string directoryName;
-        private IEnumerable<Customer> defaultCustomerList;
-        public CustomerDataJsonLoader(string DirectoryName = "Json", IEnumerable<Customer>? DefaultCustomerList = null)
+        private IEnumerable<CustomerValueObject> defaultCustomerList;
+        public JsonCustomerRepository(string DirectoryName = "Json", IEnumerable<CustomerValueObject>? DefaultCustomerList = null)
         {
-            
+
             directoryName = DirectoryName;
-            if(DefaultCustomerList != null)
+            if (DefaultCustomerList != null)
             {
                 defaultCustomerList = DefaultCustomerList;
             }
             else
             {
-                var drinks = new DrinkRoleLoader.MockDrinkTypesLoader().LoadDrinkTypes() as List<Drink>;
-                defaultCustomerList = new List<Customer>
+                var drinks = new MockDrinkRepository().LoadDrinkTypes() as List<DrinkValueObject>;
+                defaultCustomerList = new List<CustomerValueObject>
                 {
-                    new Customer("Jack", "Aalders", drinks[0].Id, true),
-                    new Customer("John", "Aalders", drinks[0].Id, true),
-                    new Customer("Sarah", "Spear", drinks[0].Id, false)
+                    new CustomerValueObject("Jack", "Aalders", drinks[0].Id, true),
+                    new CustomerValueObject("John", "Aalders", drinks[0].Id, true),
+                    new CustomerValueObject("Sarah", "Spear", drinks[0].Id, false)
                 };
             }
             jsonStorageDirectory = ConstructJsonStorageDirectory();
@@ -42,7 +43,7 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
         private DirectoryInfo ConstructJsonStorageDirectory()
         {
             DirectoryInfo applicationRootDirectory = new(Directory.GetCurrentDirectory());
-            
+
             DirectoryInfo? dataDirectory = applicationRootDirectory.GetDirectories("Data").FirstOrDefault();
             if (dataDirectory == null)
             {
@@ -55,7 +56,7 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
                 return CreateStorageDirectories();
             }
 
-            return _jsonStorageDirectory;    
+            return _jsonStorageDirectory;
         }
 
         private DirectoryInfo CreateStorageDirectories()
@@ -66,7 +67,7 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
             return Directory.CreateDirectory(applicationFolderPath + "/Data/" + directoryName);
         }
 
-        public async Task<IEnumerable<Customer>> LoadCustomersAsync()
+        public async Task<IEnumerable<CustomerValueObject>> LoadCustomersAsync()
         {
             FileInfo? file = null;
             var files = jsonStorageDirectory.GetFiles(CustomersFileName).ToList();
@@ -81,12 +82,12 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
                 return defaultCustomerList;
             }
 
-            List<Customer> customers = new();
+            List<CustomerValueObject> customers = new();
 
             //List<Customer> customers = JsonConvert.DeserializeObject<List<Customer>>(File.ReadAllText());
             using (FileStream reader = file.OpenRead())
             {
-                var DeserializationResults = await JsonSerializer.DeserializeAsync(reader, typeof(List<Customer>)) as List<Customer>;
+                var DeserializationResults = await JsonSerializer.DeserializeAsync(reader, typeof(List<CustomerValueObject>)) as List<CustomerValueObject>;
                 if (DeserializationResults != null)
                 {
                     customers.AddRange(DeserializationResults);
@@ -95,7 +96,7 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
             return customers;
         }
 
-        public async Task SaveCustomerAsync(IEnumerable<Customer> customers)
+        public async Task SaveCustomerAsync(IEnumerable<CustomerValueObject> customers)
         {
             using (var file = File.Create(jsonStorageDirectory.FullName + "/" + CustomersFileName))
             {
@@ -107,8 +108,8 @@ namespace CustomerManagerApp.Backend.Services.CustomerDataLoader
         {
             var files = jsonStorageDirectory.GetFiles(CustomersFileName);
             foreach (FileInfo file in files)
-            { 
-                File.Delete(file.FullName); 
+            {
+                File.Delete(file.FullName);
             }
         }
     }

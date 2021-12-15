@@ -1,9 +1,10 @@
 using CustomerManagerApp.Backend.Services.CustomerDataLoader;
 using Xunit;
 using CustomerManagerApp.Backend.Services;
-using CustomerManagerApp.Backend.Model;
 using System.Collections.Generic;
 using CustomerManagerApp.Backend.Services.DrinkRoleLoader;
+using CustomerManagerApp.Backend.Repository.Customer;
+using CustomerManagerApp.Backend.ValueObjects;
 
 namespace CustomerManagerApp.Test
 {
@@ -11,11 +12,11 @@ namespace CustomerManagerApp.Test
     {
         public CustomerDataLoaderTests()
         {
-            var List = new MockDrinkTypesLoader().LoadDrinkTypes() as List<Drink>;
+            var List = new MockDrinkTypesLoader().LoadDrinkTypes() as List<DrinkValueObject>;
             if (List != null) drinksTypes = List;
             else drinksTypes = new();
 
-            mockDefaultCustomersList = new List<Customer>
+            mockDefaultCustomersList = new List<CustomerValueObject>
             {
                 new("John", "1", drinksTypes[0].Id),
                 new("John", "2", drinksTypes[0].Id),
@@ -24,15 +25,15 @@ namespace CustomerManagerApp.Test
             };  
         }
 
-        private List<Drink> drinksTypes
+        private List<DrinkValueObject> drinksTypes
         {
             get; init;
         }
 
-        private List<Customer> mockDefaultCustomersList;
+        private List<CustomerValueObject> mockDefaultCustomersList;
 
 
-        private ICustomerDataLoaderService CreateMock()
+        private ICustomerRepository CreateMock()
         {
             //clear old test file
             var Loader = new CustomerDataJsonLoader("Tests");
@@ -52,7 +53,7 @@ namespace CustomerManagerApp.Test
         {
             var Loader = CreateMock();
 
-            await Loader.SaveCustomerAsync(new List<Customer>());
+            await Loader.SaveCustomerAsync(new List<CustomerValueObject>());
             var ConfirmEmpty = await Loader.LoadCustomersAsync();
             Assert.Empty(ConfirmEmpty);
 
@@ -69,7 +70,7 @@ namespace CustomerManagerApp.Test
         {
             var Loader = CreateMock();
 
-            IEnumerable<Customer> collection = await Loader.LoadCustomersAsync();
+            IEnumerable<CustomerValueObject> collection = await Loader.LoadCustomersAsync();
             if (collection is null)
             {
                 Assert.NotNull(collection);
@@ -78,10 +79,10 @@ namespace CustomerManagerApp.Test
 
             Assert.NotEmpty(collection);
 
-            List<Customer> collection2 = new();
+            List<CustomerValueObject> collection2 = new();
             collection2.AddRange(collection);
 
-            Customer customer = new("Zack", "0", drinksTypes[0].Id, true);
+            CustomerValueObject customer = new("Zack", "0", drinksTypes[0].Id, true);
             collection2.Add(customer);
             await Loader.SaveCustomerAsync(collection2);
 
@@ -96,7 +97,7 @@ namespace CustomerManagerApp.Test
         {
             var Loader = CreateMock();
 
-            List<Customer>? collection = await Loader.LoadCustomersAsync() as List<Customer>;
+            List<CustomerValueObject>? collection = await Loader.LoadCustomersAsync() as List<CustomerValueObject>;
             if (collection is null)
             {
                 Assert.NotNull(collection);
@@ -105,7 +106,7 @@ namespace CustomerManagerApp.Test
 
             Assert.NotEmpty(collection);
             
-            Customer customer = (Customer)collection[0];
+            CustomerValueObject customer = (CustomerValueObject)collection[0];
             collection.Remove(customer);
             await Loader.SaveCustomerAsync(collection);
 

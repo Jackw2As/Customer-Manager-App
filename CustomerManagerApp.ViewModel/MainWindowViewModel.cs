@@ -1,7 +1,7 @@
 ﻿using CustomerManagerApp.Backend.Entity;
-using CustomerManagerApp.Backend.Model;
+using CustomerManagerApp.Backend.Repository.Drink;
 using CustomerManagerApp.Backend.Services.CustomerDataLoader;
-using CustomerManagerApp.Backend.Services.DrinkRoleLoader;
+using CustomerManagerApp.Backend.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,7 +23,7 @@ namespace CustomerManagerApp.ViewModel
         private readonly CustomerDataContainer customerData;
         private readonly IDrinkLoaderService drinkData;
 
-        public ObservableCollection<Drink> DrinkTypes { get; } = new();
+        public ObservableCollection<DrinkValueObject> DrinkTypes { get; } = new();
 
         public MainWindowViewModel(CustomerDataContainer customerData, IDrinkLoaderService drinkData)
         {
