@@ -20,9 +20,9 @@ namespace CustomerManagerApp.Wpf.Wrapper
             drink = Drink;
         }
 
-        public Guid Id
+        public string Id
         {
-            get => new(drink.Id); 
+            get => drink.Id; 
         }
         public string Name
         {

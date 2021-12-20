@@ -3,26 +3,25 @@ using CustomerManagerApp.Backend.ValueObjects;
 using CustomerManagerApp.Wpf.CustomerEdit;
 using CustomerManagerApp.Wpf.CustomerList;
 using CustomerManagerApp.Wpf.Wrapper;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace CustomerManagerApp.Wpf
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        //This Class should handle the creations ViewModels under the Main Window
-        //This Class should pass data between the viewModels.
-        //This Class should handle taking to any external classess.
 
-
-
-        //Construct Child View Models
-        internal CustomerEditViewModel EditViewModel;
-        internal CustomerListViewModel ListViewModel;
-
+        //Child ViewModels
+        public CustomerEditViewModel EditViewModel;
+        public CustomerListViewModel ListViewModel;
 
         public MainWindowViewModel()
         {
-            DataService DataService = new();
+            DataService DataService = new();       
+            DrinkWrapper defaultdrink = new DrinkWrapper(DataService.GetDrinksAsync().Result.First());
+
+            ListViewModel = new(ref DataService, defaultdrink);
             EditViewModel = new(ref DataService);
 
             ListViewModel.SelectedCustomerChanged += SelectedCustomerChangedEvent;
@@ -32,7 +31,7 @@ namespace CustomerManagerApp.Wpf
         }
 
         //Handle View Model Commands
-        private void EditViewModel_RemoveSelectedCustomerEvent(CustomerWrapper customer) => Load();
+        private void EditViewModel_RemoveSelectedCustomerEvent(CustomerWrapper? customer) => Load();
         private void ListViewModel_OnRefreshRaised() => Load();
 
 

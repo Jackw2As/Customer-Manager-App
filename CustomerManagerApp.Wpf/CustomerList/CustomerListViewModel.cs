@@ -12,7 +12,7 @@ namespace CustomerManagerApp.Wpf.CustomerList
 {
     internal delegate void RefreshEvent();
     internal delegate void CustomerSelectionChangedEvent(CustomerWrapper? customer);
-    internal class CustomerListViewModel : ViewModelBase
+    public class CustomerListViewModel : ViewModelBase
     {
         internal ObservableCollection<CustomerWrapper> FilteredCustomerList { get; private set; } = new();
         internal ObservableCollection<CustomerWrapper> UnFilteredCustomerList { get; } = new();
