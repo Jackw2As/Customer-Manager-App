@@ -19,7 +19,7 @@ namespace CustomerManagerApp.Backend.ValueObjects
             // otherwise id use a GUID.
             Id = name;
         }
-        public string Id { get; set; }
+        public string Id { get; init; }
         public string Name { get; set; }
 
         public override bool Equals(object? obj)

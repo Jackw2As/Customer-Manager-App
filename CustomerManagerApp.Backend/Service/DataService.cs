@@ -73,7 +73,8 @@ namespace CustomerManagerApp.Backend.Service
             var edit = customers.Find(c => c == customer);
             if (edit == null)
             {
-                throw new Exception("Updating Customer that doesn't exist. Call Add Customer Instead");
+                await AddCustomerAsync(customer);
+                return;
             }
 
             edit.FirstTime = customer.FirstTime;

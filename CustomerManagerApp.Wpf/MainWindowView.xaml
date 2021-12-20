@@ -4,9 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomerManagerApp.Wpf" 
-        xmlns:controls="clr-namespace:CustomerManagerApp.Wpf.Controls"
+        xmlns:list="clr-namespace:CustomerManagerApp.Wpf.CustomerList" 
+        xmlns:generic="clr-namespace:CustomerManagerApp.Wpf.GenericControls" 
+        xmlns:edit="clr-namespace:CustomerManagerApp.Wpf.CustomerEdit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Customer Manager Applicaton" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,23 +17,39 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition />
+            <ColumnDefinition Width="23*" />
+            <ColumnDefinition Width="35*"/>
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type list:CustomerListView}">
+                <list:CustomerListView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type edit:CustomerEditView}">
+                <edit:CustomerEditView />
+            </DataTemplate>
+        </Grid.Resources>
+
         <!-- Header -->
-        <controls:HeaderControl Grid.ColumnSpan="3"/>
+        <generic:HeaderControl Grid.ColumnSpan="3"/>
 
         <!-- List View -->
-        <controls:ListView  Grid.Row="1" 
-                            Grid.RowSpan="2"
-                            />
-
+        <ContentControl Content="{Binding ListViewModel}"
+                        Grid.Row="1" 
+                        Grid.RowSpan="2"
+                        />
+        
         <!-- Editor View -->
-        <controls:UserEditView Grid.Row="1" Grid.Column="1"
-                               />
+        <ContentControl Content="{Binding EditViewModel}"
+                        Grid.Row="1" 
+                        Grid.Column="1" 
+                        Grid.ColumnSpan="2" 
+                        Grid.RowSpan="2"
+                        Margin="0,0,0,286" 
+                        />
 
-        <StackPanel Grid.Column="1" Grid.Row="3" Background="#F05A28" Margin="0 50 0 0"></StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="2" Background="#F05A28" Margin="0 50 0 0" Grid.ColumnSpan="2"></StackPanel>
 
     </Grid>
 </Window>

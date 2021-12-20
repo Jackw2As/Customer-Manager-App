@@ -1,5 +1,4 @@
 ﻿using CustomerManagerApp.Backend.Service;
-using CustomerManagerApp.ViewModel;
 using System.Windows;
 
 namespace CustomerManagerApp.Wpf
@@ -9,19 +8,18 @@ namespace CustomerManagerApp.Wpf
     /// </summary>
     public partial class MainWindowView : Window
     {
-        MainWindowViewModel viewModel;
+        public MainWindowViewModel ViewModel { get; set; }
         public MainWindowView()
         {
-            var dataService = new DataService();
-            viewModel = new(dataService);
-            DataContext = viewModel;
+            ViewModel = new MainWindowViewModel();
+            DataContext = ViewModel;
             this.Loaded += MainWindowView_Loaded;
             InitializeComponent();
         }
 
         private void MainWindowView_Loaded(object sender, RoutedEventArgs e)
         {
-            viewModel.Load();
+            ViewModel.Load();
         }
     }
 }

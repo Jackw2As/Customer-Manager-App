@@ -1,12 +1,12 @@
 ﻿using System.Windows.Controls;
 
-namespace CustomerManagerApp.Wpf.Controls
+namespace CustomerManagerApp.Wpf.GenericControls
 {
     public sealed partial class HeaderControl : UserControl
     {
         public HeaderControl()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

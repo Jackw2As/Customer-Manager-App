@@ -11,7 +11,7 @@ namespace CustomerManagerApp.Test.Backend_Tests
         public DrinkRepositoryTests()
         {
             IDrinkRepository loaderService = new MockDrinkRepository();
-            DefaultDrinkList = loaderService.LoadDrinkTypes() as List<DrinkValueObject>;
+            DefaultDrinkList = loaderService.LoadDrinkTypes() as List<DrinkValueObject> ?? throw new NullReferenceException($"LoadDrinkTypes() method wasn't properly created on {loaderService.GetType()} Class.");
             if (DefaultDrinkList == null)
             {
                 throw new NullReferenceException

@@ -31,12 +31,15 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             else
             {
                 var drinks = new MockDrinkRepository().LoadDrinkTypes() as List<DrinkValueObject>;
-                defaultCustomerList = new List<CustomerValueObject>
+                if (drinks != null)
                 {
-                    new CustomerValueObject("Jack", "Aalders", drinks[0].Id, true),
-                    new CustomerValueObject("John", "Aalders", drinks[0].Id, true),
-                    new CustomerValueObject("Sarah", "Spear", drinks[0].Id, false)
-                };
+                    defaultCustomerList = new List<CustomerValueObject>
+                    {
+                        new CustomerValueObject("Jack", "Aalders", drinks[0].Id, true),
+                        new CustomerValueObject("John", "Aalders", drinks[0].Id, true),
+                        new CustomerValueObject("Sarah", "Spear", drinks[0].Id, false)
+                    };
+                }
             }
             jsonStorageDirectory = ConstructJsonStorageDirectory();
         }

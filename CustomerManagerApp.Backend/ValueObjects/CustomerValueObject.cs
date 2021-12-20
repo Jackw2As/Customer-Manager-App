@@ -19,9 +19,18 @@ namespace CustomerManagerApp.Backend.ValueObjects
             else { Id = id; }
             DrinkID = DrinkId;
         }
+        public CustomerValueObject(CustomerValueObject customer)
+        {
+            DrinkID = customer.DrinkID;
+            FirstTime = customer.FirstTime;
+            FirstName = customer.FirstName;
+            LastName = customer.LastName;
+            IsDeveloper = customer.IsDeveloper;
+            Id = new Guid().ToString();
+        }
         //ID is a Guid. The Reason we return a string instead of GUID object
         // is because the Json Seralizer doesn't work well with GUID objects.
-        public string Id { get; set; }
+        public string Id { get; init; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool IsDeveloper { get; set; }

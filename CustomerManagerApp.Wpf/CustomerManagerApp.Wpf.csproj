@@ -12,21 +12,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CustomerManagerApp.Backend\CustomerManagerApp.Backend.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Assets\StoreLogo.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CustomerManagerApp.ViewModel\CustomerManagerApp.ViewModel.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="Controls\HeaderControl.xaml">
+    <Page Update="CustomerList\CustomerListView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="Controls\ListView.xaml">
+    <Page Update="GenericControls\HeaderControl.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="Controls\UserEditView.xaml">
+    <Page Update="CustomerEdit\CustomerEditView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>
