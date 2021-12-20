@@ -4,12 +4,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CustomerManagerApp.Backend.ValueObjects
 {
     public class CustomerValueObject
     {
+        [JsonConstructor]
         public CustomerValueObject(string firstName, string lastName, string DrinkId, bool isDeveloper = false, string? id = null)
         {
             FirstName = firstName;
