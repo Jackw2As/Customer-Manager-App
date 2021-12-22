@@ -32,7 +32,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.194" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
@@ -41,9 +40,6 @@
        package has not yet been restored -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnablePreviewMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CustomerManagerApp.ViewModel\CustomerManagerApp.ViewModel.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="Controls\ListView.xaml">
