@@ -26,23 +26,18 @@ namespace CustomerManagerApp.WinUI
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-        public MainWindowViewModel ViewModel { get; set; }
+       public MainWindowViewModel ViewModel { get; set; }
         public MainWindow()
         {
+            this.Activated += MainWindow_Activated;
+
             var dataContainer = new DataService();
             ViewModel = new MainWindowViewModel(dataContainer);
-            this.Activated += MainWindow_Activated;
+            
             this.InitializeComponent();
         }
 
         //When the Window is activated we load the Customer Data
-        private void MainWindow_Activated(object sender, WindowActivatedEventArgs args)
-        {
-            //Returns Null here for some reason on launch I need to work out why.
-            if(ViewModel.DrinkTypes?.Count == 0)
-            {
-                ViewModel.Load();
-            }
-        }
+        private void MainWindow_Activated(object sender, WindowActivatedEventArgs args) => ViewModel.Load();
     }
 }

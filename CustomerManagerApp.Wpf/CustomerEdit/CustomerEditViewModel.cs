@@ -1,5 +1,5 @@
-﻿using CustomerManagerApp.Backend.Service;
-using CustomerManagerApp.Backend.ValueObjects;
+﻿using CustomerManagerApp.Backend.Entities;
+using CustomerManagerApp.Backend.Service;
 using CustomerManagerApp.Wpf.Wrapper;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace CustomerManagerApp.Wpf.CustomerEdit
     internal delegate void SaveSelectedCustomer(CustomerWrapper? customer);
     public class CustomerEditViewModel : ViewModelBase
     {
-        public ObservableCollection<DrinkValueObject> DrinkTypes { get; init; } = new();
+        public ObservableCollection<DrinkEntity> DrinkTypes { get; init; } = new();
 
         private CustomerWrapper? selectedCustomer;
         private readonly DataService data;

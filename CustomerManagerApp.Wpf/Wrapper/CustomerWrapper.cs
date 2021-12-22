@@ -5,13 +5,13 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using CustomerManagerApp.Backend.ValueObjects;
+using CustomerManagerApp.Backend.Entities;
 
 namespace CustomerManagerApp.Wpf.Wrapper
 {
     public class CustomerWrapper : BaseWrapper
     {
-        private readonly CustomerValueObject customer;
+        private readonly CustomerEntity customer;
         
 
         public CustomerWrapper(DrinkWrapper drinkOfChoice)
@@ -19,11 +19,11 @@ namespace CustomerManagerApp.Wpf.Wrapper
             customer = new("", "", drinkOfChoice.Id.ToString());
         }
 
-        public CustomerWrapper(CustomerValueObject customer)
+        public CustomerWrapper(CustomerEntity customer)
         {
             this.customer = customer;
         }
-        public CustomerValueObject GetWrappedCustomer => customer;
+        public CustomerEntity GetWrappedCustomer => customer;
         public Guid Id
         {
             get => new(customer.Id);

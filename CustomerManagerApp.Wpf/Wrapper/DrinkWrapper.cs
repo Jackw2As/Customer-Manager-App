@@ -1,4 +1,4 @@
-﻿using CustomerManagerApp.Backend.ValueObjects;
+﻿using CustomerManagerApp.Backend.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +9,13 @@ namespace CustomerManagerApp.Wpf.Wrapper
 {
     public class DrinkWrapper : BaseWrapper
     {
-        private DrinkValueObject drink;
+        private DrinkEntity drink;
         public DrinkWrapper()
         {
             drink = new("");
         }
 
-        public DrinkWrapper(DrinkValueObject Drink)
+        public DrinkWrapper(DrinkEntity Drink)
         {
             drink = Drink;
         }

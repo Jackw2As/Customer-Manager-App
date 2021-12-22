@@ -1,6 +1,7 @@
-﻿using CustomerManagerApp.Backend.Repository.Drink;
+﻿using CustomerManagerApp.Backend.Entities;
+using CustomerManagerApp.Backend.Repository.Drink;
 using CustomerManagerApp.Backend.Service;
-using CustomerManagerApp.Backend.ValueObjects;
+using CustomerManagerApp.WinUI.Wrapper;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,14 +12,12 @@ using System.Threading.Tasks;
 namespace CustomerManagerApp.ViewModel
 {
     public delegate void RefreshEvent();
-    public delegate void CustomerChangedEvent(CustomerViewModel customer);
+    public delegate void CustomerChangedEvent(CustomerWrapper customer);
     public class ListViewModel : ViewModelBase
     {
-        public ObservableCollection<CustomerViewModel> Customers { get; } = new();
-        public ObservableCollection<DrinkValueObject> DrinkTypes { get; } = new();
+        public ObservableCollection<CustomerWrapper> Customers { get; } = new();
+        public ObservableCollection<DrinkWrapper> DrinkTypes { get; } = new();
         private DataService Data { get; }
-
-        
 
         public event RefreshEvent OnRefreshRaised;
         public void RefreshList()
@@ -30,7 +29,9 @@ namespace CustomerManagerApp.ViewModel
         /// Called when a new customer is selected
         /// </summary>
         public event CustomerChangedEvent SelectedCustomerRaisedEvent;
-        public CustomerViewModel SelectedCustomer
+
+        private CustomerWrapper selectedCustomer;
+        public CustomerWrapper SelectedCustomer
         {
             get => selectedCustomer; 
             set
@@ -50,17 +51,17 @@ namespace CustomerManagerApp.ViewModel
         }
         public void CustomerAdd()
         {
-            CustomerValueObject customer = new("new customer", "", DrinkTypes[0].Id);
-            var defualtCustomer = new CustomerViewModel(customer, Data);
+            var customer = new CustomerEntity("new customer", "", DrinkTypes[0].Id);
+            var defualtCustomer = new CustomerWrapper(customer);
             Customers.Add(defualtCustomer);
         }
 
-        public void CustomerRemove(CustomerViewModel customer)
+        public void CustomerRemove(CustomerWrapper customer)
         {
             Customers.Remove(customer);
         }
 
-        public ObservableCollection<CustomerViewModel> CustomerList()
+        public ObservableCollection<CustomerWrapper> CustomerList()
         {
             return Customers;
         }
@@ -70,7 +71,6 @@ namespace CustomerManagerApp.ViewModel
         {
             foreach (var customer in Customers)
             {
-                customer.SaveCustomer();
             }
             var customers = await Data.GetCustomersAsync();
 
@@ -90,18 +90,19 @@ namespace CustomerManagerApp.ViewModel
             throw new NotImplementedException();
         }
 
-        private List<CustomerViewModel> filteredList = new();
+        private List<CustomerWrapper> filteredList = new();
 
 
 
-        private void FilterByName(string FilterText, CustomerValueObject customer)
+        private void FilterByName(string FilterText, CustomerEntity customer)
         {
             if (customer.FirstName.Contains(FilterText) == false && customer.LastName.Contains(FilterText) == false)
             {
                 return;
             }
 
-            var model = new CustomerViewModel(customer, Data);
+            var drink = new DrinkWrapper(Data.GetDrinks().First());
+            var model = new CustomerWrapper(drink);
             if (!filteredList.Contains(model))
             {
                 filteredList.Add(model);
@@ -109,7 +110,7 @@ namespace CustomerManagerApp.ViewModel
         }
 
         
-        private CustomerViewModel selectedCustomer;
+        
         
 
     }

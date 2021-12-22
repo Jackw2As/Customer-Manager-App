@@ -1,4 +1,6 @@
-﻿using CustomerManagerApp.Backend.ValueObjects;
+﻿using CustomerManagerApp.Backend.Entities;
+using CustomerManagerApp.Backend.Service;
+using CustomerManagerApp.WinUI.Wrapper;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,21 +10,20 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.ViewModel
 {
-    public delegate void RemoveSelectedCustomer(CustomerViewModel customer);
+    public delegate void RemoveSelectedCustomer(CustomerWrapper customer);
     public class EditViewModel : ViewModelBase
     {
-        public ObservableCollection<DrinkValueObject> DrinkTypes { get; init; } = new();
+        public ObservableCollection<DrinkEntity> DrinkTypes { get; init; } 
 
-        public EditViewModel(ObservableCollection<DrinkValueObject> drinkTypes)
+        private DataService dataService;
+
+        public EditViewModel(DataService DataService)
         {
-            if (drinkTypes == null)
-            {
-                DrinkTypes = drinkTypes;
-            }
+            DrinkTypes = new(DataService.GetDrinks());
         }
 
-        private CustomerViewModel selectedCustomer;
-        public CustomerViewModel SelectedCustomer
+        private CustomerWrapper selectedCustomer;
+        public CustomerWrapper SelectedCustomer
         {
             get => selectedCustomer; 
             
@@ -39,6 +40,7 @@ namespace CustomerManagerApp.ViewModel
 
                     PropertyHasChanged();
                     PropertyHasChanged(nameof(IsCustomerSelected));
+                    PropertyHasChanged(nameof(CanSave));
                 }
                 else
                 {
@@ -46,6 +48,7 @@ namespace CustomerManagerApp.ViewModel
                     {
                         PropertyHasChanged();
                         PropertyHasChanged(nameof(IsCustomerSelected));
+                        PropertyHasChanged(nameof(CanSave));
                     }
 
                     selectedCustomer = null;
@@ -66,14 +69,25 @@ namespace CustomerManagerApp.ViewModel
             }
         }
 
-        public event RemoveSelectedCustomer RemoveSelectedCustomerEvent;
-        public void RemoveSelectedCustomer()
-        {
-            if(SelectedCustomer != null)
+        public bool CanSave { 
+            get
             {
-                SelectedCustomer.Remove();
-                RemoveSelectedCustomerEvent?.Invoke(SelectedCustomer);
+                if(IsCustomerSelected)
+                {
+                    return true;
+                }
+                return false;
             }
+        }
+
+        public event RemoveSelectedCustomer RemoveSelectedCustomerEvent;
+        public async void RemoveSelectedCustomer()
+        {
+            if (SelectedCustomer == null) return;
+
+            await dataService.RemoveCustomerAsync(SelectedCustomer.GetWrappedCustomer);
+            RemoveSelectedCustomerEvent?.Invoke(SelectedCustomer);
+            SelectedCustomer = null;
         }
 
         internal void Load()

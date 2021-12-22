@@ -1,41 +1,46 @@
 ﻿using CustomerManagerApp.Backend.Service;
-using CustomerManagerApp.Backend.ValueObjects;
+using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace CustomerManagerApp.ViewModel
 {
-    public class MainWindowViewModel : ViewModelBase
-    {
-        //This Class should handle the creations ViewModels under the Main Window
-        //This Class should pass data between the viewModels.
-        //This Class should handle taking to any external classess.
+	public class MainWindowViewModel : ViewModelBase
+	{
+		private readonly DataService dataService;
 
-        private readonly DataService dataService;
+		public MainWindowViewModel(DataService DataService)
+		{
+			this.dataService = DataService;
 
-        public ObservableCollection<DrinkValueObject> DrinkTypes { get; } = new();
+			ListViewModel = new(DataService);
+			EditViewModel = new(DataService);
+		}
 
-        public MainWindowViewModel(DataService DataService)
-        {
-            this.dataService = DataService;
-            this.DrinkTypes = new(DataService.GetDrinksAsync().Result);
+		//Child View Models
+		public ListViewModel ListViewModel { get; set; }
+		public EditViewModel EditViewModel { get; set; }
 
-            ListViewModel = new(DataService);
-            EditViewModel = new(DrinkTypes);
-        }
 
-        public ListViewModel ListViewModel { get; set; }
-        public EditViewModel EditViewModel { get; set; }
-        public bool IsLoading { get; private set; }  = false;
-        public async void Load()
-        {
-            //stops multiple refreshes firing at once.
-            if (IsLoading) return;
-            IsLoading = true;
 
-            ListViewModel.Load();
-            EditViewModel.Load();
+		public bool IsLoading { get; private set; }  = false;
+		public void Load()
+		{
+			//stops multiple refreshes firing at once.
+			if (IsLoading) return;
+			IsLoading = true;
 
-            IsLoading = false;
-        }
-    }
+            try
+            {
+				ListViewModel.Load();
+				EditViewModel.Load();
+			}
+			catch(NotImplementedException ex)
+            {
+				Debug.Print($"{ex.GetType} exception recorded: On {ex.Source}, {ex.TargetSite} isn't supported yet.");
+            }
+
+			IsLoading = false;
+		}
+	}
 }
