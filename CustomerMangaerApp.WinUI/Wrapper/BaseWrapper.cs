@@ -6,12 +6,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomerManagerApp.Wpf.Wrapper
+namespace CustomerMangaerApp.WinUI.Wrapper
 {
     public class BaseWrapper : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void propertyChanged([CallerMemberName] string? PropertyName = null)
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void propertyChanged([CallerMemberName] string PropertyName = null)
         {
             if (PropertyName != null)
             {

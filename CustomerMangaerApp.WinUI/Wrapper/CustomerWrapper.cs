@@ -6,8 +6,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using CustomerManagerApp.Backend.ValueObjects;
+using CustomerMangaerApp.WinUI.Wrapper;
 
-namespace CustomerManagerApp.Wpf.Wrapper
+namespace CustomerManagerApp.WinUI.Wrapper
 {
     public class CustomerWrapper : BaseWrapper
     {

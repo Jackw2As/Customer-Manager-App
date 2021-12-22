@@ -1,11 +1,12 @@
 ﻿using CustomerManagerApp.Backend.ValueObjects;
+using CustomerMangaerApp.WinUI.Wrapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomerManagerApp.Wpf.Wrapper
+namespace CustomerManagerApp.WinUI.Wrapper
 {
     public class DrinkWrapper : BaseWrapper
     {
