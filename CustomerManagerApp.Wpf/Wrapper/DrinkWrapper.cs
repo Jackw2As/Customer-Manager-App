@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.Wpf.Wrapper
 {
-    internal class DrinkWrapper : BaseWrapper
+    public class DrinkWrapper : BaseWrapper
     {
         private DrinkValueObject drink;
         public DrinkWrapper()

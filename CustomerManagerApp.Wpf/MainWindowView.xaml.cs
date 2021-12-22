@@ -8,18 +8,19 @@ namespace CustomerManagerApp.Wpf
     /// </summary>
     public partial class MainWindowView : Window
     {
-        public MainWindowViewModel ViewModel { get; set; }
+        //public MainWindowViewModel ViewModel { get; set; }
         public MainWindowView()
         {
-            ViewModel = new MainWindowViewModel();
-            DataContext = ViewModel;
+            //ViewModel = new MainWindowViewModel();
+            //DataContext = ViewModel;
             this.Loaded += MainWindowView_Loaded;
             InitializeComponent();
         }
 
         private void MainWindowView_Loaded(object sender, RoutedEventArgs e)
         {
-            ViewModel.Load();
+            var ViewModel = DataContext as MainWindowViewModel;
+            ViewModel?.Load();
         }
     }
 }

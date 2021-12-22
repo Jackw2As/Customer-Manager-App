@@ -6,29 +6,30 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:local="clr-namespace:CustomerManagerApp.Wpf.CustomerList"
     mc:Ignorable="d">
+    <UserControl.DataContext >
+        <local:CustomerListViewModel/>
+    </UserControl.DataContext>
 
     <StackPanel HorizontalAlignment="Center" >
 
         <StackPanel Margin="10">
-            <Button HorizontalAlignment="Stretch" 
+            <Button x:Name="Refresh" HorizontalAlignment="Stretch" 
                     FontWeight="Bold"
-                    Content="Refresh" />
+                    Content="Refresh" BorderBrush="#FF707070" />
 
-            <Button Margin="0 3 0 0" 
+            <Button x:Name="new_customer" Margin="0 3 0 0" 
                     HorizontalAlignment="Stretch" 
                     FontWeight="Bold" 
-                    Content="New Customer">
-            </Button>
-            <TextBox Margin="0 3 0 0" 
-                     Text="{Binding FilterValue, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    Content="New Customer"/>
+            <TextBox x:Name="filter" Margin="0 3 0 0" 
+                     Text="{Binding FilterValue}">
                 
             </TextBox>
         </StackPanel>
 
-        <ListView MinWidth="200" Margin="10" 
-                  ItemsSource="{Binding FilteredCustomerList, Mode=OneWay}"
-                  SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}"
-                  DisplayMemberPath="DisplayName"
+        <ListView x:Name="list" MinWidth="200" Margin="10" 
+                  DisplayMemberPath="DisplayName" 
+                  d:ItemsSource="{d:SampleData ItemCount=8}" 
                   />
 
 

@@ -9,7 +9,7 @@ using CustomerManagerApp.Backend.ValueObjects;
 
 namespace CustomerManagerApp.Wpf.Wrapper
 {
-    internal class CustomerWrapper : BaseWrapper
+    public class CustomerWrapper : BaseWrapper
     {
         private readonly CustomerValueObject customer;
         
@@ -54,6 +54,8 @@ namespace CustomerManagerApp.Wpf.Wrapper
                 }
             }
         }
+
+        public string DisplayName => FirstName + " " + LastName;
 
         public Guid DrinkId
         {

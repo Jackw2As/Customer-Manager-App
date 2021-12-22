@@ -6,8 +6,13 @@ namespace CustomerManagerApp.Wpf.CustomerList
     {
         public CustomerListView()
         {
-            DataContext = new CustomerListViewModel();
             InitializeComponent();
+
+            CustomerListViewModel? viewModel = DataContext as CustomerListViewModel;
+            if (viewModel == null) throw new System.Exception("Should never be null");
+
+            list.ItemsSource = viewModel.FilteredCustomerList;
+            list.SelectedItem = viewModel.SelectedCustomer;
         }
     }
 }

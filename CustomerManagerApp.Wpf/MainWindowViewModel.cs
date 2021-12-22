@@ -13,21 +13,21 @@ namespace CustomerManagerApp.Wpf
     {
 
         //Child ViewModels
-        public CustomerEditViewModel EditViewModel;
-        public CustomerListViewModel ListViewModel;
+        public CustomerEditViewModel CustomerEdit { get; set; }
+        public CustomerListViewModel CustomerList { get; set; }
 
         public MainWindowViewModel()
         {
             DataService DataService = new();       
-            DrinkWrapper defaultdrink = new DrinkWrapper(DataService.GetDrinksAsync().Result.First());
+            DrinkWrapper defaultdrink = new DrinkWrapper(DataService.GetDrinks().First());
 
-            ListViewModel = new(ref DataService, defaultdrink);
-            EditViewModel = new(ref DataService);
+            CustomerList = new(ref DataService, defaultdrink);
+            CustomerEdit = new(ref DataService);
 
-            ListViewModel.SelectedCustomerChanged += SelectedCustomerChangedEvent;
-            ListViewModel.OnRefresh += ListViewModel_OnRefreshRaised;
+            CustomerList.SelectedCustomerChanged += SelectedCustomerChangedEvent;
+            CustomerList.OnRefresh += ListViewModel_OnRefreshRaised;
 
-            EditViewModel.RemoveCustomerSelected += EditViewModel_RemoveSelectedCustomerEvent;
+            CustomerEdit.RemoveCustomerSelected += EditViewModel_RemoveSelectedCustomerEvent;
         }
 
         //Handle View Model Commands
@@ -35,7 +35,7 @@ namespace CustomerManagerApp.Wpf
         private void ListViewModel_OnRefreshRaised() => Load();
 
 
-        private void SelectedCustomerChangedEvent(CustomerWrapper? customer) => EditViewModel.SelectedCustomer = customer;
+        private void SelectedCustomerChangedEvent(CustomerWrapper? customer) => CustomerEdit.SelectedCustomer = customer;
 
         public bool IsLoading { get; private set; } = false;
         public void Load()
@@ -44,8 +44,8 @@ namespace CustomerManagerApp.Wpf
             if (IsLoading) return;
             IsLoading = true;
 
-            ListViewModel.Load();
-            EditViewModel.Load();
+            CustomerList.Load();
+            CustomerEdit.Load();
 
             IsLoading = false;
         }

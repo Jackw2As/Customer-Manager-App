@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CustomerManagerApp.Wpf.CustomerEdit
 {
@@ -19,7 +20,7 @@ namespace CustomerManagerApp.Wpf.CustomerEdit
         private CustomerWrapper? selectedCustomer;
         private readonly DataService data;
 
-        internal CustomerWrapper? SelectedCustomer 
+        public CustomerWrapper? SelectedCustomer 
         { 
             get => selectedCustomer;
             set
@@ -37,7 +38,7 @@ namespace CustomerManagerApp.Wpf.CustomerEdit
         public CustomerEditViewModel(ref DataService Data)
         {
             data = Data;
-            var drinks = Data.GetDrinksAsync().Result;
+            var drinks = Data.GetDrinks();
 
             foreach (var drink in drinks)
             {
@@ -77,7 +78,7 @@ namespace CustomerManagerApp.Wpf.CustomerEdit
 
         internal void Load()
         {
-            throw new NotImplementedException();
+            SelectedCustomer = null;
         }
 
         internal event RemoveSelectedCustomer? RemoveCustomerSelected;

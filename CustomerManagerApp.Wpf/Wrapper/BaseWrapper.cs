@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.Wpf.Wrapper
 {
-    internal class BaseWrapper : INotifyPropertyChanged
+    public class BaseWrapper : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void propertyChanged([CallerMemberName] string? PropertyName = null)

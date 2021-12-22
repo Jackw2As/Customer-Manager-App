@@ -36,6 +36,12 @@ namespace CustomerManagerApp.Backend.Service
             return await drinkRepository.LoadDrinkTypesAsync();
         }
 
+        public IEnumerable<DrinkValueObject> GetDrinks()
+        {
+            var drinks = drinkRepository.LoadDrinkTypesAsync().Result;
+            return drinks;
+        }
+
         //Customers
 
         public async Task<IEnumerable<CustomerValueObject>> GetCustomersAsync()

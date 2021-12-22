@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomerManagerApp.Wpf.GenericControls;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,9 @@ namespace CustomerManagerApp.Wpf
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            InitializeComponent();
+        }
     }
 }

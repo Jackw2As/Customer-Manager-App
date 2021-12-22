@@ -14,8 +14,8 @@ namespace CustomerManagerApp.Wpf.CustomerList
     internal delegate void CustomerSelectionChangedEvent(CustomerWrapper? customer);
     public class CustomerListViewModel : ViewModelBase
     {
-        internal ObservableCollection<CustomerWrapper> FilteredCustomerList { get; private set; } = new();
-        internal ObservableCollection<CustomerWrapper> UnFilteredCustomerList { get; } = new();
+        public ObservableCollection<CustomerWrapper> FilteredCustomerList { get; set; } = new();
+        public ObservableCollection<CustomerWrapper> UnFilteredCustomerList { get; } = new();
         internal DrinkWrapper DefaultDrink { get; }
         protected DataService Data { get; }
 
@@ -50,6 +50,8 @@ namespace CustomerManagerApp.Wpf.CustomerList
                     FilteredCustomerList.Add(new(customer));
                 }
             }
+            PropertyHasChanged(nameof(UnFilteredCustomerList));
+            PropertyHasChanged(nameof(FilteredCustomerList));
             isLoading = false;
         }
 
@@ -61,7 +63,7 @@ namespace CustomerManagerApp.Wpf.CustomerList
         internal event CustomerSelectionChangedEvent? SelectedCustomerChanged;
         
         private CustomerWrapper? selectedCustomer = null;
-        internal CustomerWrapper? SelectedCustomer
+        public CustomerWrapper? SelectedCustomer
         {
             get => selectedCustomer;
             set
@@ -96,7 +98,7 @@ namespace CustomerManagerApp.Wpf.CustomerList
             UnFilteredCustomerList.Add(defualtCustomer);
         }
 
-        public string FilterValue = "";
+        public string FilterValue { get; set; } = "";
         public void Filter()
         {
             FilteredCustomerList = UnFilteredCustomerList;
