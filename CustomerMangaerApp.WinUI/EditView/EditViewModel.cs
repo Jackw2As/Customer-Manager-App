@@ -75,5 +75,10 @@ namespace CustomerManagerApp.ViewModel
                 RemoveSelectedCustomerEvent?.Invoke(SelectedCustomer);
             }
         }
+
+        internal void Load()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

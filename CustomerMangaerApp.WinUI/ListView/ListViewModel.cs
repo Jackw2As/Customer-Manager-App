@@ -84,6 +84,12 @@ namespace CustomerManagerApp.ViewModel
             }
 
         }
+
+        internal void Load()
+        {
+            throw new NotImplementedException();
+        }
+
         private List<CustomerViewModel> filteredList = new();
 
 

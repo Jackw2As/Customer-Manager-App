@@ -16,9 +16,9 @@
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Controls\HeaderControl.xaml" />
-    <None Remove="Controls\ListView.xaml" />
-    <None Remove="Controls\UserEditView.xaml" />
+    <None Remove="Header\HeaderControl.xaml" />
+    <None Remove="Header\ListView.xaml" />
+    <None Remove="Header\UserEditView.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,12 +42,15 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Controls\ListView.xaml">
+    <ProjectReference Include="..\CustomerManagerApp.Backend\CustomerManagerApp.Backend.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="ListView\ListView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Controls\UserEditView.xaml">
+    <Page Update="EditView\UserEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
