@@ -1,5 +1,5 @@
-﻿using CustomerManagerApp.Backend.Repository.Drink;
-using CustomerManagerApp.Backend.ValueObjects;
+﻿using CustomerManagerApp.Backend.Entities;
+using CustomerManagerApp.Backend.Repository.Drink;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,8 +19,8 @@ namespace CustomerManagerApp.Backend.Repository.Customer
         private static readonly string CustomersFileName = "customers.json";
         private DirectoryInfo jsonStorageDirectory;
         private string directoryName;
-        private IEnumerable<CustomerValueObject> defaultCustomerList;
-        public JsonCustomerRepository(string DirectoryName = "Json", IEnumerable<CustomerValueObject>? DefaultCustomerList = null)
+        private IEnumerable<CustomerEntity> defaultCustomerList;
+        public JsonCustomerRepository(string DirectoryName = "Json", IEnumerable<CustomerEntity>? DefaultCustomerList = null)
         {
 
             directoryName = DirectoryName;
@@ -30,14 +30,14 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             }
             else
             {
-                var drinks = new MockDrinkRepository().LoadDrinkTypes() as List<DrinkValueObject>;
+                var drinks = new MockDrinkRepository().LoadDrinkTypes() as List<DrinkEntity>;
                 if (drinks != null)
                 {
-                    defaultCustomerList = new List<CustomerValueObject>
+                    defaultCustomerList = new List<CustomerEntity>
                     {
-                        new CustomerValueObject("Jack", "Aalders", drinks[0].Id, true),
-                        new CustomerValueObject("John", "Aalders", drinks[0].Id, true),
-                        new CustomerValueObject("Sarah", "Spear", drinks[0].Id, false)
+                        new CustomerEntity("Jack", "Aalders", drinks[0].Id, true),
+                        new CustomerEntity("John", "Aalders", drinks[0].Id, true),
+                        new CustomerEntity("Sarah", "Spear", drinks[0].Id, false)
                     };
                 }
             }
@@ -70,7 +70,7 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             return Directory.CreateDirectory(applicationFolderPath + "/Data/" + directoryName);
         }
 
-        public async Task<IEnumerable<CustomerValueObject>> LoadCustomersAsync()
+        public async Task<IEnumerable<CustomerEntity>> LoadCustomersAsync()
         {
             FileInfo? file = null;
             var files = jsonStorageDirectory.GetFiles(CustomersFileName).ToList();
@@ -85,12 +85,12 @@ namespace CustomerManagerApp.Backend.Repository.Customer
                 return defaultCustomerList;
             }
 
-            List<CustomerValueObject> customers = new();
+            List<CustomerEntity> customers = new();
 
             //List<Customer> customers = JsonConvert.DeserializeObject<List<Customer>>(File.ReadAllText());
             using (FileStream reader = file.OpenRead())
             {
-                var DeserializationResults = await JsonSerializer.DeserializeAsync(reader, typeof(List<CustomerValueObject>)) as List<CustomerValueObject>;
+                var DeserializationResults = await JsonSerializer.DeserializeAsync(reader, typeof(List<CustomerEntity>)) as List<CustomerEntity>;
                 if (DeserializationResults != null)
                 {
                     customers.AddRange(DeserializationResults);
@@ -99,7 +99,7 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             return customers;
         }
 
-        public async Task SaveCustomerAsync(IEnumerable<CustomerValueObject> customers)
+        public async Task SaveCustomerAsync(IEnumerable<CustomerEntity> customers)
         {
             using (var file = File.Create(jsonStorageDirectory.FullName + "/" + CustomersFileName))
             {

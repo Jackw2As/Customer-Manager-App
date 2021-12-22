@@ -1,6 +1,6 @@
-﻿using CustomerManagerApp.Backend.Repository.Customer;
+﻿using CustomerManagerApp.Backend.Entities;
+using CustomerManagerApp.Backend.Repository.Customer;
 using CustomerManagerApp.Backend.Repository.Drink;
-using CustomerManagerApp.Backend.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,12 +31,12 @@ namespace CustomerManagerApp.Backend.Service
         }
 
         //Drinks
-        public async Task<IEnumerable<DrinkValueObject>> GetDrinksAsync()
+        public async Task<IEnumerable<DrinkEntity>> GetDrinksAsync()
         {
             return await drinkRepository.LoadDrinkTypesAsync();
         }
 
-        public IEnumerable<DrinkValueObject> GetDrinks()
+        public IEnumerable<DrinkEntity> GetDrinks()
         {
             var drinks = drinkRepository.LoadDrinkTypesAsync().Result;
             return drinks;
@@ -44,12 +44,12 @@ namespace CustomerManagerApp.Backend.Service
 
         //Customers
 
-        public async Task<IEnumerable<CustomerValueObject>> GetCustomersAsync()
+        public async Task<IEnumerable<CustomerEntity>> GetCustomersAsync()
         {
             return await customerRepository.LoadCustomersAsync();
         }
 
-        public async Task AddCustomerAsync(CustomerValueObject customer)
+        public async Task AddCustomerAsync(CustomerEntity customer)
         {
             var customers = await getCustomerListAsync();
 
@@ -62,7 +62,7 @@ namespace CustomerManagerApp.Backend.Service
             await customerRepository.SaveCustomerAsync(customers);
         }
 
-        public async Task RemoveCustomerAsync(CustomerValueObject customer)
+        public async Task RemoveCustomerAsync(CustomerEntity customer)
         {
             var customers = await getCustomerListAsync();
 
@@ -73,7 +73,7 @@ namespace CustomerManagerApp.Backend.Service
             }
         }
 
-        public async Task UpdateCustomerAsync(CustomerValueObject customer)
+        public async Task UpdateCustomerAsync(CustomerEntity customer)
         {
             var customers = await getCustomerListAsync();
             var edit = customers.Find(c => c == customer);
@@ -92,9 +92,9 @@ namespace CustomerManagerApp.Backend.Service
             await customerRepository.SaveCustomerAsync(customers);
         }
 
-        private async Task<List<CustomerValueObject>> getCustomerListAsync()
+        private async Task<List<CustomerEntity>> getCustomerListAsync()
         {
-            var customers = await customerRepository.LoadCustomersAsync() as List<CustomerValueObject>;
+            var customers = await customerRepository.LoadCustomersAsync() as List<CustomerEntity>;
             if (customers == null)
             {
                 throw new Exception("Customer Data is Corrupted. Couldn't read it.");

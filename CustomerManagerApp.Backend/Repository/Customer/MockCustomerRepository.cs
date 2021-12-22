@@ -1,4 +1,4 @@
-﻿using CustomerManagerApp.Backend.ValueObjects;
+﻿using CustomerManagerApp.Backend.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +9,10 @@ namespace CustomerManagerApp.Backend.Repository.Customer
 {
     public class MockCustomerRepository : ICustomerRepository
     {
-        private List<CustomerValueObject> _customerList = new();
-        private List<CustomerValueObject> _defaultList = new();
+        private List<CustomerEntity> _customerList = new();
+        private List<CustomerEntity> _defaultList = new();
 
-        public MockCustomerRepository(List<CustomerValueObject> DefaultList)
+        public MockCustomerRepository(List<CustomerEntity> DefaultList)
         {
             _customerList.AddRange(DefaultList);
             _defaultList = DefaultList;
@@ -22,17 +22,17 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             _customerList = null;
         }
 
-        public Task<IEnumerable<CustomerValueObject>> LoadCustomersAsync()
+        public Task<IEnumerable<CustomerEntity>> LoadCustomersAsync()
         {
             if (_customerList is null)
             {
                 _customerList = _defaultList;
             }
-            IEnumerable<CustomerValueObject> list = _customerList;
+            IEnumerable<CustomerEntity> list = _customerList;
             return Task.FromResult(list);
         }
 
-        public Task SaveCustomerAsync(IEnumerable<CustomerValueObject> customers)
+        public Task SaveCustomerAsync(IEnumerable<CustomerEntity> customers)
         {
             _customerList = customers.ToList();
             return Task.CompletedTask;

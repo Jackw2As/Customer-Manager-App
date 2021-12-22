@@ -1,5 +1,5 @@
-﻿using CustomerManagerApp.Backend.Repository.Drink;
-using CustomerManagerApp.Backend.ValueObjects;
+﻿using CustomerManagerApp.Backend.Entities;
+using CustomerManagerApp.Backend.Repository.Drink;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -11,7 +11,7 @@ namespace CustomerManagerApp.Test.Backend_Tests
         public DrinkRepositoryTests()
         {
             IDrinkRepository loaderService = new MockDrinkRepository();
-            DefaultDrinkList = loaderService.LoadDrinkTypes() as List<DrinkValueObject> ?? throw new NullReferenceException($"LoadDrinkTypes() method wasn't properly created on {loaderService.GetType()} Class.");
+            DefaultDrinkList = loaderService.LoadDrinkTypes() as List<DrinkEntity> ?? throw new NullReferenceException($"LoadDrinkTypes() method wasn't properly created on {loaderService.GetType()} Class.");
             if (DefaultDrinkList == null)
             {
                 throw new NullReferenceException
@@ -19,7 +19,7 @@ namespace CustomerManagerApp.Test.Backend_Tests
             }
                 
         }
-        private List<DrinkValueObject> DefaultDrinkList { get; init; }
+        private List<DrinkEntity> DefaultDrinkList { get; init; }
 
         private IDrinkRepository constructMockRepository()
         {

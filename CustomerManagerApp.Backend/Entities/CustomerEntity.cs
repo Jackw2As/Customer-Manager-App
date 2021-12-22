@@ -7,12 +7,12 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace CustomerManagerApp.Backend.ValueObjects
+namespace CustomerManagerApp.Backend.Entities
 {
-    public class CustomerValueObject
+    public class CustomerEntity
     {
         [JsonConstructor]
-        public CustomerValueObject(string firstName, string lastName, string DrinkId, bool isDeveloper = false, string? id = null)
+        public CustomerEntity(string firstName, string lastName, string DrinkId, bool isDeveloper = false, string? id = null)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -21,7 +21,7 @@ namespace CustomerManagerApp.Backend.ValueObjects
             else { Id = id; }
             DrinkID = DrinkId;
         }
-        public CustomerValueObject(CustomerValueObject customer)
+        public CustomerEntity(CustomerEntity customer)
         {
             DrinkID = customer.DrinkID;
             FirstTime = customer.FirstTime;
@@ -44,10 +44,17 @@ namespace CustomerManagerApp.Backend.ValueObjects
         {
             if (obj != null && obj.GetType() == GetType())
             {
-                CustomerValueObject Othercustomer = (CustomerValueObject)obj;
+                CustomerEntity Othercustomer = (CustomerEntity)obj;
                 return Id == Othercustomer.Id;
             }
             return base.Equals(obj);
+        }
+
+        //Not great, but at the end of the day the only thing that really matters here is the Id of the entity.
+        //If they match then they are the same value regaurdless of other data.
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using CustomerManagerApp.Backend.ValueObjects;
+﻿using CustomerManagerApp.Backend.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +9,8 @@ namespace CustomerManagerApp.Backend.Repository.Drink
 {
     public interface IDrinkRepository
     {
-        public IEnumerable<DrinkValueObject> LoadDrinkTypes();
+        public IEnumerable<DrinkEntity> LoadDrinkTypes();
 
-        public Task<IEnumerable<DrinkValueObject>> LoadDrinkTypesAsync();
+        public Task<IEnumerable<DrinkEntity>> LoadDrinkTypesAsync();
     }
 }

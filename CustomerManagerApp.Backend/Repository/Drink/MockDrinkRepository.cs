@@ -1,4 +1,4 @@
-﻿using CustomerManagerApp.Backend.ValueObjects;
+﻿using CustomerManagerApp.Backend.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +9,20 @@ namespace CustomerManagerApp.Backend.Repository.Drink
 {
     public class MockDrinkRepository : IDrinkRepository
     {
-        public IEnumerable<DrinkValueObject> LoadDrinkTypes()
+        public IEnumerable<DrinkEntity> LoadDrinkTypes()
         {
             return CreateDrinksList();
         }
 
-        public Task<IEnumerable<DrinkValueObject>> LoadDrinkTypesAsync()
+        public Task<IEnumerable<DrinkEntity>> LoadDrinkTypesAsync()
         {
             var drinks = CreateDrinksList();
-            return Task<IEnumerable<DrinkValueObject>>.Factory.StartNew(() => drinks);
+            return Task<IEnumerable<DrinkEntity>>.Factory.StartNew(() => drinks);
         }
 
-        private IEnumerable<DrinkValueObject> CreateDrinksList()
+        private IEnumerable<DrinkEntity> CreateDrinksList()
         {
-            return new List<DrinkValueObject>() {
+            return new List<DrinkEntity>() {
             new("English Breakfast"),
             new("Hot Chocolate"),
             new("Coffee")

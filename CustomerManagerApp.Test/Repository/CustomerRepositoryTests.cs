@@ -1,8 +1,8 @@
 using Xunit;
 using System.Collections.Generic;
 using CustomerManagerApp.Backend.Repository.Customer;
-using CustomerManagerApp.Backend.ValueObjects;
 using CustomerManagerApp.Backend.Repository.Drink;
+using CustomerManagerApp.Backend.Entities;
 
 namespace CustomerManagerApp.Test
 {
@@ -10,11 +10,11 @@ namespace CustomerManagerApp.Test
     {
         public CustomerRepositoryTests()
         {
-            var List = new MockDrinkRepository().LoadDrinkTypes() as List<DrinkValueObject>;
+            var List = new MockDrinkRepository().LoadDrinkTypes() as List<DrinkEntity>;
             if (List != null) drinksTypes = List;
             else drinksTypes = new();
 
-            mockDefaultCustomersList = new List<CustomerValueObject>
+            mockDefaultCustomersList = new List<CustomerEntity>
             {
                 new("John", "1", drinksTypes[0].Id),
                 new("John", "2", drinksTypes[0].Id),
@@ -23,12 +23,12 @@ namespace CustomerManagerApp.Test
             };  
         }
 
-        private List<DrinkValueObject> drinksTypes
+        private List<DrinkEntity> drinksTypes
         {
             get; init;
         }
 
-        private List<CustomerValueObject> mockDefaultCustomersList;
+        private List<CustomerEntity> mockDefaultCustomersList;
 
 
         private ICustomerRepository CreateMock()
@@ -51,7 +51,7 @@ namespace CustomerManagerApp.Test
         {
             var Loader = CreateMock();
 
-            await Loader.SaveCustomerAsync(new List<CustomerValueObject>());
+            await Loader.SaveCustomerAsync(new List<CustomerEntity>());
             var ConfirmEmpty = await Loader.LoadCustomersAsync();
             Assert.Empty(ConfirmEmpty);
 
@@ -68,7 +68,7 @@ namespace CustomerManagerApp.Test
         {
             var Loader = CreateMock();
 
-            IEnumerable<CustomerValueObject> collection = await Loader.LoadCustomersAsync();
+            IEnumerable<CustomerEntity> collection = await Loader.LoadCustomersAsync();
             if (collection is null)
             {
                 Assert.NotNull(collection);
@@ -77,10 +77,10 @@ namespace CustomerManagerApp.Test
 
             Assert.NotEmpty(collection);
 
-            List<CustomerValueObject> collection2 = new();
+            List<CustomerEntity> collection2 = new();
             collection2.AddRange(collection);
 
-            CustomerValueObject customer = new("Zack", "0", drinksTypes[0].Id, true);
+            CustomerEntity customer = new("Zack", "0", drinksTypes[0].Id, true);
             collection2.Add(customer);
             await Loader.SaveCustomerAsync(collection2);
 
@@ -95,7 +95,7 @@ namespace CustomerManagerApp.Test
         {
             var Loader = CreateMock();
 
-            List<CustomerValueObject>? collection = await Loader.LoadCustomersAsync() as List<CustomerValueObject>;
+            List<CustomerEntity>? collection = await Loader.LoadCustomersAsync() as List<CustomerEntity>;
             if (collection is null)
             {
                 Assert.NotNull(collection);
@@ -104,7 +104,7 @@ namespace CustomerManagerApp.Test
 
             Assert.NotEmpty(collection);
             
-            CustomerValueObject customer = (CustomerValueObject)collection[0];
+            CustomerEntity customer = (CustomerEntity)collection[0];
             collection.Remove(customer);
             await Loader.SaveCustomerAsync(collection);
 

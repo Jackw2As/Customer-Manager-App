@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomerManagerApp.Backend.ValueObjects
+namespace CustomerManagerApp.Backend.Entities
 {
-    public class DrinkValueObject
+    public class DrinkEntity
     {
-        public DrinkValueObject(string name)
+        public DrinkEntity(string name)
         {
             Name = name;
 
@@ -24,10 +24,17 @@ namespace CustomerManagerApp.Backend.ValueObjects
 
         public override bool Equals(object? obj)
         {
-            DrinkValueObject? other = obj as DrinkValueObject;
+            DrinkEntity? other = obj as DrinkEntity;
             if (other == null) return false;
             if (Id == other.Id) return true;
             else { return false; }
+        }
+
+        //Not great, but at the end of the day the only thing that really matters here is the Id of the entity.
+        //If they match then they are the same value regaurdless of other data.
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
         }
     }
 }

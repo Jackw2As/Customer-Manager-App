@@ -1,4 +1,4 @@
-﻿using CustomerManagerApp.Backend.ValueObjects;
+﻿using CustomerManagerApp.Backend.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +9,9 @@ namespace CustomerManagerApp.Backend.Repository.Customer
 {
     public interface ICustomerRepository
     {
-        Task<IEnumerable<CustomerValueObject>> LoadCustomersAsync();
+        Task<IEnumerable<CustomerEntity>> LoadCustomersAsync();
 
-        Task SaveCustomerAsync(IEnumerable<CustomerValueObject> customers);
+        Task SaveCustomerAsync(IEnumerable<CustomerEntity> customers);
 
         void DeleteStorageFile();
     }
