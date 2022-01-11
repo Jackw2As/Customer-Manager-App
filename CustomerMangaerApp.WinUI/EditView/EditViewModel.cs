@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace CustomerManagerApp.ViewModel
 {
     public delegate void RemoveSelectedCustomer(CustomerWrapper customer);
+    public delegate void SaveSelectedCustomer(CustomerWrapper customer);
     public class EditViewModel : ViewModelBase
     {
         public ObservableCollection<DrinkEntity> DrinkTypes { get; init; } 
@@ -90,9 +91,15 @@ namespace CustomerManagerApp.ViewModel
             SelectedCustomer = null;
         }
 
+        public event SaveSelectedCustomer SaveSelectedCustomerEvent;
+        public void Save()
+        {
+            SaveSelectedCustomerEvent?.Invoke(SelectedCustomer);
+        }
+
         internal void Load()
         {
-            throw new NotImplementedException();
+            //Put any logic that needs to be called on loaidng here.
         }
     }
 }

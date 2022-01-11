@@ -87,7 +87,7 @@ namespace CustomerManagerApp.ViewModel
 
         internal void Load()
         {
-            throw new NotImplementedException();
+            //Put loading logic here
         }
 
         private List<CustomerWrapper> filteredList = new();
@@ -108,10 +108,5 @@ namespace CustomerManagerApp.ViewModel
                 filteredList.Add(model);
             }
         }
-
-        
-        
-        
-
     }
 }

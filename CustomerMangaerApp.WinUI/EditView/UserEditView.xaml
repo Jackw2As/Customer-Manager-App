@@ -26,8 +26,8 @@
                       />
 
             <StackPanel>
-                <Button Content="Save" HorizontalAlignment="Stretch" Click="{x:Bind ViewModel.SelectedCustomer.SaveCustomer}"
-                        IsEnabled="{x:Bind ViewModel.SelectedCustomer.CanSave, Mode=OneWay}"
+                <Button Content="Save" HorizontalAlignment="Stretch" Click="{x:Bind ViewModel.Save}"
+                        IsEnabled="{x:Bind ViewModel.CanSave, Mode=OneWay}"
                         />
                 <Button Content="Remove" HorizontalAlignment="Stretch" Click="{x:Bind ViewModel.RemoveSelectedCustomer}"/>
                 
