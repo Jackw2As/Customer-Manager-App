@@ -1,5 +1,5 @@
 ﻿using CustomerManagerApp.Backend.Service;
-using CustomerManagerApp.Backend.ValueObjects;
+using CustomerManagerApp.Backend.Entities;
 using CustomerManagerApp.Wpf.CustomerEdit;
 using CustomerManagerApp.Wpf.CustomerList;
 using CustomerManagerApp.Wpf.Wrapper;

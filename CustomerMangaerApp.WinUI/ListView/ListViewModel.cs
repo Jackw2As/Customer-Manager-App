@@ -16,7 +16,6 @@ namespace CustomerManagerApp.ViewModel
     public class ListViewModel : ViewModelBase
     {
         public ObservableCollection<CustomerWrapper> Customers { get; } = new();
-        public ObservableCollection<DrinkWrapper> DrinkTypes { get; } = new();
         private DataService Data { get; }
 
         public event RefreshEvent OnRefreshRaised;
@@ -51,7 +50,7 @@ namespace CustomerManagerApp.ViewModel
         }
         public void CustomerAdd()
         {
-            var customer = new CustomerEntity("new customer", "", DrinkTypes[0].Id);
+            var customer = new CustomerEntity("new customer", "", Data.GetDrinksAsync().Result.First().Id);
             var defualtCustomer = new CustomerWrapper(customer);
             Customers.Add(defualtCustomer);
         }
@@ -85,9 +84,14 @@ namespace CustomerManagerApp.ViewModel
 
         }
 
-        internal void Load()
+        internal async void Load()
         {
-            //Put loading logic here
+            Customers.Clear();
+            var data = await Data.GetCustomersAsync();
+            foreach (var customer in data)
+            {
+                Customers.Add(new CustomerWrapper(customer));
+            }
         }
 
         private List<CustomerWrapper> filteredList = new();

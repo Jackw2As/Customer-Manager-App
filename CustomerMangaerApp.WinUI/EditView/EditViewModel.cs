@@ -20,6 +20,7 @@ namespace CustomerManagerApp.ViewModel
 
         public EditViewModel(DataService DataService)
         {
+            dataService = DataService;
             DrinkTypes = new(DataService.GetDrinks());
         }
 
@@ -99,7 +100,14 @@ namespace CustomerManagerApp.ViewModel
 
         internal void Load()
         {
-            //Put any logic that needs to be called on loaidng here.
+            DrinkTypes.Clear();
+
+            foreach (var drink in dataService.GetDrinks())
+            {
+                DrinkTypes.Add(drink);
+            }
+
+            SelectedCustomer = null;
         }
     }
 }
