@@ -36,6 +36,7 @@ namespace CustomerManagerApp.ViewModel
 
         private void EditViewModel_RemoveSelectedCustomerEvent(CustomerWrapper customer)
         {
+			ListViewModel.CustomerRemove(customer);
 			ListViewModel.SelectedCustomer = null;
         }
 
