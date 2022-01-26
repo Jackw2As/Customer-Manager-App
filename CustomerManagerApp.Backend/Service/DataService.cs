@@ -14,14 +14,13 @@ namespace CustomerManagerApp.Backend.Service
         private System.Timers.Timer SaveTimer;
         private readonly ICustomerRepository customerRepository;
 
-        private readonly IDrinkRepository drinkRepository;
-
         /// <summary>
         /// Handles CRUD Implementation for data that is stored persistently. 
         /// </summary>
         public DataService(ICustomerRepository CustomerRepository, IDrinkRepository DrinkRepository)
         {
-            drinkRepository = DrinkRepository;
+            DrinkList = DrinkRepository.LoadDrinkTypes();
+
             customerRepository = CustomerRepository;
             SaveTimer = new System.Timers.Timer(10000); //10 Second Timer
             SaveTimer.Elapsed += Save;
@@ -34,20 +33,20 @@ namespace CustomerManagerApp.Backend.Service
 
         public DataService()
         {
-            drinkRepository = new MockDrinkRepository();
+            DrinkList = new MockDrinkRepository().LoadDrinkTypes();
             customerRepository = new JsonCustomerRepository();
         }
 
         //Drinks
-        public async Task<IEnumerable<DrinkEntity>> GetDrinksAsync()
+        private readonly IEnumerable<DrinkEntity> DrinkList;
+        public Task<IEnumerable<DrinkEntity>> GetDrinksAsync()
         {
-            return await drinkRepository.LoadDrinkTypesAsync();
+            return Task.FromResult(DrinkList);
         }
 
         public IEnumerable<DrinkEntity> GetDrinks()
         {
-            var drinks = drinkRepository.LoadDrinkTypesAsync().Result;
-            return drinks;
+            return DrinkList;
         }
 
         //Customers
@@ -118,7 +117,7 @@ namespace CustomerManagerApp.Backend.Service
             if (CustomerList != null)
             {
                 await customerRepository.SaveCustomerAsync(CustomerList);
-                CustomerList = null;
+                //CustomerList = null;
             }
         }
     }
