@@ -63,10 +63,13 @@ namespace CustomerManagerApp.WinUI.Wrapper
             get => new(customer.DrinkID);
             set
             {
-                if (value.ToString() != customer.DrinkID)
+                if (value != null)
                 {
-                    customer.DrinkID = value.ToString();
-                    propertyChanged();
+                    if (value.ToString() != customer.DrinkID)
+                    {
+                        customer.DrinkID = value.ToString();
+                        propertyChanged();
+                    }
                 }
             }
         }
