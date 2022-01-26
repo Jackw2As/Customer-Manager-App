@@ -30,7 +30,6 @@
                             />
 
             <!-- Editor View -->
-
         <controls:UserEditView Grid.Row="1" Grid.Column="1"
                                ViewModel="{x:Bind ViewModel.EditViewModel}"
                                />
