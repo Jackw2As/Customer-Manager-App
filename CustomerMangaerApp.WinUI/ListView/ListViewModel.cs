@@ -1,4 +1,5 @@
 ﻿using CustomerManagerApp.Backend.Entities;
+using CustomerManagerApp.Backend.Repository.Customer;
 using CustomerManagerApp.Backend.Repository.Drink;
 using CustomerManagerApp.Backend.Service;
 using CustomerManagerApp.WinUI.Wrapper;
@@ -19,7 +20,7 @@ namespace CustomerManagerApp.ViewModel
         private List<CustomerWrapper> DatabaseCustomerList { get; } = new();
 
         public ObservableCollection<CustomerWrapper> FilteredList { get; } = new();
-        private DataService Data { get; }
+        private DataService<JsonCustomerRepository> Data { get; }
 
         public event RefreshEvent OnRefreshRaised;
         public void RefreshList()
@@ -47,7 +48,7 @@ namespace CustomerManagerApp.ViewModel
             }
         }
 
-        public ListViewModel(ref DataService DataService)
+        public ListViewModel(ref DataService<JsonCustomerRepository> DataService)
         {
             Data = DataService;
         }

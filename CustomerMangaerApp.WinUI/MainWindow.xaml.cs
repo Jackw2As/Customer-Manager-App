@@ -14,6 +14,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using CustomerManagerApp.ViewModel;
 using CustomerManagerApp.Backend.Service;
+using CustomerManagerApp.Backend.Repository.Customer;
 
 namespace CustomerManagerApp.WinUI
 {
@@ -27,7 +28,7 @@ namespace CustomerManagerApp.WinUI
         {
             this.Activated += MainWindow_Activated;
 
-            var dataContainer = new DataService();
+            var dataContainer = new DataService<JsonCustomerRepository>();
             ViewModel = new MainWindowViewModel(dataContainer);
             
             this.InitializeComponent();

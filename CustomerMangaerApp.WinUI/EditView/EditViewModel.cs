@@ -1,4 +1,5 @@
 ﻿using CustomerManagerApp.Backend.Entities;
+using CustomerManagerApp.Backend.Repository.Customer;
 using CustomerManagerApp.Backend.Service;
 using CustomerManagerApp.WinUI.Wrapper;
 using System;
@@ -16,9 +17,9 @@ namespace CustomerManagerApp.ViewModel
     {
         public ObservableCollection<DrinkEntity> DrinkTypes { get; init; } 
 
-        private DataService dataService;
+        private DataService<JsonCustomerRepository> dataService;
 
-        public EditViewModel(ref DataService DataService)
+        public EditViewModel(ref DataService<JsonCustomerRepository> DataService)
         {
             dataService = DataService;
             DrinkTypes = new(DataService.GetDrinks());

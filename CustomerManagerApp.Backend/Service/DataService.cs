@@ -9,19 +9,19 @@ using System.Timers;
 
 namespace CustomerManagerApp.Backend.Service
 {
-    public class DataService
+    public class DataService<CustomerRepository> where CustomerRepository : ICustomerRepository
     {
         private System.Timers.Timer SaveTimer;
-        private readonly ICustomerRepository customerRepository;
+        //private readonly ICustomerRepository customerRepository;
 
         /// <summary>
         /// Handles CRUD Implementation for data that is stored persistently. 
         /// </summary>
-        public DataService(ICustomerRepository CustomerRepository, IDrinkRepository DrinkRepository)
+        public DataService(IDrinkRepository DrinkRepository)
         {
             DrinkList = DrinkRepository.LoadDrinkTypes();
 
-            customerRepository = CustomerRepository;
+            //customerRepository = CustomerRepository;
             SaveTimer = new System.Timers.Timer(10000); //10 Second Timer
             SaveTimer.Elapsed += Save;
         }
@@ -34,7 +34,7 @@ namespace CustomerManagerApp.Backend.Service
         public DataService()
         {
             DrinkList = new MockDrinkRepository().LoadDrinkTypes();
-            customerRepository = new JsonCustomerRepository();
+            //customerRepository = new JsonCustomerRepository();
         }
 
         //Drinks
@@ -101,7 +101,10 @@ namespace CustomerManagerApp.Backend.Service
         {
             if (CustomerList == null)
             {
-                var customers = await customerRepository.LoadCustomersAsync() as List<CustomerEntity>;
+                CustomerRepository? repository = (CustomerRepository?)Activator.CreateInstance(typeof(CustomerRepository));
+                if (repository == null) throw new Exception("Could Not create repository of Type provided");
+
+                var customers = await repository.LoadCustomersAsync() as List<CustomerEntity>;
                 if (customers == null)
                 {
                     throw new Exception("Customer Data is Corrupted. Couldn't read it.");
@@ -116,7 +119,10 @@ namespace CustomerManagerApp.Backend.Service
         {
             if (CustomerList != null)
             {
-                await customerRepository.SaveCustomerAsync(CustomerList);
+                CustomerRepository? repository = (CustomerRepository?)Activator.CreateInstance(typeof(CustomerRepository));
+                if (repository == null) throw new Exception("Could Not create repository of Type provided");
+
+                await repository.SaveCustomerAsync(CustomerList);
                 //CustomerList = null;
             }
         }

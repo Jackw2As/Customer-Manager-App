@@ -3,14 +3,15 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CustomerManagerApp.WinUI.Wrapper;
+using CustomerManagerApp.Backend.Repository.Customer;
 
 namespace CustomerManagerApp.ViewModel
 {
 	public class MainWindowViewModel : ViewModelBase
 	{
-		private readonly DataService dataService;
+		private readonly DataService<JsonCustomerRepository> dataService;
 
-		public MainWindowViewModel(DataService DataService)
+		public MainWindowViewModel(DataService<JsonCustomerRepository> DataService)
 		{
 			this.dataService = DataService;
 
