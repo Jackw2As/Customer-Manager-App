@@ -101,6 +101,9 @@ namespace CustomerManagerApp.ViewModel
         public event SaveSelectedCustomer SaveSelectedCustomerEvent;
         public void Save()
         {
+            CustomerEntity customerEntity = new(SelectedCustomer.GetWrappedCustomer);
+
+            dataService.UpdateCustomerAsync(customerEntity);
             SaveSelectedCustomerEvent?.Invoke(SelectedCustomer);
         }
 
