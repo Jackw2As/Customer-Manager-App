@@ -5,6 +5,7 @@ using CustomerManagerApp.WinUI.Wrapper;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,8 +39,8 @@ namespace CustomerManagerApp.ViewModel
                 if(selectedCustomer != value)
                 {
                     selectedCustomer = value;
-                    SelectedCustomerRaisedEvent.Invoke(selectedCustomer);
                     PropertyHasChanged();
+                    SelectedCustomerRaisedEvent?.Invoke(SelectedCustomer);
                 }
             }
         }

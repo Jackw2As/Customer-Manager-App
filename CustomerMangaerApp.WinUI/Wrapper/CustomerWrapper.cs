@@ -58,7 +58,7 @@ namespace CustomerManagerApp.WinUI.Wrapper
 
         public string DisplayName => FirstName + " " + LastName;
 
-        public Guid DrinkId
+        public string DrinkId
         {
             get => new(customer.DrinkID);
             set
