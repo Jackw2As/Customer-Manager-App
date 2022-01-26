@@ -69,7 +69,7 @@ namespace CustomerManagerApp.Backend.Service
             var isSuccessful = customers.Remove(customer);
             if(isSuccessful == false)
             {
-                throw new Exception("Deleting Customer that does not exist in Database!.");
+                throw new ArgumentException("Deleting Customer that does not exist in Database!.");
             }
         }
 
