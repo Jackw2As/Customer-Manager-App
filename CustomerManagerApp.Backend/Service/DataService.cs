@@ -5,12 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
 
 namespace CustomerManagerApp.Backend.Service
 {
     public class DataService
     {
+        private System.Timers.Timer SaveTimer;
         private readonly ICustomerRepository customerRepository;
 
         private readonly IDrinkRepository drinkRepository;
@@ -22,6 +23,13 @@ namespace CustomerManagerApp.Backend.Service
         {
             drinkRepository = DrinkRepository;
             customerRepository = CustomerRepository;
+            SaveTimer = new System.Timers.Timer(10000); //10 Second Timer
+            SaveTimer.Elapsed += Save;
+        }
+
+        private async void Save(object sender, ElapsedEventArgs e)
+        {
+            await SaveToRepository();
         }
 
         public DataService()
@@ -46,37 +54,30 @@ namespace CustomerManagerApp.Backend.Service
 
         public async Task<IEnumerable<CustomerEntity>> GetCustomersAsync()
         {
-            return await customerRepository.LoadCustomersAsync();
+            return await getCustomerListAsync();
         }
 
-        /// <summary>
-        /// Only Call this method if you are adding a new customer. Otherwise use the Update Method.
-        /// </summary>
-        /// <param name="customer"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception">Returns exception if trying to update existing data</exception>
-        public async Task AddCustomerAsync(CustomerEntity customer)
+        private async Task AddCustomerAsync(CustomerEntity customer)
         {
             var customers = await getCustomerListAsync();
 
             if (customers.Find(c => c == customer) != null)
             {
-                throw new Exception("Trying to Add something that already exists. Use Update Method instead or delete the object first.");
+                throw new Exception("Can't 'Add' item which already exists.");
             }
 
             customers.Add(customer);
-            await customerRepository.SaveCustomerAsync(customers);
         }
 
         public async Task RemoveCustomerAsync(CustomerEntity customer)
         {
             var customers = await getCustomerListAsync();
-
-            var isSuccessful = customers.Remove(customer);
-            if(isSuccessful == false)
+            if (customers.Find(c => c == customer) != null)
             {
                 throw new ArgumentException("Deleting Customer that does not exist in Database!.");
             }
+
+            customers.Remove(customer);
         }
 
         public async Task UpdateCustomerAsync(CustomerEntity customer)
@@ -94,18 +95,31 @@ namespace CustomerManagerApp.Backend.Service
             edit.FirstName = customer.FirstName;
             edit.LastName = customer.LastName;
             edit.IsDeveloper = customer.IsDeveloper;
-
-            await customerRepository.SaveCustomerAsync(customers);
         }
 
+        private List<CustomerEntity>? CustomerList;
         private async Task<List<CustomerEntity>> getCustomerListAsync()
         {
-            var customers = await customerRepository.LoadCustomersAsync() as List<CustomerEntity>;
-            if (customers == null)
+            if (CustomerList == null)
             {
-                throw new Exception("Customer Data is Corrupted. Couldn't read it.");
+                var customers = await customerRepository.LoadCustomersAsync() as List<CustomerEntity>;
+                if (customers == null)
+                {
+                    throw new Exception("Customer Data is Corrupted. Couldn't read it.");
+                }
+                return customers;
             }
-            return customers;
+
+            return CustomerList;
+        }
+
+        private async Task SaveToRepository()
+        {
+            if (CustomerList != null)
+            {
+                await customerRepository.SaveCustomerAsync(CustomerList);
+                CustomerList = null;
+            }
         }
     }
 }
