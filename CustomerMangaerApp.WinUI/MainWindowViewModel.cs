@@ -14,8 +14,8 @@ namespace CustomerManagerApp.ViewModel
 		{
 			this.dataService = DataService;
 
-			ListViewModel = new(DataService);
-			EditViewModel = new(DataService);
+			ListViewModel = new(ref DataService);
+			EditViewModel = new(ref DataService);
 
             EditViewModel.RemoveSelectedCustomerEvent += EditViewModel_RemoveSelectedCustomerEvent;
             EditViewModel.SaveSelectedCustomerEvent += EditViewModel_SaveSelectedCustomerEvent;

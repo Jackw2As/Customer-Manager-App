@@ -18,7 +18,7 @@ namespace CustomerManagerApp.ViewModel
 
         private DataService dataService;
 
-        public EditViewModel(DataService DataService)
+        public EditViewModel(ref DataService DataService)
         {
             dataService = DataService;
             DrinkTypes = new(DataService.GetDrinks());

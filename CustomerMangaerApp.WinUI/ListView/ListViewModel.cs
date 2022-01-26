@@ -47,7 +47,7 @@ namespace CustomerManagerApp.ViewModel
             }
         }
 
-        public ListViewModel(DataService DataService)
+        public ListViewModel(ref DataService DataService)
         {
             Data = DataService;
         }
