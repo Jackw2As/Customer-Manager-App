@@ -86,10 +86,16 @@ namespace CustomerManagerApp.ViewModel
         public async void RemoveSelectedCustomer()
         {
             if (SelectedCustomer == null) return;
-
-            await dataService.RemoveCustomerAsync(SelectedCustomer.GetWrappedCustomer);
-            RemoveSelectedCustomerEvent?.Invoke(SelectedCustomer);
-            SelectedCustomer = null;
+            try
+            {
+                await dataService.RemoveCustomerAsync(SelectedCustomer.GetWrappedCustomer);
+            }
+            catch (ArgumentException ex) { }
+            finally
+            {
+                RemoveSelectedCustomerEvent?.Invoke(SelectedCustomer);
+                SelectedCustomer = null;
+            }
         }
 
         public event SaveSelectedCustomer SaveSelectedCustomerEvent;
