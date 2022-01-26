@@ -20,6 +20,27 @@ namespace CustomerManagerApp.Backend.Repository.Customer
         private DirectoryInfo jsonStorageDirectory;
         private string directoryName;
         private IEnumerable<CustomerEntity> defaultCustomerList;
+
+        public JsonCustomerRepository()
+        {
+            directoryName = "Json";
+
+
+                var drinks = new MockDrinkRepository().LoadDrinkTypes() as List<DrinkEntity>;
+                if (drinks == null)
+                {
+                    throw new ArgumentNullException("Drinks weren't found in the repository!");
+                }
+                defaultCustomerList = new List<CustomerEntity>
+                    {
+                        new CustomerEntity("Jack", "Aalders", drinks[0].Id, true),
+                        new CustomerEntity("John", "Aalders", drinks[0].Id, true),
+                        new CustomerEntity("Sarah", "Spear", drinks[0].Id, false)
+                    };
+            
+            jsonStorageDirectory = ConstructJsonStorageDirectory();
+        }
+
         public JsonCustomerRepository(string DirectoryName = "Json", IEnumerable<CustomerEntity>? DefaultCustomerList = null)
         {
 
@@ -31,15 +52,16 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             else
             {
                 var drinks = new MockDrinkRepository().LoadDrinkTypes() as List<DrinkEntity>;
-                if (drinks != null)
+                if (drinks == null)
                 {
-                    defaultCustomerList = new List<CustomerEntity>
+                    throw new ArgumentNullException("Drinks weren't found in the repository!");
+                }
+                defaultCustomerList = new List<CustomerEntity>
                     {
                         new CustomerEntity("Jack", "Aalders", drinks[0].Id, true),
                         new CustomerEntity("John", "Aalders", drinks[0].Id, true),
                         new CustomerEntity("Sarah", "Spear", drinks[0].Id, false)
                     };
-                }
             }
             jsonStorageDirectory = ConstructJsonStorageDirectory();
         }
