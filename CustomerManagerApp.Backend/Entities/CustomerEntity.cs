@@ -17,7 +17,7 @@ namespace CustomerManagerApp.Backend.Entities
             FirstName = firstName;
             LastName = lastName;
             IsDeveloper = isDeveloper;
-            if (id == null) { Id = Guid.NewGuid().ToString(); }
+            if (String.IsNullOrWhiteSpace(id)) { Id = Guid.NewGuid().ToString(); }
             else { Id = id; }
             DrinkID = DrinkId;
         }
@@ -28,10 +28,11 @@ namespace CustomerManagerApp.Backend.Entities
             FirstName = customer.FirstName;
             LastName = customer.LastName;
             IsDeveloper = customer.IsDeveloper;
-            Id = new Guid().ToString();
+            if (String.IsNullOrWhiteSpace(customer.Id)) { Id = Guid.NewGuid().ToString(); }
+            else { Id = customer.Id; }
         }
         //ID is a Guid. The Reason we return a string instead of GUID object
-        // is because the Json Seralizer doesn't work well with GUID objects.
+        // is because the Json Seralizer doesn't work with GUID objects.
         public string Id { get; init; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

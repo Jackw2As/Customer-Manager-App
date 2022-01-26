@@ -29,10 +29,9 @@ namespace CustomerManagerApp.ViewModel
         
 
         private void EditViewModel_SaveSelectedCustomerEvent(CustomerWrapper customer)
-        {
-            //Save
-			//Do I want to reload data?
-        }
+        {       
+		
+		}
 
         private void EditViewModel_RemoveSelectedCustomerEvent(CustomerWrapper customer)
         {
