@@ -49,6 +49,12 @@ namespace CustomerManagerApp.Backend.Service
             return await customerRepository.LoadCustomersAsync();
         }
 
+        /// <summary>
+        /// Only Call this method if you are adding a new customer. Otherwise use the Update Method.
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception">Returns exception if trying to update existing data</exception>
         public async Task AddCustomerAsync(CustomerEntity customer)
         {
             var customers = await getCustomerListAsync();
