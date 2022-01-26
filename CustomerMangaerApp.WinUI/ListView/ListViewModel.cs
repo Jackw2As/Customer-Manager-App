@@ -16,7 +16,9 @@ namespace CustomerManagerApp.ViewModel
     public delegate void CustomerChangedEvent(CustomerWrapper customer);
     public class ListViewModel : ViewModelBase
     {
-        public ObservableCollection<CustomerWrapper> Customers { get; } = new();
+        private List<CustomerWrapper> DatabaseCustomerList { get; } = new();
+
+        public ObservableCollection<CustomerWrapper> FilteredList { get; } = new();
         private DataService Data { get; }
 
         public event RefreshEvent OnRefreshRaised;
@@ -55,65 +57,72 @@ namespace CustomerManagerApp.ViewModel
             var drink = drinks.First().Id;
             var customer = new CustomerEntity("new customer", "", drink);
             var defualtCustomer = new CustomerWrapper(customer);
-            Customers.Add(defualtCustomer);
+            DatabaseCustomerList.Add(defualtCustomer);
+            FilteredList.Add(defualtCustomer);
         }
 
         public void CustomerRemove(CustomerWrapper customer)
         {
-            Customers.Remove(customer);
+            DatabaseCustomerList.Remove(customer);
+            FilteredList.Remove(customer);
         }
 
-        public ObservableCollection<CustomerWrapper> CustomerList()
+        public List<CustomerWrapper> GetDatabaseCustomerList()
         {
-            return Customers;
+            return new(DatabaseCustomerList);
         }
 
-        public string FilterValue = "";
-        public async void Filter()
+        
+
+        internal void Load()
         {
-            foreach (var customer in Customers)
-            {
-            }
-            var customers = await Data.GetCustomersAsync();
+            RefreshDatabaseList();
 
-            Customers.Clear();
-            filteredList.Clear();
-            Parallel.ForEach(customers, customer => FilterByName(FilterValue, customer));
-
-            foreach (var item in filteredList)
-            {
-                Customers.Add(item);
-            }
-
+            Filter();
         }
 
-        internal async void Load()
+        private async void RefreshDatabaseList()
         {
-            Customers.Clear();
+            DatabaseCustomerList.Clear();
             var data = await Data.GetCustomersAsync();
             foreach (var customer in data)
             {
-                Customers.Add(new CustomerWrapper(customer));
+                DatabaseCustomerList.Add(new CustomerWrapper(customer));
             }
         }
 
+        public string FilterValue = "";
         private List<CustomerWrapper> filteredList = new();
+        public void Filter()
+        {
+            filteredList.Clear();
+            FilteredList.Clear();
 
+            //If Empty add Database List
+            if (FilterValue == String.Empty)
+            { 
+                foreach (var customer in DatabaseCustomerList)
+                {
+                    FilteredList.Add(customer);
+                }
+                return;
+            }
 
+            Parallel.ForEach(DatabaseCustomerList, customer => FilterByName(FilterValue, customer));
 
-        private void FilterByName(string FilterText, CustomerEntity customer)
+            foreach (var customer in filteredList)
+            {
+                FilteredList.Add(customer);
+            }
+        }
+
+        private void FilterByName(string FilterText, CustomerWrapper customer)
         {
             if (customer.FirstName.Contains(FilterText) == false && customer.LastName.Contains(FilterText) == false)
             {
                 return;
             }
-
-            var drink = new DrinkWrapper(Data.GetDrinks().First());
-            var model = new CustomerWrapper(drink);
-            if (!filteredList.Contains(model))
-            {
-                filteredList.Add(model);
-            }
+            filteredList.Add(customer);
         }
     }
 }

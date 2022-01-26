@@ -15,7 +15,7 @@
         </StackPanel>
 
         <ListView MinWidth="200" Margin="10" 
-                  ItemsSource="{x:Bind ViewModel.Customers, Mode=OneWay}"
+                  ItemsSource="{x:Bind ViewModel.FilteredList, Mode=OneWay}"
                   SelectedItem="{x:Bind ViewModel.SelectedCustomer, Mode=TwoWay}"
                   DisplayMemberPath="DisplayName"
                   />
