@@ -74,14 +74,14 @@ namespace CustomerManagerApp.ViewModel
 
         
 
-        internal void Load()
+        internal async void Load()
         {
-            RefreshDatabaseList();
+            await RefreshDatabaseList();
 
             Filter();
         }
 
-        private async void RefreshDatabaseList()
+        private async Task RefreshDatabaseList()
         {
             DatabaseCustomerList.Clear();
             var data = await Data.GetCustomersAsync();
