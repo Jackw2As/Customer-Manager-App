@@ -49,9 +49,11 @@ namespace CustomerManagerApp.ViewModel
         {
             Data = DataService;
         }
-        public void CustomerAdd()
+        public async void CustomerAdd()
         {
-            var customer = new CustomerEntity("new customer", "", Data.GetDrinksAsync().Result.First().Id);
+            var drinks = await Data.GetDrinksAsync();
+            var drink = drinks.First().Id;
+            var customer = new CustomerEntity("new customer", "", drink);
             var defualtCustomer = new CustomerWrapper(customer);
             Customers.Add(defualtCustomer);
         }
