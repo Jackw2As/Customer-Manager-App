@@ -9,9 +9,9 @@ namespace CustomerManagerApp.ViewModel
 {
 	public class MainWindowViewModel : ViewModelBase
 	{
-		private readonly DataService<JsonCustomerRepository> dataService;
+		private readonly DataService dataService;
 
-		public MainWindowViewModel(DataService<JsonCustomerRepository> DataService)
+		public MainWindowViewModel(DataService DataService)
 		{
 			this.dataService = DataService;
 

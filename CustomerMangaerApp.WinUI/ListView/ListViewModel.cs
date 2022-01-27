@@ -20,7 +20,7 @@ namespace CustomerManagerApp.ViewModel
         private List<CustomerWrapper> DatabaseCustomerList { get; } = new();
 
         public ObservableCollection<CustomerWrapper> FilteredList { get; } = new();
-        private DataService<JsonCustomerRepository> Data { get; }
+        private DataService Data { get; }
 
         public event RefreshEvent OnRefreshRaised;
         public void RefreshList()
@@ -48,7 +48,7 @@ namespace CustomerManagerApp.ViewModel
             }
         }
 
-        public ListViewModel(ref DataService<JsonCustomerRepository> DataService)
+        public ListViewModel(ref DataService DataService)
         {
             Data = DataService;
         }
@@ -73,19 +73,18 @@ namespace CustomerManagerApp.ViewModel
             return new(DatabaseCustomerList);
         }
 
-        
-
-        internal async void Load()
+        internal void Load()
         {
-            await RefreshDatabaseList();
+            RefreshDatabaseList();
 
             Filter();
         }
 
-        private async Task RefreshDatabaseList()
+        private void RefreshDatabaseList()
         {
+            Data.Refresh();
             DatabaseCustomerList.Clear();
-            var data = await Data.GetCustomersAsync();
+            var data = Data.GetCustomerList();
             foreach (var customer in data)
             {
                 DatabaseCustomerList.Add(new CustomerWrapper(customer));

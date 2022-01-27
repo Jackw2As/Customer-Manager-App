@@ -17,9 +17,9 @@ namespace CustomerManagerApp.ViewModel
     {
         public ObservableCollection<DrinkEntity> DrinkTypes { get; init; } 
 
-        private DataService<JsonCustomerRepository> dataService;
+        private DataService dataService;
 
-        public EditViewModel(ref DataService<JsonCustomerRepository> DataService)
+        public EditViewModel(ref DataService DataService)
         {
             dataService = DataService;
             DrinkTypes = new(DataService.GetDrinks());
@@ -84,12 +84,12 @@ namespace CustomerManagerApp.ViewModel
         }
 
         public event RemoveSelectedCustomer RemoveSelectedCustomerEvent;
-        public async void RemoveSelectedCustomer()
+        public void RemoveSelectedCustomer()
         {
             if (SelectedCustomer == null) return;
             try
             {
-                await dataService.RemoveCustomerAsync(SelectedCustomer.GetWrappedCustomer);
+                dataService.RemoveCustomerFromList(SelectedCustomer.GetWrappedCustomer);
             }
             catch (ArgumentException ex) { }
             finally
@@ -104,7 +104,7 @@ namespace CustomerManagerApp.ViewModel
         {
             CustomerEntity customerEntity = new(SelectedCustomer.GetWrappedCustomer);
 
-            dataService.UpdateCustomerAsync(customerEntity);
+            dataService.AddCustomerToList(customerEntity);
             SaveSelectedCustomerEvent?.Invoke(SelectedCustomer);
         }
 

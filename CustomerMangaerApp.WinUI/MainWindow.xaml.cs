@@ -28,7 +28,7 @@ namespace CustomerManagerApp.WinUI
         {
             this.Activated += MainWindow_Activated;
 
-            var dataContainer = new DataService<JsonCustomerRepository>();
+            var dataContainer = new DataService();
             ViewModel = new MainWindowViewModel(dataContainer);
             
             this.InitializeComponent();
