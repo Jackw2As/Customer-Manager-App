@@ -22,7 +22,19 @@ namespace CustomerManagerApp.ViewModel
         public EditViewModel(ref DataService DataService)
         {
             dataService = DataService;
-            DrinkTypes = new(DataService.GetDrinks());
+            DrinkTypes = new();
+
+            GetDrinks();
+        }
+
+        private async void GetDrinks()
+        {
+            var drinkList = await dataService.GetDrinksAsync();
+            DrinkTypes.Clear();
+            foreach (var drink in drinkList)
+            {
+                DrinkTypes.Add(drink);
+            }
         }
 
         private CustomerWrapper selectedCustomer;
@@ -110,12 +122,7 @@ namespace CustomerManagerApp.ViewModel
 
         internal void Load()
         {
-            DrinkTypes.Clear();
-
-            foreach (var drink in dataService.GetDrinks())
-            {
-                DrinkTypes.Add(drink);
-            }
+            GetDrinks();
 
             SelectedCustomer = null;
         }

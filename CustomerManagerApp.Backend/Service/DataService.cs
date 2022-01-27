@@ -48,13 +48,6 @@ namespace CustomerManagerApp.Backend.Service
 
             return drinkList;
         }
-
-        public IEnumerable<DrinkEntity> GetDrinks()
-        {
-            var drinks = GetDrinksAsync().Result;
-            return drinks;
-        }
-
         private async Task<List<DrinkEntity>> GetDrinksFromRepo(IDrinkRepository repository)
         {
            var drinks = await repository.LoadDrinkTypesAsync();
