@@ -39,6 +39,7 @@ namespace CustomerManagerApp.WinUI.Wrapper
                 {
                     customer.FirstName = value;
                     propertyChanged();
+                    propertyChanged(nameof(DisplayName));
                 }
             }
         }
@@ -52,6 +53,7 @@ namespace CustomerManagerApp.WinUI.Wrapper
                 {
                     customer.LastName = value;
                     propertyChanged();
+                    propertyChanged(nameof(DisplayName));
                 }
             }
         }
