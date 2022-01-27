@@ -16,11 +16,16 @@ namespace CustomerManagerApp.Wpf
         public CustomerEditViewModel CustomerEdit { get; set; }
         public CustomerListViewModel CustomerList { get; set; }
 
+        private DrinkWrapper defaultdrink = new();
+
+        DataService dataService;
         public MainWindowViewModel()
         {
-            DataService DataService = new();       
-            DrinkWrapper defaultdrink = new DrinkWrapper(DataService.GetDrinks().First());
+            DataService DataService = new();
 
+            dataService = DataService;
+
+            GetDefaultDrink();
             CustomerList = new(ref DataService, defaultdrink);
             CustomerEdit = new(ref DataService);
 
@@ -28,6 +33,12 @@ namespace CustomerManagerApp.Wpf
             CustomerList.OnRefresh += ListViewModel_OnRefreshRaised;
 
             CustomerEdit.RemoveCustomerSelected += EditViewModel_RemoveSelectedCustomerEvent;
+        }
+
+        private async void GetDefaultDrink()
+        {
+            var drinks = await dataService.GetDrinksAsync();
+            new DrinkWrapper(drinks.First());
         }
 
         //Handle View Model Commands

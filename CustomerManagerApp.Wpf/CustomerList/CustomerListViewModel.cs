@@ -38,7 +38,7 @@ namespace CustomerManagerApp.Wpf.CustomerList
             if (isLoading) return;
             isLoading = true;
 
-            var Customerscollection = await Data.GetCustomersAsync();
+            var Customerscollection = Data.GetCustomerList();
             UnFilteredCustomerList.Clear();
             FilteredCustomerList.Clear();
 

@@ -38,13 +38,20 @@ namespace CustomerManagerApp.Wpf.CustomerEdit
         public CustomerEditViewModel(ref DataService Data)
         {
             data = Data;
-            var drinks = Data.GetDrinks();
+            GetDrinks();
+        }
 
-            foreach (var drink in drinks)
+        private async void GetDrinks()
+        {
+            var drinkList = await data.GetDrinksAsync();
+            DrinkTypes.Clear();
+            foreach (var drink in drinkList)
             {
                 DrinkTypes.Add(drink);
             }
+           
         }
+
 
         public CustomerEditViewModel()
         {
@@ -93,11 +100,11 @@ namespace CustomerManagerApp.Wpf.CustomerEdit
         }
 
         internal event SaveSelectedCustomer? SaveSelectedCustomer;
-        public async void SaveCustomer()
+        public void SaveCustomer()
         {
             if (SelectedCustomer != null)
             {
-                await data.UpdateCustomerAsync(SelectedCustomer.GetWrappedCustomer);
+                data.AddCustomerToList(SelectedCustomer.GetWrappedCustomer);
                 SelectedCustomer = null;
                 SaveSelectedCustomer?.Invoke(SelectedCustomer);
                 
