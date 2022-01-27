@@ -9,122 +9,136 @@ using System.Timers;
 
 namespace CustomerManagerApp.Backend.Service
 {
-    public class DataService<CustomerRepository> where CustomerRepository : ICustomerRepository
+    public class DataService
     {
-        private System.Timers.Timer SaveTimer;
-        //private readonly ICustomerRepository customerRepository;
-
         /// <summary>
-        /// Handles CRUD Implementation for data that is stored persistently. 
+        /// Handles CRUD Implementation for data that is eventually stored persistently. 
         /// </summary>
-        public DataService(IDrinkRepository DrinkRepository)
+        public DataService(IDrinkRepository DrinkRepository, ICustomerRepository CustomerRepository)
         {
-            DrinkList = DrinkRepository.LoadDrinkTypes();
+            drinkRepository = DrinkRepository;
+            customerRepository = CustomerRepository;
 
-            //customerRepository = CustomerRepository;
-            SaveTimer = new System.Timers.Timer(10000); //10 Second Timer
-            SaveTimer.Elapsed += Save;
-        }
-
-        private async void Save(object sender, ElapsedEventArgs e)
-        {
-            await SaveToRepository();
+            CreateTimer();
         }
 
         public DataService()
         {
-            DrinkList = new MockDrinkRepository().LoadDrinkTypes();
-            //customerRepository = new JsonCustomerRepository();
+            drinkRepository = new MockDrinkRepository();
+            customerRepository = new JsonCustomerRepository();
+
+            CreateTimer();
         }
 
-        //Drinks
-        private readonly IEnumerable<DrinkEntity> DrinkList;
-        public Task<IEnumerable<DrinkEntity>> GetDrinksAsync()
+
+        //
+        //  Drinks
+        //
+
+        #region Drinks
+        private readonly IDrinkRepository drinkRepository;
+        private readonly List<DrinkEntity> drinkList = new();
+        
+        public async Task<List<DrinkEntity>> GetDrinksAsync()
         {
-            return Task.FromResult(DrinkList);
+            if(drinkList.Any() == false)
+            {
+                drinkList.AddRange(await GetDrinksFromRepo(drinkRepository));
+            }
+
+            return drinkList;
         }
 
         public IEnumerable<DrinkEntity> GetDrinks()
         {
-            return DrinkList;
+            var drinks = GetDrinksAsync().Result;
+            return drinks;
         }
 
-        //Customers
-
-        public async Task<IEnumerable<CustomerEntity>> GetCustomersAsync()
+        private async Task<List<DrinkEntity>> GetDrinksFromRepo(IDrinkRepository repository)
         {
-            return await getCustomerListAsync();
+           var drinks = await repository.LoadDrinkTypesAsync();
+           return drinks.ToList();
         }
 
-        private async Task AddCustomerAsync(CustomerEntity customer)
-        {
-            var customers = await getCustomerListAsync();
+        #endregion
 
-            if (customers.Find(c => c == customer) != null)
+
+        //
+        //  Customers
+        //
+        #region Customers
+        private readonly ICustomerRepository customerRepository;
+        private readonly List<CustomerEntity> customerList = new();
+
+        public List<CustomerEntity> GetCustomerList()
+        {
+            if(customerList.Any() == false)
             {
-                throw new Exception("Can't 'Add' item which already exists.");
+                LoadCustomersFromRepository();
             }
 
-            customers.Add(customer);
+            return customerList;
         }
 
-        public async Task RemoveCustomerAsync(CustomerEntity customer)
+        public void AddCustomerToList(CustomerEntity customer)
         {
-            var customers = await getCustomerListAsync();
-            if (customers.Find(c => c == customer) != null)
+            var matches = customerList.Where(listValue => listValue == customer);
+            if (matches != null && matches.Count() > 0)
             {
-                throw new ArgumentException("Deleting Customer that does not exist in Database!.");
-            }
-
-            customers.Remove(customer);
-        }
-
-        public async Task UpdateCustomerAsync(CustomerEntity customer)
-        {
-            var customers = await getCustomerListAsync();
-            var edit = customers.Find(c => c == customer);
-            if (edit == null)
-            {
-                await AddCustomerAsync(customer);
-                return;
-            }
-
-            edit.FirstTime = customer.FirstTime;
-            edit.DrinkID = customer.DrinkID;
-            edit.FirstName = customer.FirstName;
-            edit.LastName = customer.LastName;
-            edit.IsDeveloper = customer.IsDeveloper;
-        }
-
-        private List<CustomerEntity>? CustomerList;
-        private async Task<List<CustomerEntity>> getCustomerListAsync()
-        {
-            if (CustomerList == null)
-            {
-                CustomerRepository? repository = (CustomerRepository?)Activator.CreateInstance(typeof(CustomerRepository));
-                if (repository == null) throw new Exception("Could Not create repository of Type provided");
-
-                var customers = await repository.LoadCustomersAsync() as List<CustomerEntity>;
-                if (customers == null)
+                foreach (var customerEntity in matches)
                 {
-                    throw new Exception("Customer Data is Corrupted. Couldn't read it.");
+                    customerList.Remove(customerEntity);
                 }
-                return customers;
             }
-
-            return CustomerList;
+            customerList.Add(customer);
         }
 
-        private async Task SaveToRepository()
+        public void RemoveCustomerFromList(CustomerEntity customer)
         {
-            if (CustomerList != null)
-            {
-                CustomerRepository? repository = (CustomerRepository?)Activator.CreateInstance(typeof(CustomerRepository));
-                if (repository == null) throw new Exception("Could Not create repository of Type provided");
-
-                await repository.SaveCustomerAsync(CustomerList);
-                //CustomerList = null;
-            }
+            customerList.Remove(customer);
         }
+
+        private async void SaveCustomersToRepository()
+        {
+          await customerRepository.SaveCustomerAsync(customerList);
+        }
+        private async void LoadCustomersFromRepository()
+        {
+            customerList.Clear();
+            customerList.AddRange(await customerRepository.LoadCustomersAsync());
+        }
+
+        #endregion
+
+
+        //
+        //  Saving Features
+        //
+        #region SavingFeatures
+        private System.Timers.Timer SaveTimer = new();
+        public void Refresh()
+        {
+            SaveCustomersToRepository();
+            customerList.Clear();
+            GetCustomerList();
+        }
+
+        private void CreateTimer()
+        {
+            SaveTimer = new(10000); //10 Second Timer
+            
+            SaveTimer.Elapsed += AutoSave;
+            SaveTimer.AutoReset = true;
+            SaveTimer.Enabled = true;
+        }
+
+        private void AutoSave(object sender, ElapsedEventArgs e)
+        {
+            SaveCustomersToRepository();
+        }
+
+        #endregion
+
     }
 }
