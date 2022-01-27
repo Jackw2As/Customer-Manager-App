@@ -19,7 +19,7 @@ namespace CustomerManagerApp.Backend.Repository.Customer
         }
         public void DeleteStorageFile()
         {
-            _customerList = null;
+            _customerList.Clear();
         }
 
         public Task<IEnumerable<CustomerEntity>> LoadCustomersAsync()
