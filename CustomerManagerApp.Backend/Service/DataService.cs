@@ -94,12 +94,20 @@ namespace CustomerManagerApp.Backend.Service
 
         private async void SaveCustomersToRepository()
         {
-          await customerRepository.SaveCustomerAsync(customerList);
+            try
+            {
+                await customerRepository.SaveCustomerAsync(customerList);
+            }
+          catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
         private async void LoadCustomersFromRepository()
         {
             customerList.Clear();
-            customerList.AddRange(await customerRepository.LoadCustomersAsync());
+            var list = await customerRepository.LoadCustomersAsync();
+            customerList.AddRange(list);
         }
 
         #endregion
