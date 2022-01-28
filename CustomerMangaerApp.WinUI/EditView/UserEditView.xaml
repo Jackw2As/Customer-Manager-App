@@ -8,8 +8,7 @@
     mc:Ignorable="d">
 
     <StackPanel VerticalAlignment="Stretch" Height="600">
-        <StackPanel VerticalAlignment="Bottom" Width="Auto" HorizontalAlignment="Center" Margin="0 50 0 20">
-            <!--Visibility=" {x:Bind ViewModel.IsCustomerSelected} "-->
+        <StackPanel VerticalAlignment="Bottom" Width="Auto" HorizontalAlignment="Center" Margin="0 50 0 20" Visibility="{x:Bind ViewModel.IsCustomerSelected, Mode=OneWay}">
             <TextBox x:Name="FirstName" Header="First Name" Margin="10" Text="{x:Bind ViewModel.SelectedCustomer.FirstName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 
             <TextBox x:Name="LastName" Header="Last Name" Margin="10" Text="{x:Bind ViewModel.SelectedCustomer.LastName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
