@@ -61,12 +61,11 @@ namespace CustomerManagerApp.ViewModel
                 {
                     if (selectedCustomer != null)
                     {
+                        selectedCustomer = null;
                         PropertyHasChanged();
                         PropertyHasChanged(nameof(IsCustomerSelected));
                         PropertyHasChanged(nameof(CanSave));
-                    }
-
-                    selectedCustomer = null;
+                    }  
                 }
             }
         }
@@ -114,7 +113,7 @@ namespace CustomerManagerApp.ViewModel
         public event SaveSelectedCustomer SaveSelectedCustomerEvent;
         public void Save()
         {
-            CustomerEntity customerEntity = new(SelectedCustomer.GetWrappedCustomer);
+            CustomerEntity customerEntity = SelectedCustomer.GetWrappedCustomer;
 
             dataService.AddCustomerToList(customerEntity);
             SaveSelectedCustomerEvent?.Invoke(SelectedCustomer);
