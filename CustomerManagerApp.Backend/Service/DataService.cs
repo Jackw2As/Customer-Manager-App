@@ -11,23 +11,43 @@ namespace CustomerManagerApp.Backend.Service
 {
     public class DataService
     {
-        /// <summary>
-        /// Handles CRUD Implementation for data that is eventually stored persistently. 
-        /// </summary>
-        public DataService(IDrinkRepository DrinkRepository, ICustomerRepository CustomerRepository)
+        private static IDrinkRepository drinkRepository;
+        private static ICustomerRepository customerRepository;
+        public async static Task<DataService> CreateDataServiceObjectAsync()
         {
-            drinkRepository = DrinkRepository;
-            customerRepository = CustomerRepository;
+            if (drinkRepository == null)
+            {
+                drinkRepository = new MockDrinkRepository();
+            }
+            if (customerRepository == null)
+            {
+                customerRepository = await setupMockCustomerRepository();
+            }
 
-            CreateTimer();
+            return new DataService();
+
+            static async Task<MockCustomerRepository> setupMockCustomerRepository()
+            {
+                var drinks = await drinkRepository.LoadDrinkTypesAsync();
+                var drinkId = drinks.First().Id;
+                if (drinks == null) throw new ArgumentNullException($"{nameof(drinks)} is null. Something went wrong with {nameof(drinkRepository.LoadDrinkTypesAsync)} method");
+
+                List<CustomerEntity> list = new List<CustomerEntity>()
+            {
+                new CustomerEntity("Jack", "Aalders", drinkId),
+                new CustomerEntity("John", "Aalders", drinkId),
+                new CustomerEntity("Sarah", "Aalders", drinkId)
+            };
+
+                return new MockCustomerRepository(list);
+            }
         }
 
-        public DataService()
-        {
-            drinkRepository = new MockDrinkRepository();
-            customerRepository = new JsonCustomerRepository();
 
-            CreateTimer();
+
+        private DataService()
+        {
+            //CreateTimer();
         }
 
 
@@ -36,7 +56,7 @@ namespace CustomerManagerApp.Backend.Service
         //
 
         #region Drinks
-        private readonly IDrinkRepository drinkRepository;
+        
         private readonly List<DrinkEntity> drinkList = new();
         
         public async Task<List<DrinkEntity>> GetDrinksAsync()
@@ -61,7 +81,7 @@ namespace CustomerManagerApp.Backend.Service
         //  Customers
         //
         #region Customers
-        private readonly ICustomerRepository customerRepository;
+        
         private readonly List<CustomerEntity> customerList = new();
 
         public List<CustomerEntity> GetCustomerList()
@@ -120,9 +140,7 @@ namespace CustomerManagerApp.Backend.Service
         private System.Timers.Timer SaveTimer = new();
         public void Refresh()
         {
-            SaveCustomersToRepository();
-            customerList.Clear();
-            GetCustomerList();
+            LoadCustomersFromRepository();
         }
 
         private void CreateTimer()
