@@ -52,12 +52,6 @@ namespace CustomerManagerApp.Wpf.CustomerEdit
            
         }
 
-
-        public CustomerEditViewModel()
-        {
-            data = new DataService();
-        }
-
         public bool CanSave
         {
             get

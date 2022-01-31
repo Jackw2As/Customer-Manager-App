@@ -25,12 +25,6 @@ namespace CustomerManagerApp.Wpf.CustomerList
             DefaultDrink = defaultDrink;
         }
 
-        public CustomerListViewModel()
-        {
-            Data = new();
-            DefaultDrink = new(Data.GetDrinksAsync().Result?.FirstOrDefault() ?? new("default drink value not set!"));
-        }
-
         //The List View is responsible for populating the list with new values.
         private bool isLoading = false;
         public async void Load()

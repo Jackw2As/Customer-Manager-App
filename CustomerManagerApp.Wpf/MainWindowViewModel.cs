@@ -6,6 +6,7 @@ using CustomerManagerApp.Wpf.Wrapper;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 
 namespace CustomerManagerApp.Wpf
 {
@@ -21,19 +22,30 @@ namespace CustomerManagerApp.Wpf
         DataService dataService;
         public MainWindowViewModel()
         {
-            DataService DataService = new();
-
-            dataService = DataService;
-
+            CreateDataService();
             GetDefaultDrink();
-            CustomerList = new(ref DataService, defaultdrink);
-            CustomerEdit = new(ref DataService);
+            
+            while(CustomerList == null && CustomerEdit == null)
+            {
+                Thread.Sleep(100);
+            }
 
             CustomerList.SelectedCustomerChanged += SelectedCustomerChangedEvent;
             CustomerList.OnRefresh += ListViewModel_OnRefreshRaised;
 
             CustomerEdit.RemoveCustomerSelected += EditViewModel_RemoveSelectedCustomerEvent;
+            
+
+            async void CreateDataService()
+            {
+                dataService = await DataService.CreateDataServiceObjectAsync();
+
+                CustomerList = new(ref dataService, defaultdrink);
+                CustomerEdit = new(ref dataService);
+            }
         }
+
+        
 
         private async void GetDefaultDrink()
         {
