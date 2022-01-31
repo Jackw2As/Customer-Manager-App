@@ -72,11 +72,6 @@ namespace CustomerManagerApp.Backend.Repository.Customer
                         customers.AddRange(DeserializationResults);
                     }
                 }
-                if(customers.Count < 1)
-                {
-                    FileLocked = false;
-                    return CreateDefaultData();
-                }
 
                 FileLocked = false;
                 return customers;
