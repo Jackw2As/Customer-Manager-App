@@ -30,96 +30,13 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             directoryName = DirectoryName;
             if (DefaultCustomerList != null)
             {
-                defaultCustomerList = DefaultCustomerList;
+                defaultCustomerList = DefaultCustomerList.ToList();
             }
 
             jsonStorageDirectory = ConstructJsonStorageDirectory();
         }
 
         static private bool FileLocked = false;
-
-        public async Task<IEnumerable<CustomerEntity>> LoadCustomersAsync()
-        {
-            List<CustomerEntity> customers = new();
-            
-            try
-            {
-                while (FileLocked)
-                {
-                    await Task.Delay(100);
-                }
-                FileLocked = true;
-
-                FileInfo? file = null;
-                var files = jsonStorageDirectory.GetFiles(CustomersFileName).ToList();
-                if (files.Count > 0)
-                {
-                    file = files?.First();
-                }
-
-                if (file == null)
-                {
-                    FileLocked = false;
-                    return CreateDefaultData();
-                }
-
-                //List<Customer> customers = JsonConvert.DeserializeObject<List<Customer>>(File.ReadAllText());
-                using (FileStream reader = file.OpenRead())
-                {
-                    var DeserializationResults = await JsonSerializer.DeserializeAsync(reader, typeof(List<CustomerEntity>)) as List<CustomerEntity>;
-                    if (DeserializationResults != null)
-                    {
-                        customers.AddRange(DeserializationResults);
-                    }
-                }
-
-                FileLocked = false;
-                return customers;
-            }
-            catch (IOException ex)
-            {
-
-            }
-            return customers;
-        }
-        public async Task SaveCustomerAsync(IEnumerable<CustomerEntity> customers)
-        {
-            try
-            {
-                while (FileLocked)
-                {
-                    await Task.Delay(100);
-                }
-                FileLocked = true;
-
-                using (FileStream file = File.Create(jsonStorageDirectory.FullName + "/" + CustomersFileName))
-                {
-                    await JsonSerializer.SerializeAsync(file, customers);
-                }
-                FileLocked = false;
-                return;
-            }
-            catch (IOException ex)
-            {
-
-            }
-        }
-        public void DeleteStorageFile()
-        {
-            try
-            {
-                var files = jsonStorageDirectory.GetFiles(CustomersFileName);
-                foreach (FileInfo file in files)
-                {
-                    File.Delete(file.FullName);
-                }
-            }
-            catch(IOException ex)
-            {
-            }
-        }
-
-
 
 
         private DirectoryInfo ConstructJsonStorageDirectory()
@@ -149,8 +66,8 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             return Directory.CreateDirectory(applicationFolderPath + "/Data/" + directoryName);
         }
 
-        private IEnumerable<CustomerEntity>? defaultCustomerList;
-        private IEnumerable<CustomerEntity> CreateDefaultData()
+        private List<CustomerEntity>? defaultCustomerList;
+        private async Task<List<CustomerEntity>> CreateDefaultData()
         {
             if (defaultCustomerList == null) { 
                 defaultCustomerList = new List<CustomerEntity>(); 
@@ -158,20 +75,120 @@ namespace CustomerManagerApp.Backend.Repository.Customer
 
             if (defaultCustomerList.Count() < 1)
             {
-                var drinks = new MockDrinkRepository().LoadDrinkTypes() as List<DrinkEntity>;
+                var drinks = await new MockDrinkRepository().ReadAll();
+
                 if (drinks == null)
                 {
                     throw new ArgumentNullException("Drinks weren't found in the repository!");
                 }
                 defaultCustomerList = new List<CustomerEntity>
                     {
-                        new CustomerEntity("Jack", "Aalders", drinks[0].Id, true),
-                        new CustomerEntity("John", "Aalders", drinks[0].Id, true),
-                        new CustomerEntity("Sarah", "Spear", drinks[0].Id, false)
+                        new CustomerEntity( Guid.NewGuid().ToString(), "Jack", "Aalders", drinks[0].ID, true),
+                        new CustomerEntity( Guid.NewGuid().ToString(), "John", "Aalders", drinks[0].ID, true),
+                        new CustomerEntity( Guid.NewGuid().ToString(), "Sarah", "Spear", drinks[0].ID, false)
                     };
             }
 
             return defaultCustomerList;
+        }
+
+        public async void  Create(CustomerEntity Model)
+        {
+            //TODO Fix this so it doesn't remove all the prior values.
+            try
+            {
+                while (FileLocked)
+                {
+                    await Task.Delay(100);
+                }
+                FileLocked = true;
+
+                using (FileStream file = File.Create(jsonStorageDirectory.FullName + "/" + CustomersFileName))
+                {
+                    await JsonSerializer.SerializeAsync(file, Model);
+                }
+                FileLocked = false;
+                return;
+            }
+            catch (IOException ex)
+            {
+
+            }
+        }
+
+        public Task<CustomerEntity> Read(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<CustomerEntity>> ReadAll()
+        {
+            List<CustomerEntity> customers = new();
+
+            try
+            {
+                while (FileLocked)
+                {
+                    await Task.Delay(100);
+                }
+                FileLocked = true;
+
+                FileInfo? file = null;
+                var files = jsonStorageDirectory.GetFiles(CustomersFileName).ToList();
+                if (files.Count > 0)
+                {
+                    file = files?.First();
+                }
+
+                if (file == null)
+                {
+                    FileLocked = false;
+                    return await CreateDefaultData();
+                }
+
+                //List<Customer> customers = JsonConvert.DeserializeObject<List<Customer>>(File.ReadAllText());
+                using (FileStream reader = file.OpenRead())
+                {
+                    var DeserializationResults = await JsonSerializer.DeserializeAsync(reader, typeof(List<CustomerEntity>)) as List<CustomerEntity>;
+                    if (DeserializationResults != null)
+                    {
+                        customers.AddRange(DeserializationResults);
+                    }
+                }
+
+                FileLocked = false;
+                return customers;
+            }
+            catch (IOException ex)
+            {
+
+            }
+            return customers;
+        }
+
+        public void Update(CustomerEntity Model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(CustomerEntity Model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteAll()
+        {
+            try
+            {
+                var files = jsonStorageDirectory.GetFiles(CustomersFileName);
+                foreach (FileInfo file in files)
+                {
+                    File.Delete(file.FullName);
+                }
+            }
+            catch (IOException ex)
+            {
+            }
         }
     }
 }

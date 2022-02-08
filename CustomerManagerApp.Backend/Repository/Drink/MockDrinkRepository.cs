@@ -9,7 +9,7 @@ namespace CustomerManagerApp.Backend.Repository.Drink
 {
     public class MockDrinkRepository : IDrinkRepository
     {
-        public DrinkEntity Read(string id)
+        public Task<DrinkEntity> Read(string id)
         {
             var drinks = CreateDrinksList();
 
@@ -20,10 +20,13 @@ namespace CustomerManagerApp.Backend.Repository.Drink
                 throw new ArgumentNullException($"{nameof(id)} ID was not found in the List");
             }
 
-            return drink;
+            return Task.FromResult(drink);
         }
 
-        public List<DrinkEntity> ReadAll() => CreateDrinksList();
+        public Task<List<DrinkEntity>> ReadAll()
+        {
+            return  Task.FromResult(CreateDrinksList());
+        }
 
         public void Create(DrinkEntity Model)
         {

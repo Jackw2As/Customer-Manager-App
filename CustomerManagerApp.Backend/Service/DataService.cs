@@ -28,15 +28,15 @@ namespace CustomerManagerApp.Backend.Service
 
             static async Task<MockCustomerRepository> setupMockCustomerRepository()
             {
-                var drinks = await drinkRepository.LoadDrinkTypesAsync();
-                var drinkId = drinks.First().Id;
-                if (drinks == null) throw new ArgumentNullException($"{nameof(drinks)} is null. Something went wrong with {nameof(drinkRepository.LoadDrinkTypesAsync)} method");
+                var drinks = await drinkRepository.ReadAll();
+                var drinkId = drinks.First().ID;
+                if (drinks == null) throw new ArgumentNullException($"{nameof(drinks)} is null. Something went wrong with {nameof(drinkRepository.ReadAll)} method");
 
                 List<CustomerEntity> list = new List<CustomerEntity>()
             {
-                new CustomerEntity("Jack", "Aalders", drinkId),
-                new CustomerEntity("John", "Aalders", drinkId),
-                new CustomerEntity("Sarah", "Aalders", drinkId)
+                new CustomerEntity(Guid.NewGuid().ToString(), "Jack", "Aalders", drinkId),
+                new CustomerEntity(Guid.NewGuid().ToString(), "John", "Aalders", drinkId),
+                new CustomerEntity(Guid.NewGuid().ToString(), "Sarah", "Aalders", drinkId)
             };
 
                 return new MockCustomerRepository(list);
@@ -68,11 +68,7 @@ namespace CustomerManagerApp.Backend.Service
 
             return drinkList;
         }
-        private async Task<List<DrinkEntity>> GetDrinksFromRepo(IDrinkRepository repository)
-        {
-           var drinks = await repository.LoadDrinkTypesAsync();
-           return drinks.ToList();
-        }
+        private async Task<List<DrinkEntity>> GetDrinksFromRepo(IDrinkRepository repository) => await repository.ReadAll();
 
         #endregion
 
@@ -81,7 +77,7 @@ namespace CustomerManagerApp.Backend.Service
         //  Customers
         //
         #region Customers
-        
+
         private readonly List<CustomerEntity> customerList = new();
 
         public List<CustomerEntity> GetCustomerList()
@@ -116,17 +112,32 @@ namespace CustomerManagerApp.Backend.Service
         {
             try
             {
-                await customerRepository.SaveCustomerAsync(customerList);
+                var databaseList = await customerRepository.ReadAll();
+                Parallel.ForEach(customerList, (item) => DatabaseRequestHandler(item));
+
+                void DatabaseRequestHandler(CustomerEntity item)
+                {
+                    if (databaseList.Contains(item))
+                    {
+                        customerRepository.Update(item);
+                    }
+                    else
+                    {
+                        customerRepository.Create(item);
+                    }
+                }
             }
           catch (InvalidOperationException ex)
             {
                 Console.WriteLine(ex.Message);
             }
+
+            
         }
         private async void LoadCustomersFromRepository()
         {
             customerList.Clear();
-            var list = await customerRepository.LoadCustomersAsync();
+            var list = await customerRepository.ReadAll();
             customerList.AddRange(list);
         }
 

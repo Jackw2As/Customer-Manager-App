@@ -11,8 +11,8 @@ namespace CustomerManagerApp.Backend.Repository
     {
         void Create(T Model);
 
-        T Read(ID id);
-        List<T> ReadAll();
+        Task<T> Read(ID id);
+        Task<List<T>> ReadAll();
 
         void Update(T Model);
 

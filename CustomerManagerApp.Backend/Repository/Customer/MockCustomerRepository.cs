@@ -17,25 +17,55 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             _customerList.AddRange(DefaultList);
             _defaultList = DefaultList;
         }
-        public void DeleteStorageFile()
+
+        public void Create(CustomerEntity Model)
+        {
+            var values = _customerList.Find(item => item == Model);
+            if(values != null)
+            {
+                throw new Exception($"Trying to Create a Model that already exists! use Update instead.");
+            }
+            _customerList.Add(Model);
+        }
+
+        public void Delete(CustomerEntity Model)
+        {
+            var sucessfulDelete = _customerList.Remove(Model);
+            if(!sucessfulDelete)
+            {
+                throw new Exception($"Trying to Delete a Model that does not exist. Perhaps it was already removed!");
+            }
+        }
+
+        public void DeleteAll()
         {
             _customerList.Clear();
         }
 
-        public Task<IEnumerable<CustomerEntity>> LoadCustomersAsync()
+        public Task<CustomerEntity> Read(string id)
         {
-            if (_customerList is null)
+            var customer = _customerList.Find(customer => customer.ID == id);
+            if(customer == null)
             {
-                _customerList = _defaultList;
+                throw new ArgumentNullException($"{nameof(id)} was not a valid ID!");
             }
-            IEnumerable<CustomerEntity> list = _customerList;
-            return Task.FromResult(list);
+            return Task.FromResult(customer);
         }
 
-        public Task SaveCustomerAsync(IEnumerable<CustomerEntity> customers)
+        public Task<List<CustomerEntity>> ReadAll()
         {
-            _customerList = customers.ToList();
-            return Task.CompletedTask;
+            return Task.FromResult(_customerList);
+        }
+        public void Update(CustomerEntity Model)
+        {
+            var customer = _customerList.Find(customer => customer == Model);
+            if( customer == null)
+            {
+                throw new ArgumentNullException(nameof(Model), $"The Model did not exist in the data base. Call Create instead!");
+            }
+            _customerList.Remove(customer);
+
+            customer = Model;
         }
     }
 }
