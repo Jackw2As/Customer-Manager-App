@@ -23,7 +23,7 @@ namespace CustomerManagerApp.WinUI.Wrapper
 
         public string Id
         {
-            get => drink.Id; 
+            get => drink.ID; 
         }
         public string Name
         {

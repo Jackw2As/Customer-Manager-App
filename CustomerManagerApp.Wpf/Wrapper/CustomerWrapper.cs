@@ -16,7 +16,7 @@ namespace CustomerManagerApp.Wpf.Wrapper
 
         public CustomerWrapper(DrinkWrapper drinkOfChoice)
         {
-            customer = new("", "", drinkOfChoice.Id.ToString());
+            customer = new(Guid.NewGuid().ToString(), "", "", drinkOfChoice.Id.ToString());
         }
 
         public CustomerWrapper(CustomerEntity customer)
@@ -26,7 +26,7 @@ namespace CustomerManagerApp.Wpf.Wrapper
         public CustomerEntity GetWrappedCustomer => customer;
         public Guid Id
         {
-            get => new(customer.Id);
+            get => new(customer.ID);
         }
 
         public string FirstName

@@ -11,7 +11,7 @@ namespace CustomerManagerApp.Test.Backend_Tests
         public DrinkRepositoryTests()
         {
             IDrinkRepository loaderService = new MockDrinkRepository();
-            DefaultDrinkList = loaderService.LoadDrinkTypes() as List<DrinkEntity> ?? throw new NullReferenceException($"LoadDrinkTypes() method wasn't properly created on {loaderService.GetType()} Class.");
+            DefaultDrinkList = loaderService.ReadAll().Result ?? throw new NullReferenceException($"LoadDrinkTypes() method wasn't properly created on {loaderService.GetType()} Class.");
             if (DefaultDrinkList == null)
             {
                 throw new NullReferenceException
@@ -27,10 +27,10 @@ namespace CustomerManagerApp.Test.Backend_Tests
         }
 
         [Fact(DisplayName = "Load Drinks Sync")]
-        public void LoadDrinksSync()
+        public async void LoadDrinksSync()
         {
             var drinksRepo = constructMockRepository();
-            var drinks = drinksRepo.LoadDrinkTypes();
+            var drinks = await drinksRepo.ReadAll();
             Assert.NotNull(drinks);
             Assert.NotEmpty(drinks);
             Assert.Equal(DefaultDrinkList, drinks);
@@ -39,7 +39,7 @@ namespace CustomerManagerApp.Test.Backend_Tests
         public async void LoadDrinksAsync()
         {
             var drinksRepo = constructMockRepository();
-            var drinks = await drinksRepo.LoadDrinkTypesAsync();
+            var drinks = await drinksRepo.ReadAll();
             Assert.NotNull(drinks);
             Assert.NotEmpty(drinks);
             Assert.Equal(DefaultDrinkList, drinks);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CustomerManagerApp.Backend.Repository.Customer;
 using CustomerManagerApp.Backend.Repository.Drink;
 using CustomerManagerApp.Backend.Entities;
+using System;
 
 namespace CustomerManagerApp.Test
 {
@@ -10,16 +11,16 @@ namespace CustomerManagerApp.Test
     {
         public CustomerRepositoryTests()
         {
-            var List = new MockDrinkRepository().LoadDrinkTypes() as List<DrinkEntity>;
+            var List = new MockDrinkRepository().ReadAll().Result as List<DrinkEntity>;
             if (List != null) drinksTypes = List;
             else drinksTypes = new();
 
             mockDefaultCustomersList = new List<CustomerEntity>
             {
-                new("John", "1", drinksTypes[0].Id),
-                new("John", "2", drinksTypes[0].Id),
-                new("Susan", "1", drinksTypes[0].Id, true),
-                new("Susan", "2", drinksTypes[0].Id)
+                new(Guid.NewGuid().ToString(), "John", "1", drinksTypes[0].ID),
+                new(Guid.NewGuid().ToString(), "John", "2", drinksTypes[0].ID),
+                new(Guid.NewGuid().ToString(), "Susan", "1", drinksTypes[0].ID, true),
+                new(Guid.NewGuid().ToString(), "Susan", "2", drinksTypes[0].ID)
             };  
         }
 
@@ -35,7 +36,7 @@ namespace CustomerManagerApp.Test
         {
             //clear old test file
             var Loader = new JsonCustomerRepository("Tests");
-            Loader.DeleteStorageFile();
+            Loader.DeleteAll();
             //create new test file
             return new JsonCustomerRepository("Tests", mockDefaultCustomersList);
         }
@@ -51,12 +52,17 @@ namespace CustomerManagerApp.Test
         {
             var Loader = CreateMock();
 
-            await Loader.SaveCustomerAsync(new List<CustomerEntity>());
-            var ConfirmEmpty = await Loader.LoadCustomersAsync();
+            var customerCollection = await Loader.ReadAll();
+
+            foreach (var customer in customerCollection)
+            {
+                Loader.Delete(customer);
+            }
+            var ConfirmEmpty = await Loader.ReadAll();
             Assert.Empty(ConfirmEmpty);
 
-            Loader.DeleteStorageFile();
-            var customers = await Loader.LoadCustomersAsync();
+            Loader.DeleteAll();
+            var customers = await Loader.ReadAll();
             
             Assert.NotEmpty(customers);
         }
@@ -68,7 +74,7 @@ namespace CustomerManagerApp.Test
         {
             var Loader = CreateMock();
 
-            IEnumerable<CustomerEntity> collection = await Loader.LoadCustomersAsync();
+            IEnumerable<CustomerEntity> collection = await Loader.ReadAll();
             if (collection is null)
             {
                 Assert.NotNull(collection);
@@ -76,15 +82,10 @@ namespace CustomerManagerApp.Test
             }
 
             Assert.NotEmpty(collection);
+            CustomerEntity customer = new("1111", "Zack", "0", drinksTypes[0].ID, true);
+            Loader.Create(customer);
 
-            List<CustomerEntity> collection2 = new();
-            collection2.AddRange(collection);
-
-            CustomerEntity customer = new("Zack", "0", drinksTypes[0].Id, true);
-            collection2.Add(customer);
-            await Loader.SaveCustomerAsync(collection2);
-
-            var customers = await Loader.LoadCustomersAsync();
+            var customers = await Loader.ReadAll();
             Assert.Contains(customer, customers);
         }
 
@@ -93,23 +94,32 @@ namespace CustomerManagerApp.Test
         /// Removing a new Customer
         public async void RemoveNewCustomer()
         {
+            //Setup
             var Loader = CreateMock();
+            
+            var collection = await Loader.ReadAll();
+            CustomerEntity customer = (CustomerEntity)collection[0];
 
-            List<CustomerEntity>? collection = await Loader.LoadCustomersAsync() as List<CustomerEntity>;
+            //Delete Customer
+            Loader.Delete(customer);
+
+            //Validation
+            var customers = await Loader.ReadAll();
+            Assert.DoesNotContain(customer, customers);
+        }
+
+
+        [Fact(DisplayName = "Read All Returns Values")]
+        public async void ReadAllReturnsValues()
+        {
+            var Loader = CreateMock();
+            List<CustomerEntity>? collection = await Loader.ReadAll();
             if (collection is null)
             {
                 Assert.NotNull(collection);
+                Assert.NotEmpty(collection);
                 return;
             }
-
-            Assert.NotEmpty(collection);
-            
-            CustomerEntity customer = (CustomerEntity)collection[0];
-            collection.Remove(customer);
-            await Loader.SaveCustomerAsync(collection);
-
-            var customers = await Loader.LoadCustomersAsync();
-            Assert.DoesNotContain(customer, customers);
         }
 
     }
