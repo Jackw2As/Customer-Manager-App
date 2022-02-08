@@ -9,31 +9,24 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.Backend.Entities
 {
-    public class CustomerEntity
+    public class CustomerEntity : BaseEntity<string>
     {
         [JsonConstructor]
-        public CustomerEntity(string firstName, string lastName, string DrinkId, bool isDeveloper = false, string? id = null)
+        public CustomerEntity(string id, string firstName, string lastName, string DrinkId, bool isDeveloper = false) : base (id)
         {
             FirstName = firstName;
             LastName = lastName;
             IsDeveloper = isDeveloper;
-            if (String.IsNullOrWhiteSpace(id)) { Id = Guid.NewGuid().ToString(); }
-            else { Id = id; }
             DrinkID = DrinkId;
         }
-        public CustomerEntity(CustomerEntity customer)
+        public CustomerEntity(CustomerEntity customer) : base(customer.ID)
         {
             DrinkID = customer.DrinkID;
             FirstTime = customer.FirstTime;
             FirstName = customer.FirstName;
             LastName = customer.LastName;
             IsDeveloper = customer.IsDeveloper;
-            if (String.IsNullOrWhiteSpace(customer.Id)) { Id = Guid.NewGuid().ToString(); }
-            else { Id = customer.Id; }
         }
-        //ID is a Guid. The Reason we return a string instead of GUID object
-        // is because the Json Seralizer doesn't work with GUID objects.
-        public string Id { get; init; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool IsDeveloper { get; set; }
@@ -46,16 +39,14 @@ namespace CustomerManagerApp.Backend.Entities
             if (obj != null && obj.GetType() == GetType())
             {
                 CustomerEntity Othercustomer = (CustomerEntity)obj;
-                return Id == Othercustomer.Id;
+                return ID == Othercustomer.ID;
             }
             return base.Equals(obj);
         }
 
-        //Not great, but at the end of the day the only thing that really matters here is the Id of the entity.
-        //If they match then they are the same value regaurdless of other data.
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return ID.GetHashCode();
         }
     }
 }
