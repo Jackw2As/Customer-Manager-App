@@ -9,18 +9,47 @@ namespace CustomerManagerApp.Backend.Repository.Drink
 {
     public class MockDrinkRepository : IDrinkRepository
     {
-        public IEnumerable<DrinkEntity> LoadDrinkTypes()
-        {
-            return CreateDrinksList();
-        }
-
-        public Task<IEnumerable<DrinkEntity>> LoadDrinkTypesAsync()
+        public DrinkEntity Read(string id)
         {
             var drinks = CreateDrinksList();
-            return Task<IEnumerable<DrinkEntity>>.Factory.StartNew(() => drinks);
+
+            var drink = drinks.Find(_ => _.ID == id);
+
+            if (drink == null)
+            {
+                throw new ArgumentNullException($"{nameof(id)} ID was not found in the List");
+            }
+
+            return drink;
         }
 
-        private IEnumerable<DrinkEntity> CreateDrinksList()
+        public List<DrinkEntity> ReadAll() => CreateDrinksList();
+
+        public void Create(DrinkEntity Model)
+        {
+            string message = $"The Drink Mock Repository Class doesn't support {nameof(Create)} method!";
+            throw new NotSupportedException(message);
+        }
+
+        public void Delete(DrinkEntity Model)
+        {
+            string message = $"The Drink Mock Repository Class doesn't support {nameof(Delete)} method!";
+            throw new NotSupportedException(message);
+        }
+
+        public void DeleteAll()
+        {
+            string message = $"The Drink Mock Repository Class doesn't support {nameof(DeleteAll)} method!";
+            throw new NotSupportedException(message);
+        }
+        
+        public void Update(DrinkEntity Model)
+        {
+            string message = $"The Drink Mock Repository Class doesn't support {nameof(Update)} method!";
+            throw new NotSupportedException(message);
+        }
+
+        private List<DrinkEntity> CreateDrinksList()
         {
             return new List<DrinkEntity>() {
             new("English Breakfast"),
