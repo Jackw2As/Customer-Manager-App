@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.Backend.Repository.Drink
 {
-    public interface IDrinkRepository
+    public interface IDrinkRepository : IRepository<DrinkEntity, string>
     {
-        public IEnumerable<DrinkEntity> LoadDrinkTypes();
 
-        public Task<IEnumerable<DrinkEntity>> LoadDrinkTypesAsync();
     }
 }

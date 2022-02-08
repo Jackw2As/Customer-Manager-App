@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.Backend.Repository.Customer
 {
-    public interface ICustomerRepository
+    public interface ICustomerRepository : IRepository<CustomerEntity, string>
     {
-        Task<IEnumerable<CustomerEntity>> LoadCustomersAsync();
 
-        Task SaveCustomerAsync(IEnumerable<CustomerEntity> customers);
-
-        void DeleteStorageFile();
     }
 }
