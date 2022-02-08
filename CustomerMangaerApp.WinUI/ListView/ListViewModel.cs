@@ -26,6 +26,7 @@ namespace CustomerManagerApp.ViewModel
         public void RefreshList()
         {
             OnRefreshRaised?.Invoke();
+            this.PropertyHasChanged(nameof(FilteredList));
         }
 
         /// <summary>
@@ -55,8 +56,8 @@ namespace CustomerManagerApp.ViewModel
         public async void CustomerAdd()
         {
             var drinks = await Data.GetDrinksAsync();
-            var drink = drinks.First().Id;
-            var customer = new CustomerEntity("new customer", "", drink);
+            var drink = drinks.First().ID;
+            var customer = new CustomerEntity(Guid.NewGuid().ToString(), "new customer", "", drink);
             var defualtCustomer = new CustomerWrapper(customer);
             DatabaseCustomerList.Add(defualtCustomer);
             FilteredList.Add(defualtCustomer);
