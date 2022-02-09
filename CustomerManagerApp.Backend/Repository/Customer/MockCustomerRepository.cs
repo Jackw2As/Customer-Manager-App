@@ -58,14 +58,13 @@ namespace CustomerManagerApp.Backend.Repository.Customer
         }
         public void Update(CustomerEntity Model)
         {
-            var customer = _customerList.Find(customer => customer == Model);
-            if( customer == null)
+            var success = _customerList.Remove(Model);
+            if (!success)
             {
                 throw new ArgumentNullException(nameof(Model), $"The Model did not exist in the data base. Call Create instead!");
             }
-            _customerList.Remove(customer);
-
-            customer = Model;
+            
+            _customerList.Add(Model);
         }
     }
 }
