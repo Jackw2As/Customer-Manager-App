@@ -92,14 +92,7 @@ namespace CustomerManagerApp.Backend.Service
 
         public void AddCustomerToList(CustomerEntity customer)
         {
-            var matches = customerList.Where(listValue => listValue == customer);
-            if (matches != null && matches.Count() > 0)
-            {
-                foreach (var customerEntity in matches)
-                {
-                    customerList.Remove(customerEntity);
-                }
-            }
+            customerList.Remove(customer);
             customerList.Add(customer);
         }
 
@@ -149,8 +142,9 @@ namespace CustomerManagerApp.Backend.Service
         //
         #region SavingFeatures
         private System.Timers.Timer SaveTimer = new();
-        public void Refresh()
+        public async void Refresh()
         {
+            await Task.Factory.StartNew(() => SaveCustomersToRepository());
             LoadCustomersFromRepository();
         }
 

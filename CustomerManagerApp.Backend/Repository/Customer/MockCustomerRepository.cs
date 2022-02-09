@@ -61,7 +61,7 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             var success = _customerList.Remove(Model);
             if (!success)
             {
-                throw new ArgumentNullException(nameof(Model), $"The Model did not exist in the data base. Call Create instead!");
+                throw new ArgumentNullException(nameof(Model), $"The Model did not exist in the database. Call Create instead!");
             }
             
             _customerList.Add(Model);
