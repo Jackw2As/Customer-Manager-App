@@ -109,7 +109,7 @@ namespace CustomerManagerApp.ViewModel
                 return;
             }
 
-            Parallel.ForEach(DatabaseCustomerList, customer => FilterByName(FilterValue, customer));
+            Parallel.ForEach(DatabaseCustomerList, customer => FilterByName(FilterValue.ToLower(), customer));
 
             foreach (var customer in filteredList)
             {
@@ -119,7 +119,8 @@ namespace CustomerManagerApp.ViewModel
 
         private void FilterByName(string FilterText, CustomerWrapper customer)
         {
-            if (customer.FirstName.Contains(FilterText) == false && customer.LastName.Contains(FilterText) == false)
+
+            if (customer.FirstName.ToLower().Contains(FilterText) == false && customer.LastName.ToLower().Contains(FilterText) == false)
             {
                 return;
             }
