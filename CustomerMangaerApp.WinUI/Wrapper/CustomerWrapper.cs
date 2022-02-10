@@ -24,7 +24,7 @@ namespace CustomerManagerApp.WinUI.Wrapper
         {
             this.customer = customer;
         }
-        public CustomerEntity GetWrappedCustomer => customer;
+        public CustomerEntity GetWrappedCustomer { get => customer; }
         public Guid Id
         {
             get => new(customer.ID);
