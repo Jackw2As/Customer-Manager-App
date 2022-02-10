@@ -34,9 +34,9 @@ namespace CustomerManagerApp.Backend.Service
 
                 List<CustomerEntity> list = new List<CustomerEntity>()
             {
-                new CustomerEntity(Guid.NewGuid().ToString(), "Jack", "Aalders", drinkId),
-                new CustomerEntity(Guid.NewGuid().ToString(), "John", "Aalders", drinkId),
-                new CustomerEntity(Guid.NewGuid().ToString(), "Sarah", "Aalders", drinkId)
+                new CustomerEntity(Guid.NewGuid().ToString(), "Jack", "Yellow", drinkId),
+                new CustomerEntity(Guid.NewGuid().ToString(), "John", "Blue", drinkId),
+                new CustomerEntity(Guid.NewGuid().ToString(), "Sarah", "Purple", drinkId)
             };
 
                 return new MockCustomerRepository(list);
