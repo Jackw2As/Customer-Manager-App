@@ -34,11 +34,19 @@ namespace CustomerManagerApp.Test
 
         private ICustomerRepository CreateMock()
         {
-            //clear old test file
-            var Loader = new JsonCustomerRepository("Tests");
-            Loader.DeleteAll();
-            //create new test file
-            return new JsonCustomerRepository("Tests", mockDefaultCustomersList);
+            //Delete Test File
+            var loader = new JsonCustomerRepo("Tests");
+            loader.DeleteAll();
+            
+            //Create new Test File
+            var mockRepository = new JsonCustomerRepo("Tests");
+
+            foreach (var customer in mockDefaultCustomersList)
+            {
+                mockRepository.Create(customer);
+            }
+
+            return mockRepository;
         }
 
 
@@ -62,9 +70,16 @@ namespace CustomerManagerApp.Test
             Assert.Empty(ConfirmEmpty);
 
             Loader.DeleteAll();
-            var customers = await Loader.ReadAll();
-            
-            Assert.NotEmpty(customers);
+            try
+            {
+                var customers = await Loader.ReadAll();
+
+                Assert.NotEmpty(customers);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                //File is Deleted here
+            }
         }
 
         [Fact(DisplayName = "Add Customer")]
