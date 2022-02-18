@@ -9,13 +9,14 @@ using System.Security.AccessControl;
 
 namespace CustomerManagerApp.Backend.Repository.Customer
 {
-    public class JsonCustomerRepo : ICustomerRepository
+
+    public class JsonCustomerRepo : QueryBaseClass, ICustomerRepository
     {
         FileInfo PersistentStorage { get; set; }
         DirectoryInfo ApplicationFolder { get; init; }
         DirectoryInfo SaveFolder { get; init; }
         List<CustomerEntity>? Entities { get; set; }
-        FileStream SaveFileStream { get; set; }
+        FileStream? SaveFileStream { get; set; }
 
         public JsonCustomerRepo(string FileName)
         {
@@ -31,6 +32,11 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             {
                SaveFileStream = PersistentStorage.Create();
             }
+
+            //Setup Base Class
+            base.WriteRequest += HandleWriteRequest;
+            base.ReadRequest += HandleReadRequest;
+            base.DeleteRequest += HandleDeleteRequest;
         }
 
         public JsonCustomerRepo()
@@ -43,15 +49,25 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             // Get/Create File Store
             string filepath = $"{SaveFolder.FullName}/customer.json";
             PersistentStorage = new(filepath);
+            if (!PersistentStorage.Exists)
+            {
+                SaveFileStream = PersistentStorage.Create();
+            }
+
+            //Setup Base Class
+            base.WriteRequest += HandleWriteRequest;
+            base.ReadRequest += HandleReadRequest;
+            base.DeleteRequest += HandleDeleteRequest;
         }
 
        
 
         public async void Create(CustomerEntity Model)
         {
-            if(Entities == null)
+            while(Entities == null)
             {
-                Entities = await DeserializeFile();
+               Queue.Enqueue(new(QueueRequest.Read));
+               await RunQueueAsync();
             }
 
             if(Entities.Exists(_ => _ == Model))
@@ -59,42 +75,35 @@ namespace CustomerManagerApp.Backend.Repository.Customer
                 throw new ArgumentException("Trying to Duplicate Customer Entry!");
             }
             Entities.Add(Model);
-            SerializeFile();
+            Queue.Enqueue(new(QueueRequest.Write));
+            await RunQueueAsync();
+
+            return;
         }
 
         
-        public void Delete(CustomerEntity Model)
+        public async void Delete(CustomerEntity Model)
         {
-
-            if(Entities == null)
+            while(Entities == null)
             {
-                throw new ArgumentNullException(nameof(Entities), "File Not Read or Doesn't Exist!");
+                await EnqueueQuery(new(QueueRequest.Read));
             }
 
-            var sucessful = Entities.Remove(Model);
-
-            if(!sucessful)
-            {
-                throw new ArgumentException("CustomerEntity trying to be removed from the file doesn't exist", nameof(Model));
-            }
+            await EnqueueQuery(new(QueueRequest.Delete, Model));
+            return;
         }
 
-        public void DeleteAll()
+        public async void DeleteAll()
         {
-            Entities = null;
-            if (SaveFileStream != null)
-            { 
-                SaveFileStream.Dispose(); 
-            }
-            PersistentStorage.Delete();
-            PersistentStorage.Refresh();
+            await EnqueueQuery(new(QueueRequest.Delete));
+            return;
         }
 
         public async Task<CustomerEntity> Read(string id)
         {
             while(Entities == null)
             {
-                Entities = await DeserializeFile();
+                await EnqueueQuery(new(QueueRequest.Read));
             }
 
             var customer = Entities.First(customer => customer.ID == id);
@@ -103,6 +112,7 @@ namespace CustomerManagerApp.Backend.Repository.Customer
                 throw new ArgumentNullException(nameof(customer),
                     $"Either Entity: {nameof(id)} did not exist, or the List is broken");
             }
+
             return customer;
         }
 
@@ -110,36 +120,82 @@ namespace CustomerManagerApp.Backend.Repository.Customer
         {
             while (Entities == null)
             {
-                Entities = await DeserializeFile();
+                await EnqueueQuery(new(QueueRequest.Read));
             }
             var list = Entities.ToList();
             return list;
         }
 
-        public void Update(CustomerEntity Model)
+        public async void Update(CustomerEntity Model)
         {
-            if(Entities == null)
+            while(Entities == null)
             {
-                throw new ArgumentNullException(nameof(Entities), "Trying to Update, but no Entities exist on File!(Or file hasn't been read)");
+                await EnqueueQuery(new(QueueRequest.Read));
             }
             var successful = Entities.Remove(Model);
             if(successful)
             {
                 Entities.Add(Model);
-                SerializeFile();
+                await EnqueueQuery(new(QueueRequest.Write));
+                return;
             }
             throw new NullReferenceException("List Does Not contain value trying to be updated!");
         }
-
-        async void SerializeFile()
+        private async Task HandleDeleteRequest(QueueQuery query)
         {
-            if (SaveFileStream == null)
+            if (query.Customer == null)
             {
-                SaveFileStream = PersistentStorage.Create();
+                Entities = null;
+                if (SaveFileStream != null)
+                {
+                    SaveFileStream.Dispose();
+                }
+                PersistentStorage.Delete();
+                PersistentStorage.Refresh();
             }
-            await JsonSerializer.SerializeAsync(SaveFileStream, Entities);
-        }
+            else
+            {
+                while(Entities == null)
+                {
+                    await EnqueueQuery(new(QueueRequest.Read));
+                }
+                var sucessful = Entities.Remove(query.Customer);
 
+                if (!sucessful)
+                {
+                    throw new ArgumentException("CustomerEntity trying to be removed from the file doesn't exist", nameof(query.Customer));
+                }
+            }
+            return;
+        }
+        private async Task HandleReadRequest(QueueQuery query) => Entities = await DeserializeFile();
+        private async Task HandleWriteRequest(QueueQuery query) => await SerializeFile();
+
+        async Task SerializeFile()
+        {
+            try
+            {
+                if (SaveFileStream == null)
+                {
+                    SaveFileStream = PersistentStorage.Create();
+                }
+
+                while (SaveFileStream.CanWrite == false)
+                {
+                    Thread.Sleep(500);
+                }
+
+                await JsonSerializer.SerializeAsync(SaveFileStream, Entities);
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                Thread.Sleep(500);
+                await EnqueueQuery(new(QueueRequest.Write));
+            }
+
+            return;
+        }
         private async Task<List<CustomerEntity>?> DeserializeFile()
         {
             try
@@ -147,6 +203,11 @@ namespace CustomerManagerApp.Backend.Repository.Customer
                 if(SaveFileStream == null)
                 {
                     SaveFileStream = PersistentStorage.Create();
+                }
+
+                while (SaveFileStream.CanRead == false)
+                {
+                    Thread.Sleep(500);
                 }
 
                 List<CustomerEntity>? customers;
@@ -157,7 +218,14 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             }
             catch(JsonException ex)
             {
+                Console.WriteLine(ex.Message);
                 return new();
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                Thread.Sleep(500);
+                return await DeserializeFile();
             }
         }
     }
