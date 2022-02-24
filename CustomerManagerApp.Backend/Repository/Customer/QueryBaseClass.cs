@@ -66,6 +66,13 @@ namespace CustomerManagerApp.Backend.Repository.Customer
 
         private protected async Task EnqueueQuery(QueueQuery item)
         {
+            if (item.Request == QueueRequest.Read)
+            {
+                if(Queue.Any(q => q.Request == QueueRequest.Read))
+                {
+                    return; //Prevents Duplicate Read Requests. We only need one in the Queue at a time!
+                }
+            }
             Queue.Enqueue(item);
             await RunQueueAsync();
         }
