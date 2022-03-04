@@ -49,7 +49,6 @@ namespace CustomerManagerApp.Wpf.CustomerEdit
             {
                 DrinkTypes.Add(drink);
             }
-           
         }
 
         public bool CanSave

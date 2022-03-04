@@ -9,9 +9,6 @@
         xmlns:edit="clr-namespace:CustomerManagerApp.Wpf.CustomerEdit" 
         mc:Ignorable="d"
         Title="Customer Manager Applicaton" Height="450" Width="800">
-    <Window.DataContext >
-        <local:MainWindowViewModel/>
-    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -27,10 +24,11 @@
 
         <Grid.Resources>
             <DataTemplate DataType="{x:Type list:CustomerListViewModel}">
-                <list:CustomerListView />
+                <list:CustomerListView ViewModel="{Binding CustomerList}" />
+
             </DataTemplate>
             <DataTemplate DataType="{x:Type edit:CustomerEditViewModel}">
-                <edit:CustomerEditView />
+                <edit:CustomerEditView ViewModel="{Binding CustomerEdit}" />
             </DataTemplate>
         </Grid.Resources>
 
@@ -42,8 +40,9 @@
                         Grid.Row="1" 
                         Grid.RowSpan="2"
                         />
-        
+
         <!-- Editor View -->
+
         <ContentControl Content="{Binding CustomerEdit}"
                         Grid.Row="1" 
                         Grid.Column="1" 
@@ -51,7 +50,6 @@
                         Grid.RowSpan="2"
                         Margin="0,0,0,286" 
                         />
-
         <StackPanel Grid.Column="1" Grid.Row="2" Background="#F05A28" Margin="0 50 0 0" Grid.ColumnSpan="2"></StackPanel>
 
     </Grid>

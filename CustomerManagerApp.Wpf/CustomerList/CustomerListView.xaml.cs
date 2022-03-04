@@ -4,12 +4,13 @@ namespace CustomerManagerApp.Wpf.CustomerList
 {
     public sealed partial class CustomerListView : UserControl
     {
-        public CustomerListView()
+        public CustomerListViewModel ViewModel { get; set; }
+        public CustomerListView(CustomerListViewModel viewModel)
         {
-            InitializeComponent();
+            DataContext = viewModel;
+            ViewModel = viewModel;
 
-            CustomerListViewModel? viewModel = DataContext as CustomerListViewModel;
-            if (viewModel == null) throw new System.Exception("Should never be null");
+            InitializeComponent();
 
             list.ItemsSource = viewModel.FilteredCustomerList;
             list.SelectedItem = viewModel.SelectedCustomer;

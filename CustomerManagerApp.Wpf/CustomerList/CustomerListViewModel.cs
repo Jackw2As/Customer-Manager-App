@@ -16,13 +16,19 @@ namespace CustomerManagerApp.Wpf.CustomerList
     {
         public ObservableCollection<CustomerWrapper> FilteredCustomerList { get; set; } = new();
         public ObservableCollection<CustomerWrapper> UnFilteredCustomerList { get; } = new();
-        internal DrinkWrapper DefaultDrink { get; }
+        internal DrinkWrapper? DefaultDrink { get; private set; }
         protected DataService Data { get; }
 
-        internal CustomerListViewModel(ref DataService DataService, DrinkWrapper defaultDrink)
+        internal CustomerListViewModel(ref DataService dataService)
         {
-            Data = DataService;
-            DefaultDrink = defaultDrink;
+            Data = dataService;
+            GetDrink();
+        }
+
+        private async void GetDrink()
+        {
+            var list = await Data.GetDrinksAsync();
+            DefaultDrink = new(list.First());
         }
 
         //The List View is responsible for populating the list with new values.

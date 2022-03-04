@@ -5,24 +5,23 @@ namespace CustomerManagerApp.Wpf.CustomerEdit
 {
     public sealed partial class CustomerEditView : UserControl
     {
-        CustomerEditViewModel? viewModel;
-        public CustomerEditView()
+        public CustomerEditViewModel ViewModel { get; set; }
+        public CustomerEditView(CustomerEditViewModel viewModel)
         {
+            DataContext = viewModel;
+            ViewModel = viewModel;
+
             InitializeComponent();
-            viewModel = DataContext as CustomerEditViewModel;
-            if (viewModel == null) throw new System.Exception("ViewModle should not be null");
 
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
-
-            
         }
 
         private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (viewModel == null) return;
+            if (ViewModel == null) return;
             if (e.PropertyName == nameof(CustomerEditViewModel.IsCustomerSelected))
             {
-                if(viewModel.IsCustomerSelected)
+                if(ViewModel.IsCustomerSelected)
                 {
                     EditView_Panel.Visibility = Visibility.Visible;
                 }

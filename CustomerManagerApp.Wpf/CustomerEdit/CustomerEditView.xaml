@@ -6,9 +6,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:local="clr-namespace:CustomerManagerApp.Wpf.CustomerEdit"
     mc:Ignorable="d">
-    <UserControl.DataContext >
-        <local:CustomerEditViewModel/>
-    </UserControl.DataContext>
 
     <StackPanel x:Name="EditView_Panel" VerticalAlignment="Stretch" Height="600">
         <StackPanel VerticalAlignment="Bottom" Width="Auto" HorizontalAlignment="Center" Margin="0 50 0 20">

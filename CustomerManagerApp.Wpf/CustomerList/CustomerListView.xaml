@@ -6,9 +6,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:local="clr-namespace:CustomerManagerApp.Wpf.CustomerList"
     mc:Ignorable="d">
-    <UserControl.DataContext >
-        <local:CustomerListViewModel/>
-    </UserControl.DataContext>
 
     <StackPanel HorizontalAlignment="Center" >
 

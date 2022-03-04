@@ -12,6 +12,10 @@ namespace CustomerManagerApp.Wpf
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        //In the Constructor what I want to happen.
+        //Create a CustomerEdit and CustomerList Event.
+        //Create two seperate windows from this.
+
 
         //Child ViewModels
         public CustomerEditViewModel CustomerEdit { get; set; }
@@ -19,45 +23,32 @@ namespace CustomerManagerApp.Wpf
 
         private DrinkWrapper defaultdrink = new();
 
-        DataService dataService;
-        public MainWindowViewModel()
+        private DataService dataService;
+        public MainWindowViewModel(DataService dataService)
         {
-            CreateDataService();
-            GetDefaultDrink();
-            
-            while(CustomerList == null && CustomerEdit == null)
-            {
-                Thread.Sleep(100);
-            }
+            this.dataService = dataService;
+            GetDefaultDrink(dataService);
+
+            CustomerList = new(ref dataService);
+            CustomerEdit = new(ref dataService);
 
             CustomerList.SelectedCustomerChanged += SelectedCustomerChangedEvent;
             CustomerList.OnRefresh += ListViewModel_OnRefreshRaised;
 
             CustomerEdit.RemoveCustomerSelected += EditViewModel_RemoveSelectedCustomerEvent;
-            
-
-            async void CreateDataService()
-            {
-                dataService = await DataService.CreateDataServiceObjectAsync();
-
-                CustomerList = new(ref dataService, defaultdrink);
-                CustomerEdit = new(ref dataService);
-            }
         }
 
         
 
-        private async void GetDefaultDrink()
+        private async void GetDefaultDrink(DataService service)
         {
-            var drinks = await dataService.GetDrinksAsync();
+            var drinks = await service.GetDrinksAsync();
             new DrinkWrapper(drinks.First());
         }
 
-        //Handle View Model Commands
+        //Event Handling
         private void EditViewModel_RemoveSelectedCustomerEvent(CustomerWrapper? customer) => Load();
         private void ListViewModel_OnRefreshRaised() => Load();
-
-
         private void SelectedCustomerChangedEvent(CustomerWrapper? customer) => CustomerEdit.SelectedCustomer = customer;
 
         public bool IsLoading { get; private set; } = false;

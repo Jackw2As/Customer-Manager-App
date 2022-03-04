@@ -1,4 +1,5 @@
 ﻿using CustomerManagerApp.Backend.Service;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace CustomerManagerApp.Wpf
@@ -8,19 +9,20 @@ namespace CustomerManagerApp.Wpf
     /// </summary>
     public partial class MainWindowView : Window
     {
-        //public MainWindowViewModel ViewModel { get; set; }
+        public MainWindowViewModel? ViewModel { get; set; }
         public MainWindowView()
         {
-            //ViewModel = new MainWindowViewModel();
-            //DataContext = ViewModel;
-            this.Loaded += MainWindowView_Loaded;
-            InitializeComponent();
+            Task.Factory.StartNew(()=>Load());
+
         }
 
-        private void MainWindowView_Loaded(object sender, RoutedEventArgs e)
+        private async Task Load()
         {
-            var ViewModel = DataContext as MainWindowViewModel;
-            ViewModel?.Load();
+            var dataContainer = await DataService.CreateDataServiceObjectAsync();
+            ViewModel = new MainWindowViewModel(dataContainer);
+            ViewModel.Load();
+            DataContext = ViewModel;
+            this.InitializeComponent();
         }
     }
 }
