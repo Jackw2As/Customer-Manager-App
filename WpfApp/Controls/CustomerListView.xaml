@@ -1,0 +1,33 @@
+﻿<UserControl
+    x:Class="CustomerManagerApp.WpfApp.Controls.CustomerListView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d">
+
+    <StackPanel HorizontalAlignment="Center" >
+
+        <StackPanel Margin="10">
+            <Button x:Name="Refresh" HorizontalAlignment="Stretch" 
+                    FontWeight="Bold"
+                    Content="Refresh" BorderBrush="#FF707070" />
+
+            <Button x:Name="new_customer" Margin="0 3 0 0" 
+                    HorizontalAlignment="Stretch" 
+                    FontWeight="Bold" 
+                    Content="New Customer"/>
+            <TextBox x:Name="filter" Margin="0 3 0 0" 
+                     Text="">
+                
+            </TextBox>
+        </StackPanel>
+
+        <ListView x:Name="list" MinWidth="200" Margin="10" 
+                  DisplayMemberPath="DisplayName" 
+                  d:ItemsSource="{d:SampleData ItemCount=8}" 
+                  />
+
+
+    </StackPanel>
+</UserControl>
