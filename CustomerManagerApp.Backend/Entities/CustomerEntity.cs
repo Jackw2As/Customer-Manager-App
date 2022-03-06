@@ -12,12 +12,13 @@ namespace CustomerManagerApp.Backend.Entities
     public class CustomerEntity : BaseEntity<string>
     {
         [JsonConstructor]
-        public CustomerEntity(string id, string firstName, string lastName, string DrinkId, bool isDeveloper = false) : base (id)
+        public CustomerEntity(string id, string firstName, string lastName, string drinkId, DateTimeOffset firstTime, bool isDeveloper = false) : base (id)
         {
             FirstName = firstName;
             LastName = lastName;
             IsDeveloper = isDeveloper;
-            DrinkID = DrinkId;
+            DrinkID = drinkId;
+            FirstTime = firstTime;
         }
         public CustomerEntity(CustomerEntity customer) : base(customer.ID)
         {

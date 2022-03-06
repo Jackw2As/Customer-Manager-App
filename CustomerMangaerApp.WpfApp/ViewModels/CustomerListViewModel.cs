@@ -55,7 +55,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         //methods
         public void Load()
         {
-            if (Data == null && isLoading) return;
+            if (Data == null || isLoading) return;
             isLoading = true;
 
             var Customerscollection = Data!.GetCustomerList();

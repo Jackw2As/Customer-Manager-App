@@ -59,7 +59,7 @@ namespace CustomerManagerApp.ViewModel
         {
             var drinks = await Data.GetDrinksAsync();
             var drink = drinks.First().ID;
-            var customer = new CustomerEntity(Guid.NewGuid().ToString(), "new customer", "", drink);
+            var customer = new CustomerEntity(Guid.NewGuid().ToString(), "new customer", "", drink, DateTimeOffset.Now);
             var defualtCustomer = new CustomerWrapper(customer);
 
             DatabaseCustomerList.Add(customer);

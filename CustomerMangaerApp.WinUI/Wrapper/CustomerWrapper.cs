@@ -17,7 +17,7 @@ namespace CustomerManagerApp.WinUI.Wrapper
 
         public CustomerWrapper(DrinkWrapper drinkOfChoice)
         {
-            customer = new(Guid.NewGuid().ToString(), "", "", drinkOfChoice.Id.ToString());
+            customer = new(Guid.NewGuid().ToString(), "", "", drinkOfChoice.Id.ToString(), DateTimeOffset.Now);
         }
 
         public CustomerWrapper(CustomerEntity customer)
