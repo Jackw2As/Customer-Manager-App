@@ -18,7 +18,7 @@ namespace CustomerManagerApp.ViewModel
     public delegate void CustomerChangedEvent(CustomerWrapper customer);
     public class ListViewModel : ViewModelBase
     {
-        private List<CustomerWrapper> DatabaseCustomerList { get; } = new();
+        private List<CustomerEntity> DatabaseCustomerList { get; } = new();
 
         public ObservableCollection<CustomerWrapper> FilteredList { get; } = new();
         public string FilterValue = "";
@@ -61,17 +61,18 @@ namespace CustomerManagerApp.ViewModel
             var drink = drinks.First().ID;
             var customer = new CustomerEntity(Guid.NewGuid().ToString(), "new customer", "", drink);
             var defualtCustomer = new CustomerWrapper(customer);
-            DatabaseCustomerList.Add(defualtCustomer);
+
+            DatabaseCustomerList.Add(customer);
             FilteredList.Add(defualtCustomer);
         }
 
         public void CustomerRemove(CustomerWrapper customer)
         {
-            DatabaseCustomerList.Remove(customer);
+            DatabaseCustomerList.Remove(customer.GetWrappedCustomer);
             FilteredList.Remove(customer);
         }
 
-        public List<CustomerWrapper> GetDatabaseCustomerList()
+        public List<CustomerEntity> GetDatabaseCustomerList()
         {
             return new(DatabaseCustomerList);
         }
@@ -88,10 +89,8 @@ namespace CustomerManagerApp.ViewModel
             FilteredList.Clear();
 
             List<CustomerEntity> databaseCustomerList = new();
-            //Converting CustomerWrapper into CustomerEntity
-            Parallel.ForEach(DatabaseCustomerList, customerWrapper => databaseCustomerList.Add(customerWrapper.GetWrappedCustomer));
 
-            var filteredList = filterService.FilterCustomerList(databaseCustomerList, FilterValue);
+            var filteredList = filterService.FilterCustomerList(DatabaseCustomerList, FilterValue);
 
             Parallel.ForEach(filteredList, customerEntity => FilteredList.Add( new(customerEntity) ));
         }
@@ -103,7 +102,7 @@ namespace CustomerManagerApp.ViewModel
             var data = Data.GetCustomerList();
             foreach (var customer in data)
             {
-                DatabaseCustomerList.Add(new CustomerWrapper(customer));
+                DatabaseCustomerList.Add(customer);
             }
         }
 
