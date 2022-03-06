@@ -97,19 +97,20 @@ namespace CustomerManagerApp.WpfApp.ViewModels
             }
             CustomerWrapper defualtCustomer = new(DefaultDrink);
             UnFilteredCustomerList.Add(defualtCustomer);
+            Filter();
         }
         public void Filter()
         {
             var filterService = new FilterService();
             FilteredCustomerList.Clear();
 
-            var UnfilteredList = new List<CustomerEntity>();
+            var UnFilteredList = new List<CustomerEntity>();
             foreach (var customerWrapper in UnFilteredCustomerList)
             {
-                UnfilteredList.Add(customerWrapper.GetWrappedCustomer);
+                UnFilteredList.Add(customerWrapper.GetWrappedCustomer);
             }
 
-            var filteredList = filterService.FilterCustomerList(UnfilteredList, FilterValue);
+            var filteredList = filterService.FilterCustomerList(UnFilteredList, FilterValue);
 
             foreach (var customerEntity in filteredList)
             {

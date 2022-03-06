@@ -16,7 +16,7 @@ namespace CustomerManagerApp.WpfApp.Wrapper
 
         public CustomerWrapper(DrinkWrapper drinkOfChoice)
         {
-            customer = new(Guid.NewGuid().ToString(), "", "", drinkOfChoice.Id.ToString());
+            customer = new(Guid.NewGuid().ToString(), "new", "customer", drinkOfChoice.Id.ToString());
         }
 
         public CustomerWrapper(CustomerEntity customer)
