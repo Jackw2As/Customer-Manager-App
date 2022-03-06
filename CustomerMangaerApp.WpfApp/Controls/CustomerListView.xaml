@@ -21,8 +21,9 @@
                     Content="New Customer"
                     Click="new_customer_Click"
                     />
-            <TextBox x:Name="filter" Margin="0 3 0 0" 
-                     Text="">
+            <TextBox x:Name="filter" Margin="0 3 0 0"
+                     Text="{Binding FilterValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     TextChanged="filter_TextChanged">
             </TextBox>
         </StackPanel>
 

@@ -25,5 +25,11 @@ namespace CustomerManagerApp.WpfApp.Controls
         {
             ViewModel.AddNewCustomerToList();
         }
+
+        private void filter_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var test = ViewModel.FilterValue;
+            ViewModel.Filter();
+        }
     }
 }
