@@ -11,23 +11,27 @@
         <StackPanel Margin="10">
             <Button x:Name="Refresh" HorizontalAlignment="Stretch" 
                     FontWeight="Bold"
-                    Content="Refresh" BorderBrush="#FF707070" />
+                    Content="Refresh" BorderBrush="#FF707070"
+                    Click="Refresh_Click"
+                    />
 
             <Button x:Name="new_customer" Margin="0 3 0 0" 
                     HorizontalAlignment="Stretch" 
                     FontWeight="Bold" 
-                    Content="New Customer"/>
+                    Content="New Customer"
+                    Click="new_customer_Click"
+                    />
             <TextBox x:Name="filter" Margin="0 3 0 0" 
                      Text="">
-                
             </TextBox>
         </StackPanel>
 
         <ListView x:Name="list" MinWidth="200" Margin="10" 
                   DisplayMemberPath="DisplayName" 
-                  d:ItemsSource="{d:SampleData ItemCount=8}" 
+                  d:ItemsSource="{d:SampleData ItemCount=8}"
+                  ItemsSource="{Binding FilteredCustomerList}"
+                  IsSynchronizedWithCurrentItem="true"
+                  SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}"
                   />
-
-
     </StackPanel>
 </UserControl>

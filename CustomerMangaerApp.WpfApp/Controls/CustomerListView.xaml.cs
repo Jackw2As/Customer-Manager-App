@@ -12,9 +12,18 @@ namespace CustomerManagerApp.WpfApp.Controls
             DataContext = ViewModel;
 
             InitializeComponent();
-            
-            list.ItemsSource = ViewModel.FilteredCustomerList;
-            list.SelectedItem = ViewModel.SelectedCustomer;            
+
+            ViewModel.RefreshList();
+        }
+
+        private void Refresh_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ViewModel.RefreshList();
+        }
+
+        private void new_customer_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ViewModel.AddNewCustomerToList();
         }
     }
 }
