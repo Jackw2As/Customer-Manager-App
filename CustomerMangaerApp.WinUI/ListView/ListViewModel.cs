@@ -2,6 +2,7 @@
 using CustomerManagerApp.Backend.Repository.Customer;
 using CustomerManagerApp.Backend.Repository.Drink;
 using CustomerManagerApp.Backend.Service;
+using CustomerManagerApp.Backend.Service.FilterService;
 using CustomerManagerApp.WinUI.Wrapper;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace CustomerManagerApp.ViewModel
         private List<CustomerWrapper> DatabaseCustomerList { get; } = new();
 
         public ObservableCollection<CustomerWrapper> FilteredList { get; } = new();
+        public string FilterValue = "";
         private DataService Data { get; }
 
         public event RefreshEvent OnRefreshRaised;
@@ -77,8 +79,21 @@ namespace CustomerManagerApp.ViewModel
         internal void Load()
         {
             RefreshDatabaseList();
-
             Filter();
+        }
+
+        public void Filter()
+        {
+            var filterService = new FilterService();
+            FilteredList.Clear();
+
+            List<CustomerEntity> databaseCustomerList = new();
+            //Converting CustomerWrapper into CustomerEntity
+            Parallel.ForEach(DatabaseCustomerList, customerWrapper => databaseCustomerList.Add(customerWrapper.GetWrappedCustomer));
+
+            var filteredList = filterService.FilterCustomerList(databaseCustomerList, FilterValue);
+
+            Parallel.ForEach(filteredList, customerEntity => FilteredList.Add( new(customerEntity) ));
         }
 
         private void RefreshDatabaseList()
@@ -92,39 +107,6 @@ namespace CustomerManagerApp.ViewModel
             }
         }
 
-        public string FilterValue = "";
-        private List<CustomerWrapper> filteredList = new();
-        public void Filter()
-        {
-            filteredList.Clear();
-            FilteredList.Clear();
-
-            //If Empty add Database List
-            if (FilterValue == String.Empty)
-            { 
-                foreach (var customer in DatabaseCustomerList)
-                {
-                    FilteredList.Add(customer);
-                }
-                return;
-            }
-
-            Parallel.ForEach(DatabaseCustomerList, customer => FilterByName(FilterValue.ToLower(), customer));
-
-            foreach (var customer in filteredList)
-            {
-                FilteredList.Add(customer);
-            }
-        }
-
-        private void FilterByName(string FilterText, CustomerWrapper customer)
-        {
-
-            if (customer.FirstName.ToLower().Contains(FilterText) == false && customer.LastName.ToLower().Contains(FilterText) == false)
-            {
-                return;
-            }
-            filteredList.Add(customer);
-        }
+        
     }
 }
