@@ -23,7 +23,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         public CustomerEditViewModel() => SetupViewModel();
         
         //properties
-        public ObservableCollection<DrinkEntity> DrinkTypes { get; init; } = new();
+        public ObservableCollection<DrinkWrapper> DrinkTypes { get; init; } = new();
         public CustomerWrapper? SelectedCustomer
         {
             get => selectedCustomer;
@@ -98,7 +98,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
             DrinkTypes.Clear();
             foreach (var drink in drinkList)
             {
-                DrinkTypes.Add(drink);
+                DrinkTypes.Add(new(drink));
             }
         }
 
