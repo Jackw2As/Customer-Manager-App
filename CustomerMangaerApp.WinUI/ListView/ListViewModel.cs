@@ -88,11 +88,12 @@ namespace CustomerManagerApp.ViewModel
             var filterService = new FilterService();
             FilteredList.Clear();
 
-            List<CustomerEntity> databaseCustomerList = new();
-
             var filteredList = filterService.FilterCustomerList(DatabaseCustomerList, FilterValue);
 
-            Parallel.ForEach(filteredList, customerEntity => FilteredList.Add( new(customerEntity) ));
+            foreach (var customerEntity in filteredList)
+            {
+                FilteredList.Add(new(customerEntity));
+            }
         }
 
         private void RefreshDatabaseList()
