@@ -1,6 +1,7 @@
 ﻿using CustomerManagerApp.Backend.Entities;
 using CustomerManagerApp.Backend.Repository.Drink;
 using CustomerManagerApp.Backend.Service;
+using CustomerManagerApp.Backend.Service.FilterService;
 using CustomerManagerApp.WpfApp.Wrapper;
 using System;
 using System.Collections.Generic;
@@ -99,8 +100,21 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         }
         public void Filter()
         {
-            FilteredCustomerList = UnFilteredCustomerList;
-            Parallel.ForEach(FilteredCustomerList, customer => FilterByName(FilterValue, customer));
+            var filterService = new FilterService();
+            FilteredCustomerList.Clear();
+
+            var UnfilteredList = new List<CustomerEntity>();
+            foreach (var customerWrapper in UnFilteredCustomerList)
+            {
+                UnfilteredList.Add(customerWrapper.GetWrappedCustomer);
+            }
+
+            var filteredList = filterService.FilterCustomerList(UnfilteredList, FilterValue);
+
+            foreach (var customerEntity in filteredList)
+            {
+                FilteredCustomerList.Add(new(customerEntity));
+            }
         }
 
         //private methods
