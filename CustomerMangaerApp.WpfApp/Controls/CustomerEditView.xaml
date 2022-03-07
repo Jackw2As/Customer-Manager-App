@@ -30,7 +30,7 @@
                       ItemsSource="{Binding DrinkTypes, Mode=OneWay}"
                       DisplayMemberPath="Name"   
                       SelectedValuePath="Id"
-                      SelectedValue="{Binding SelectedCustomer.DrinkID, Mode=TwoWay}"/>
+                      SelectedValue="{Binding SelectedCustomer.DrinkId, Mode=TwoWay}"/>
 
             <StackPanel>
                 <Button Content="Save" HorizontalAlignment="Stretch" 
