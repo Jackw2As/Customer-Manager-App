@@ -14,6 +14,8 @@ namespace CustomerManagerApp.WpfApp.Controls
 
             InitializeComponent();
 
+            EditView_Panel.Visibility = Visibility.Hidden;
+
             if (ViewModel != null)
             {
                 ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -31,7 +33,7 @@ namespace CustomerManagerApp.WpfApp.Controls
                 }
                 else
                 {
-                    EditView_Panel.Visibility = Visibility.Visible;
+                    EditView_Panel.Visibility = Visibility.Hidden;
                 }
             }
         }
