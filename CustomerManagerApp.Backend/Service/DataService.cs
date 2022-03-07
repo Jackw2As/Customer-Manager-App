@@ -78,7 +78,7 @@ namespace CustomerManagerApp.Backend.Service
         //
         #region Customers
 
-        private readonly List<CustomerEntity> customerList = new();
+        private static readonly List<CustomerEntity> customerList = new();
 
         public List<CustomerEntity> GetCustomerList()
         {

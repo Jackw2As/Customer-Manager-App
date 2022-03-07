@@ -33,9 +33,8 @@
                       SelectedValue="{Binding SelectedCustomer.DrinkId, Mode=TwoWay}"/>
 
             <StackPanel>
-                <Button Content="Save" HorizontalAlignment="Stretch" />
-                <Button Content="Remove" HorizontalAlignment="Stretch" />
-
+                <Button Content="Save" Click="Button_Save" HorizontalAlignment="Stretch" />
+                <Button Content="Remove" Click="Button_Remove" HorizontalAlignment="Stretch" />
             </StackPanel>
         </StackPanel>
     </StackPanel>

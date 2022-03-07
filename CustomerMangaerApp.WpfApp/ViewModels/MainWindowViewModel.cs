@@ -68,7 +68,14 @@ namespace CustomerManagerApp.WpfApp.ViewModels
             var drinks = await dataService.GetDrinksAsync();
             defaultdrink = new DrinkWrapper(drinks.First());
         }
-        private void EditViewModel_RemoveSelectedCustomerEvent(CustomerWrapper? customer) => Load();
+
+        private void Remove(CustomerWrapper? customer)
+        {
+            if (customer == null) return;
+            dataService.RemoveCustomerFromList(customer.GetWrappedCustomer);
+            Load();
+        }
+        private void EditViewModel_RemoveSelectedCustomerEvent(CustomerWrapper? customer) => Remove(customer);
         private void ListViewModel_OnRefreshRaised() => Load();
         private void SelectedCustomerChangedEvent(CustomerWrapper? customer) => CustomerEdit.SelectedCustomer = customer;
     }

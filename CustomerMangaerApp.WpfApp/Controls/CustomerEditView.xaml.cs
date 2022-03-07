@@ -37,5 +37,15 @@ namespace CustomerManagerApp.WpfApp.Controls
                 }
             }
         }
+
+        private void Button_Save(object sender, RoutedEventArgs e)
+        {
+            ViewModel.SaveCustomer();
+        }
+
+        private void Button_Remove(object sender, RoutedEventArgs e)
+        {
+            ViewModel.RemoveSelectedCustomer();
+        }
     }
 }

@@ -85,8 +85,8 @@ namespace CustomerManagerApp.WpfApp.ViewModels
             if (SelectedCustomer != null && data != null)
             {
                 data.AddCustomerToList(SelectedCustomer.GetWrappedCustomer);
-                SelectedCustomer = null;
                 SaveSelectedCustomer?.Invoke(SelectedCustomer);
+                SelectedCustomer = null;
             }
         }
 
