@@ -6,7 +6,7 @@
         xmlns:controls="clr-namespace:CustomerManagerApp.WpfApp.Controls"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -36,7 +36,7 @@
             Grid.Row="1" 
             Grid.Column="1" 
             Grid.ColumnSpan="2" 
-            Grid.RowSpan="2"
+            Grid.RowSpan="1"
             Margin="0,0,0,286" />
 
         <StackPanel Grid.Column="1" Grid.Row="2" Background="#F05A28" Margin="0 50 0 0" Grid.ColumnSpan="2"></StackPanel>
