@@ -66,8 +66,9 @@ namespace CustomerManagerApp.WpfApp.ViewModels
             {
                 if (customer != null)
                 {
-                    UnFilteredCustomerList.Add(new(customer));
-                    FilteredCustomerList.Add(new(customer));
+                    var _customer = new CustomerWrapper(customer);
+                    UnFilteredCustomerList.Add(_customer);
+                    FilteredCustomerList.Add(_customer);
                 }
             }
             PropertyHasChanged(nameof(UnFilteredCustomerList));
@@ -116,6 +117,12 @@ namespace CustomerManagerApp.WpfApp.ViewModels
             {
                 FilteredCustomerList.Add(new(customerEntity));
             }
+        }
+
+        public void RemoveCustomer(CustomerWrapper customer)
+        {
+            UnFilteredCustomerList.Remove(customer);
+            FilteredCustomerList.Remove(customer);
         }
 
         //private methods

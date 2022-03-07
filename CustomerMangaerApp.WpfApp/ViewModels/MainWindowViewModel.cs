@@ -73,7 +73,8 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         {
             if (customer == null) return;
             dataService.RemoveCustomerFromList(customer.GetWrappedCustomer);
-            Load();
+            if(customerList != null)
+            customerList.RemoveCustomer(customer);
         }
         private void EditViewModel_RemoveSelectedCustomerEvent(CustomerWrapper? customer) => Remove(customer);
         private void ListViewModel_OnRefreshRaised() => Load();
