@@ -21,6 +21,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         private DrinkWrapper? DefaultDrink { get; set; }
         private bool isLoading = false;
         private CustomerWrapper? selectedCustomer = null;
+        private List<CustomerWrapper> UnFilteredCustomerList { get; } = new();
 
         //contructors
         public CustomerListViewModel()
@@ -30,7 +31,6 @@ namespace CustomerManagerApp.WpfApp.ViewModels
 
         //properties
         public ObservableCollection<CustomerWrapper> FilteredCustomerList { get; set; } = new();
-        public ObservableCollection<CustomerWrapper> UnFilteredCustomerList { get; } = new();
         public CustomerWrapper? SelectedCustomer
         {
             get => selectedCustomer;
@@ -124,13 +124,6 @@ namespace CustomerManagerApp.WpfApp.ViewModels
             Data = await DataService.CreateDataServiceObjectAsync();
             var list = await Data.GetDrinksAsync();
             DefaultDrink = new(list.First());
-        }
-        private void FilterByName(string FilterText, CustomerWrapper customer)
-        {
-            if (customer.FirstName.Contains(FilterText) && customer.LastName.Contains(FilterText))
-            {
-                FilteredCustomerList.Add(customer);
-            }
         }
     }
 }
