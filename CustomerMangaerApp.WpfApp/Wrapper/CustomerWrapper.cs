@@ -57,9 +57,9 @@ namespace CustomerManagerApp.WpfApp.Wrapper
 
         public string DisplayName => FirstName + " " + LastName;
 
-        public Guid DrinkId
+        public string DrinkId
         {
-            get => new(customer.DrinkID);
+            get => customer.DrinkID;
             set
             {
                 if (value.ToString() != customer.DrinkID)
@@ -83,9 +83,9 @@ namespace CustomerManagerApp.WpfApp.Wrapper
             }
         }
 
-        public DateTimeOffset FirstTime
+        public DateTime FirstTime
         {
-            get => customer.FirstTime;
+            get => customer.FirstTime.DateTime;
             set
             {
                 if (value != customer.FirstTime)
