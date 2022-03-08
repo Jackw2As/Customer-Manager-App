@@ -18,7 +18,7 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             _defaultList = DefaultList;
         }
 
-        public void Create(CustomerEntity Model)
+        public Task Create(CustomerEntity Model)
         {
             var values = _customerList.Find(item => item == Model);
             if(values != null)
@@ -26,20 +26,23 @@ namespace CustomerManagerApp.Backend.Repository.Customer
                 throw new Exception($"Trying to Create a Model that already exists! use Update instead.");
             }
             _customerList.Add(Model);
+            return Task.CompletedTask;
         }
 
-        public void Delete(CustomerEntity Model)
+        public Task Delete(CustomerEntity Model)
         {
             var sucessfulDelete = _customerList.Remove(Model);
             if(!sucessfulDelete)
             {
                 throw new Exception($"Trying to Delete a Model that does not exist. Perhaps it was already removed!");
             }
+            return Task.CompletedTask;
         }
 
-        public void DeleteAll()
+        public Task DeleteAll()
         {
             _customerList.Clear();
+            return Task.CompletedTask;
         }
 
         public Task<CustomerEntity> Read(string id)
@@ -56,7 +59,7 @@ namespace CustomerManagerApp.Backend.Repository.Customer
         {
             return Task.FromResult(_customerList);
         }
-        public void Update(CustomerEntity Model)
+        public Task Update(CustomerEntity Model)
         {
             var success = _customerList.Remove(Model);
             if (!success)
@@ -65,6 +68,7 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             }
             
             _customerList.Add(Model);
+            return Task.CompletedTask;
         }
     }
 }

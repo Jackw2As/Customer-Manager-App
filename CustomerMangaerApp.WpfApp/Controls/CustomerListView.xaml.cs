@@ -1,4 +1,5 @@
 ﻿using CustomerManagerApp.WpfApp.ViewModels;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace CustomerManagerApp.WpfApp.Controls
@@ -13,17 +14,17 @@ namespace CustomerManagerApp.WpfApp.Controls
 
             InitializeComponent();
 
-            ViewModel.RefreshList();
+            Task.Run(()=>ViewModel.RefreshList());
         }
 
-        private void Refresh_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async void Refresh_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            ViewModel.RefreshList();
+            await ViewModel.RefreshList();
         }
 
-        private void new_customer_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async void new_customer_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            ViewModel.AddNewCustomerToList();
+            await ViewModel.AddNewCustomerToList();
         }
 
         private void filter_TextChanged(object sender, TextChangedEventArgs e)
@@ -31,5 +32,6 @@ namespace CustomerManagerApp.WpfApp.Controls
             var test = ViewModel.FilterValue;
             ViewModel.Filter();
         }
+
     }
 }

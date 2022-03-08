@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CustomerManagerApp.WinUI.Wrapper;
 using CustomerManagerApp.Backend.Repository.Customer;
+using System.Threading.Tasks;
 
 namespace CustomerManagerApp.ViewModel
 {
@@ -25,7 +26,7 @@ namespace CustomerManagerApp.ViewModel
             ListViewModel.OnRefreshRaised += ListViewModel_OnRefreshRaised;
 		}
 
-        private void ListViewModel_OnRefreshRaised() => Load();
+        private async Task ListViewModel_OnRefreshRaised() => await Load();
         private void ListViewModel_SelectedCustomerRaisedEvent(CustomerWrapper customer) => EditViewModel.SelectedCustomer = customer;
         
 
@@ -47,7 +48,7 @@ namespace CustomerManagerApp.ViewModel
 
 
 		public bool IsLoading { get; private set; }  = false;
-		public void Load()
+		public async Task Load()
 		{
 			//stops multiple refreshes firing at once.
 			if (IsLoading) return;
@@ -55,8 +56,8 @@ namespace CustomerManagerApp.ViewModel
 
             try
             {
-				ListViewModel.Load();
-				EditViewModel.Load();
+				await ListViewModel.Load();
+				await EditViewModel.Load();
 			}
 			catch(NotImplementedException ex)
             {

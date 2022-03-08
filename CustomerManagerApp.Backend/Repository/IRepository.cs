@@ -9,16 +9,16 @@ namespace CustomerManagerApp.Backend.Repository
 {
     public interface IRepository<T, ID> where T : BaseEntity<ID> where ID : class
     {
-        void Create(T Model);
+        Task Create(T Model);
 
         Task<T> Read(ID id);
         Task<List<T>> ReadAll();
 
-        void Update(T Model);
+        Task Update(T Model);
 
-        void Delete(T Model);
+        Task Delete(T Model);
 
-        void DeleteAll();
+        Task DeleteAll();
 
         
     }

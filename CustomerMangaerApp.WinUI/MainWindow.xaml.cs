@@ -15,6 +15,7 @@ using Windows.Foundation.Collections;
 using CustomerManagerApp.ViewModel;
 using CustomerManagerApp.Backend.Service;
 using CustomerManagerApp.Backend.Repository.Customer;
+using System.Threading.Tasks;
 
 namespace CustomerManagerApp.WinUI
 {
@@ -26,14 +27,14 @@ namespace CustomerManagerApp.WinUI
        public MainWindowViewModel ViewModel { get; set; }
         public MainWindow()
         {
-            Load();
+            Task.Run(() => Load());
         }
 
-        private async void Load()
+        private async Task Load()
         {
             var dataContainer = await DataService.CreateDataServiceObjectAsync();
             ViewModel = new MainWindowViewModel(dataContainer);
-            ViewModel.Load();
+            await ViewModel.Load();
             this.Activated += MainWindow_Activated;
             this.InitializeComponent();
         }

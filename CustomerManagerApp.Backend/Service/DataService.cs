@@ -80,11 +80,11 @@ namespace CustomerManagerApp.Backend.Service
 
         private static readonly List<CustomerEntity> customerList = new();
 
-        public List<CustomerEntity> GetCustomerList()
+        public async Task<List<CustomerEntity>> GetCustomerList()
         {
             if(customerList.Any() == false)
             {
-                LoadCustomersFromRepository();
+                await LoadCustomersFromRepository();
             }
 
             return customerList;
@@ -101,7 +101,7 @@ namespace CustomerManagerApp.Backend.Service
             customerList.Remove(customer);
         }
 
-        private async void SaveCustomersToRepository()
+        private async Task SaveCustomersToRepository()
         {
             try
             {
@@ -127,7 +127,7 @@ namespace CustomerManagerApp.Backend.Service
 
             
         }
-        private async void LoadCustomersFromRepository()
+        private async Task LoadCustomersFromRepository()
         {
             customerList.Clear();
             var list = await customerRepository.ReadAll();
@@ -142,10 +142,10 @@ namespace CustomerManagerApp.Backend.Service
         //
         #region SavingFeatures
         private System.Timers.Timer SaveTimer = new();
-        public async void Refresh()
+        public async Task Refresh()
         {
-            await Task.Factory.StartNew(() => SaveCustomersToRepository());
-            LoadCustomersFromRepository();
+            await SaveCustomersToRepository();
+            await LoadCustomersFromRepository();
         }
 
         private void CreateTimer()
@@ -157,9 +157,9 @@ namespace CustomerManagerApp.Backend.Service
             SaveTimer.Enabled = true;
         }
 
-        private void AutoSave(object sender, ElapsedEventArgs e)
+        private void AutoSave(object? sender, ElapsedEventArgs e)
         {
-            SaveCustomersToRepository();
+           Task.Run(() => SaveCustomersToRepository());
         }
 
         #endregion

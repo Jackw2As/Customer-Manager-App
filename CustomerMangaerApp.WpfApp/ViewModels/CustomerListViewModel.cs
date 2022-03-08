@@ -26,7 +26,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         //contructors
         public CustomerListViewModel()
         {
-            setupModel();
+            Task.Run(()=>setupModel());
         }
 
         //properties
@@ -53,12 +53,12 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         internal event CustomerSelectionChangedEvent? SelectedCustomerChanged;
         internal event RefreshEvent? OnRefresh;
         //methods
-        public void Load()
+        public async Task Load()
         {
             if (Data == null || isLoading) return;
             isLoading = true;
 
-            var Customerscollection = Data!.GetCustomerList();
+            var Customerscollection = await Data!.GetCustomerList();
             UnFilteredCustomerList.Clear();
             FilteredCustomerList.Clear();
 
@@ -75,7 +75,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
             PropertyHasChanged(nameof(FilteredCustomerList));
             isLoading = false;
         }
-        public void RefreshList()
+        public async Task RefreshList()
         {
             if (OnRefresh != null)
             {
@@ -83,10 +83,10 @@ namespace CustomerManagerApp.WpfApp.ViewModels
             }
             else
             {
-                Load();
+                await Load();
             }
         }
-        public async void AddNewCustomerToList()
+        public async Task AddNewCustomerToList()
         {
             if(DefaultDrink == null)
             {
@@ -126,7 +126,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         }
 
         //private methods
-        private async void setupModel()
+        private async Task setupModel()
         {
             Data = await DataService.CreateDataServiceObjectAsync();
             var list = await Data.GetDrinksAsync();

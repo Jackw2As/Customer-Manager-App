@@ -23,11 +23,10 @@ namespace CustomerManagerApp.ViewModel
         {
             dataService = DataService;
             DrinkTypes = new();
-
-            GetDrinks();
+            Task.Run(() => GetDrinks());
         }
 
-        private async void GetDrinks()
+        private async Task GetDrinks()
         {
             var drinkList = await dataService.GetDrinksAsync();
             DrinkTypes.Clear();
@@ -119,9 +118,9 @@ namespace CustomerManagerApp.ViewModel
             SaveSelectedCustomerEvent?.Invoke(SelectedCustomer);
         }
 
-        internal void Load()
+        internal async Task Load()
         {
-            GetDrinks();
+            await GetDrinks();
 
             SelectedCustomer = null;
         }

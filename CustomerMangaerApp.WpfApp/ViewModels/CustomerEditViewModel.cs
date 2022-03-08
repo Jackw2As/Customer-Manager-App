@@ -20,7 +20,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         private CustomerWrapper? selectedCustomer;
 
         //constructors
-        public CustomerEditViewModel() => SetupViewModel();
+        public CustomerEditViewModel() => Task.Run(()=>SetupViewModel());
         
         //properties
         public ObservableCollection<DrinkWrapper> DrinkTypes { get; init; } = new();
@@ -91,7 +91,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         }
 
         //local methods
-        private async void SetupViewModel()
+        private async Task SetupViewModel()
         {
             data = await DataService.CreateDataServiceObjectAsync();
             var drinkList = await data.GetDrinksAsync();

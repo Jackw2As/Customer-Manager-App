@@ -28,25 +28,25 @@ namespace CustomerManagerApp.Backend.Repository.Drink
             return  Task.FromResult(CreateDrinksList());
         }
 
-        public void Create(DrinkEntity Model)
+        public Task Create(DrinkEntity Model)
         {
             string message = $"The Drink Mock Repository Class doesn't support {nameof(Create)} method!";
             throw new NotSupportedException(message);
         }
 
-        public void Delete(DrinkEntity Model)
+        public Task Delete(DrinkEntity Model)
         {
             string message = $"The Drink Mock Repository Class doesn't support {nameof(Delete)} method!";
             throw new NotSupportedException(message);
         }
 
-        public void DeleteAll()
+        public Task DeleteAll()
         {
             string message = $"The Drink Mock Repository Class doesn't support {nameof(DeleteAll)} method!";
             throw new NotSupportedException(message);
         }
         
-        public void Update(DrinkEntity Model)
+        public Task Update(DrinkEntity Model)
         {
             string message = $"The Drink Mock Repository Class doesn't support {nameof(Update)} method!";
             throw new NotSupportedException(message);

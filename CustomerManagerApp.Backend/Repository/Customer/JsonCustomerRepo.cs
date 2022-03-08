@@ -62,7 +62,7 @@ namespace CustomerManagerApp.Backend.Repository.Customer
 
        
 
-        public async void Create(CustomerEntity Model)
+        public async Task Create(CustomerEntity Model)
         {
             while(Entities == null)
             {
@@ -82,7 +82,7 @@ namespace CustomerManagerApp.Backend.Repository.Customer
         }
 
         
-        public async void Delete(CustomerEntity Model)
+        public async Task Delete(CustomerEntity Model)
         {
             while(Entities == null)
             {
@@ -93,7 +93,7 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             return;
         }
 
-        public async void DeleteAll()
+        public async Task DeleteAll()
         {
             await EnqueueQuery(new(QueueRequest.Delete));
             return;
@@ -126,7 +126,7 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             return list;
         }
 
-        public async void Update(CustomerEntity Model)
+        public async Task Update(CustomerEntity Model)
         {
             while(Entities == null)
             {

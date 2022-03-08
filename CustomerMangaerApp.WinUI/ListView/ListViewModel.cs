@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.ViewModel
 {
-    public delegate void RefreshEvent();
+    public delegate Task RefreshEvent();
     public delegate void CustomerChangedEvent(CustomerWrapper customer);
     public class ListViewModel : ViewModelBase
     {
@@ -55,7 +55,7 @@ namespace CustomerManagerApp.ViewModel
         {
             Data = DataService;
         }
-        public async void CustomerAdd()
+        public async Task CustomerAdd()
         {
             var drinks = await Data.GetDrinksAsync();
             var drink = drinks.First().ID;
@@ -77,9 +77,9 @@ namespace CustomerManagerApp.ViewModel
             return new(DatabaseCustomerList);
         }
 
-        internal void Load()
+        internal async Task Load()
         {
-            RefreshDatabaseList();
+            await RefreshDatabaseList();
             Filter();
         }
 
@@ -96,11 +96,11 @@ namespace CustomerManagerApp.ViewModel
             }
         }
 
-        private void RefreshDatabaseList()
+        private async Task RefreshDatabaseList()
         {
-            Data.Refresh();
+            await Data.Refresh();
             DatabaseCustomerList.Clear();
-            var data = Data.GetCustomerList();
+            var data = await Data.GetCustomerList();
             foreach (var customer in data)
             {
                 DatabaseCustomerList.Add(customer);

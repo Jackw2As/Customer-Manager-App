@@ -2,6 +2,7 @@
 using CustomerManagerApp.Backend.Repository.Drink;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace CustomerManagerApp.Test.Backend_Tests
@@ -26,17 +27,8 @@ namespace CustomerManagerApp.Test.Backend_Tests
             return new MockDrinkRepository();
         }
 
-        [Fact(DisplayName = "Load Drinks Sync")]
-        public async void LoadDrinksSync()
-        {
-            var drinksRepo = constructMockRepository();
-            var drinks = await drinksRepo.ReadAll();
-            Assert.NotNull(drinks);
-            Assert.NotEmpty(drinks);
-            Assert.Equal(DefaultDrinkList, drinks);
-        }
         [Fact(DisplayName = "Load Drinks Async")]
-        public async void LoadDrinksAsync()
+        public async Task LoadDrinksAsync()
         {
             var drinksRepo = constructMockRepository();
             var drinks = await drinksRepo.ReadAll();

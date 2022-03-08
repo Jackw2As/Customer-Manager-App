@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using CustomerManagerApp.WpfApp.Wrapper;
 using System;
+using System.Threading.Tasks;
 
 namespace CustomerManagerApp.WpfApp.ViewModels
 {
@@ -20,7 +21,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         //constructors
         public MainWindowViewModel()
         {
-            SetupModel();
+            Task.Run(()=>SetupModel());
         }
 
         //properties
@@ -62,7 +63,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         }
 
         //local methods
-        private async void SetupModel()
+        private async Task SetupModel()
         {
             dataService = await DataService.CreateDataServiceObjectAsync();
             var drinks = await dataService.GetDrinksAsync();
@@ -78,6 +79,6 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         }
         private void EditViewModel_RemoveSelectedCustomerEvent(CustomerWrapper? customer) => Remove(customer);
         private void ListViewModel_OnRefreshRaised() => Load();
-        private void SelectedCustomerChangedEvent(CustomerWrapper? customer) => CustomerEdit.SelectedCustomer = customer;
+        private void SelectedCustomerChangedEvent(CustomerWrapper? customer) => CustomerEdit!.SelectedCustomer = customer;
     }
 }

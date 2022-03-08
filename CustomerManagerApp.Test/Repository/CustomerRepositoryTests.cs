@@ -4,6 +4,7 @@ using CustomerManagerApp.Backend.Repository.Customer;
 using CustomerManagerApp.Backend.Repository.Drink;
 using CustomerManagerApp.Backend.Entities;
 using System;
+using System.Threading.Tasks;
 
 namespace CustomerManagerApp.Test
 {
@@ -17,10 +18,10 @@ namespace CustomerManagerApp.Test
 
             mockDefaultCustomersList = new List<CustomerEntity>
             {
-                new(Guid.NewGuid().ToString(), "John", "1", drinksTypes[0].ID),
-                new(Guid.NewGuid().ToString(), "John", "2", drinksTypes[0].ID),
-                new(Guid.NewGuid().ToString(), "Susan", "1", drinksTypes[0].ID, true),
-                new(Guid.NewGuid().ToString(), "Susan", "2", drinksTypes[0].ID)
+                new(Guid.NewGuid().ToString(), "John", "1", drinksTypes[0].ID, DateTime.UtcNow),
+                new(Guid.NewGuid().ToString(), "John", "2", drinksTypes[0].ID, DateTime.UtcNow),
+                new(Guid.NewGuid().ToString(), "Susan", "1", drinksTypes[0].ID, DateTime.UtcNow, true),
+                new(Guid.NewGuid().ToString(), "Susan", "2", drinksTypes[0].ID, DateTime.UtcNow)
             };  
         }
 
@@ -32,18 +33,18 @@ namespace CustomerManagerApp.Test
         private List<CustomerEntity> mockDefaultCustomersList;
 
 
-        private ICustomerRepository CreateMock()
+        private async Task<ICustomerRepository> CreateMock()
         {
             //Delete Test File
             var loader = new JsonCustomerRepo("Tests");
-            loader.DeleteAll();
+            await loader.DeleteAll();
             
             //Create new Test File
             var mockRepository = new JsonCustomerRepo("Tests");
 
             foreach (var customer in mockDefaultCustomersList)
             {
-                mockRepository.Create(customer);
+                await mockRepository.Create(customer);
             }
 
             return mockRepository;
@@ -56,20 +57,20 @@ namespace CustomerManagerApp.Test
         /// Delete Function.
         /// SaveCustomerAsync method works with a new list.
         /// Tests to see that if no File exists a new file is created with default values.
-        public async void DeleteFile()
+        public async Task DeleteFile()
         {
-            var Loader = CreateMock();
+            var Loader = await CreateMock();
 
             var customerCollection = await Loader.ReadAll();
 
             foreach (var customer in customerCollection)
             {
-                Loader.Delete(customer);
+                await Loader.Delete(customer);
             }
             var ConfirmEmpty = await Loader.ReadAll();
             Assert.Empty(ConfirmEmpty);
 
-            Loader.DeleteAll();
+            await Loader.DeleteAll();
             try
             {
                 var customers = await Loader.ReadAll();
@@ -85,9 +86,9 @@ namespace CustomerManagerApp.Test
         [Fact(DisplayName = "Add Customer")]
         /// Tests:
         /// Adding a new Customer
-        public async void AddNewCustomer()
+        public async Task AddNewCustomer()
         {
-            var Loader = CreateMock();
+            var Loader = await CreateMock();
 
             IEnumerable<CustomerEntity> collection = await Loader.ReadAll();
             if (collection is null)
@@ -97,8 +98,8 @@ namespace CustomerManagerApp.Test
             }
 
             Assert.NotEmpty(collection);
-            CustomerEntity customer = new("1111", "Zack", "0", drinksTypes[0].ID, true);
-            Loader.Create(customer);
+            CustomerEntity customer = new("1111", "Zack", "0", drinksTypes[0].ID, DateTime.UtcNow, true);
+            await Loader.Create(customer);
 
             var customers = await Loader.ReadAll();
             Assert.Contains(customer, customers);
@@ -107,16 +108,16 @@ namespace CustomerManagerApp.Test
         [Fact(DisplayName = "Remove Customer")]
         /// Tests:
         /// Removing a new Customer
-        public async void RemoveNewCustomer()
+        public async Task RemoveNewCustomer()
         {
             //Setup
-            var Loader = CreateMock();
+            var Loader = await CreateMock();
             
             var collection = await Loader.ReadAll();
             CustomerEntity customer = (CustomerEntity)collection[0];
 
             //Delete Customer
-            Loader.Delete(customer);
+            await Loader.Delete(customer);
 
             //Validation
             var customers = await Loader.ReadAll();
@@ -125,9 +126,9 @@ namespace CustomerManagerApp.Test
 
 
         [Fact(DisplayName = "Read All Returns Values")]
-        public async void ReadAllReturnsValues()
+        public async Task ReadAllReturnsValues()
         {
-            var Loader = CreateMock();
+            var Loader = await CreateMock();
             List<CustomerEntity>? collection = await Loader.ReadAll();
             if (collection is null)
             {
