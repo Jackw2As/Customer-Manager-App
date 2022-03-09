@@ -44,6 +44,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
                 }
             }
         }
+
         public string FilterValue { get; set; } = "";
 
         //events
@@ -55,8 +56,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         //methods
         public async Task Load()
         {
-            if (Data == null || isLoading) return;
-            isLoading = true;
+            if (Data == null) return;
 
             var Customerscollection = await Data!.GetCustomerList();
             UnFilteredCustomerList.Clear();
@@ -73,13 +73,12 @@ namespace CustomerManagerApp.WpfApp.ViewModels
             }
             PropertyHasChanged(nameof(UnFilteredCustomerList));
             PropertyHasChanged(nameof(FilteredCustomerList));
-            isLoading = false;
         }
         public async Task RefreshList()
         {
             if (OnRefresh != null)
             {
-                OnRefresh?.Invoke();
+                await OnRefresh!.Invoke();
             }
             else
             {
