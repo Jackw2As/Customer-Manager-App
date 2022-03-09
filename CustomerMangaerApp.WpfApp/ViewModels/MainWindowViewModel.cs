@@ -13,25 +13,27 @@ namespace CustomerManagerApp.WpfApp.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         //fields
-        private DrinkWrapper defaultdrink = new();
-        private DataService dataService;
+        private readonly DataService dataService;
         private CustomerListViewModel? customerList;
         private CustomerEditViewModel? customerEdit;
 
         //constructors
         public MainWindowViewModel()
         {
-            Task.Run(()=>SetupModel());
+            this.dataService = new DataService();
+        }
+        public MainWindowViewModel(DataService dataService)
+        {
+            this.dataService = dataService;
         }
 
         //properties
         public CustomerEditViewModel? CustomerEdit
         {
             get => customerEdit; 
-            set {
-                if (value == null) throw new ArgumentNullException(nameof(value)); 
-                
+            set {                
                 customerEdit = value;
+                if(value != null)
                 value.RemoveCustomerSelected += EditViewModel_RemoveSelectedCustomerEvent;
             }
         }
@@ -39,36 +41,35 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         {
             get => customerList; 
             set {
-                if (value == null) throw new ArgumentNullException(nameof(value));
 
                 customerList = value;
-                value.SelectedCustomerChanged += SelectedCustomerChangedEvent;
-                value.OnRefresh += ListViewModel_OnRefreshRaised;
+                if(value != null)
+                {
+                    value.SelectedCustomerChanged += SelectedCustomerChangedEvent;
+                    value.OnRefresh += ListViewModel_OnRefreshRaised;
+                }
             }
         }
 
         public bool IsLoading { get; private set; } = false;
         
         //methods
-        public void Load()
+        public async Task Load()
         {
             //stops multiple refreshes firing at once.
             if (IsLoading) return;
             IsLoading = true;
 
-            CustomerList?.Load();
+            if (CustomerList != null)
+            {
+                await CustomerList.Load();
+            }
             CustomerEdit?.Load();
 
             IsLoading = false;
         }
 
         //local methods
-        private async Task SetupModel()
-        {
-            dataService = await DataService.CreateDataServiceObjectAsync();
-            var drinks = await dataService.GetDrinksAsync();
-            defaultdrink = new DrinkWrapper(drinks.First());
-        }
 
         private void Remove(CustomerWrapper? customer)
         {
@@ -78,7 +79,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
             customerList.RemoveCustomer(customer);
         }
         private void EditViewModel_RemoveSelectedCustomerEvent(CustomerWrapper? customer) => Remove(customer);
-        private void ListViewModel_OnRefreshRaised() => Load();
-        private void SelectedCustomerChangedEvent(CustomerWrapper? customer) => CustomerEdit!.SelectedCustomer = customer;
+        private async Task ListViewModel_OnRefreshRaised() => await Load();
+        private async Task SelectedCustomerChangedEvent(CustomerWrapper? customer) => await CustomerEdit!.CustomerSelected(customer);
     }
 }

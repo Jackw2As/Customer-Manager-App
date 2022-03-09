@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.WpfApp.ViewModels
 {
-    internal delegate void RefreshEvent();
-    internal delegate void CustomerSelectionChangedEvent(CustomerWrapper? customer);
+    internal delegate Task RefreshEvent();
+    internal delegate Task CustomerSelectionChangedEvent(CustomerWrapper? customer);
     public class CustomerListViewModel : ViewModelBase
     {
         //fields
@@ -26,7 +26,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         //contructors
         public CustomerListViewModel()
         {
-            Task.Run(()=>setupModel());
+            Data = new();
         }
 
         //properties
@@ -123,14 +123,6 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         {
             UnFilteredCustomerList.Remove(customer);
             FilteredCustomerList.Remove(customer);
-        }
-
-        //private methods
-        private async Task setupModel()
-        {
-            Data = await DataService.CreateDataServiceObjectAsync();
-            var list = await Data.GetDrinksAsync();
-            DefaultDrink = new(list.First());
         }
     }
 }

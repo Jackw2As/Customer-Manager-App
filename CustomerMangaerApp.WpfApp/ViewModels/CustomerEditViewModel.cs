@@ -16,25 +16,27 @@ namespace CustomerManagerApp.WpfApp.ViewModels
     public class CustomerEditViewModel : ViewModelBase
     {
         //fields
-        private DataService? data;
+        private DataService data;
         private CustomerWrapper? selectedCustomer;
 
         //constructors
-        public CustomerEditViewModel() => Task.Run(()=>SetupViewModel());
-        
+        public CustomerEditViewModel()
+        {
+            data = new DataService();
+        }
+
         //properties
         public ObservableCollection<DrinkWrapper> DrinkTypes { get; init; } = new();
         public CustomerWrapper? SelectedCustomer
         {
             get => selectedCustomer;
-            set
+            private set
             {
                 if (value != selectedCustomer)
                 {
                     selectedCustomer = value;
                     PropertyHasChanged();
                     PropertyHasChanged(nameof(IsCustomerSelected));
-
                 }
             }
         }
@@ -90,17 +92,19 @@ namespace CustomerManagerApp.WpfApp.ViewModels
             }
         }
 
-        //local methods
-        private async Task SetupViewModel()
+        public async Task CustomerSelected(CustomerWrapper? selectedCustomer)
         {
-            data = await DataService.CreateDataServiceObjectAsync();
-            var drinkList = await data.GetDrinksAsync();
-            DrinkTypes.Clear();
-            foreach (var drink in drinkList)
+            if(DrinkTypes.Count > 1)
             {
-                DrinkTypes.Add(new(drink));
-            }
-        }
+                var drinkList = await data.GetDrinksAsync();
+                foreach (var drink in drinkList)
+                {
+                    DrinkTypes.Add(new(drink));
+                }
 
+                DrinkTypes.Clear();
+            }
+            SelectedCustomer = selectedCustomer;
+        }
     }
 }
