@@ -5,61 +5,59 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
-using System.Security.AccessControl;
 
 namespace CustomerManagerApp.Backend.Repository.Customer
 {
-
     public class JsonCustomerRepo : QueryBaseClass, ICustomerRepository
     {
-        FileInfo PersistentStorage { get; set; }
-        DirectoryInfo ApplicationFolder { get; init; }
-        DirectoryInfo SaveFolder { get; init; }
+        FileInfo SaveFile { get; set; }
         List<CustomerEntity>? Entities { get; set; }
-        FileStream? SaveFileStream { get; set; }
-
-        public JsonCustomerRepo(string FileName)
+        
+        public JsonCustomerRepo() : this("save")
         {
-            // Setup Directories
-            DirectoryInfo applicationRootDirectory = new(Directory.GetCurrentDirectory());
-            ApplicationFolder = applicationRootDirectory.CreateSubdirectory("Customer Manager Application");
-            SaveFolder = ApplicationFolder.CreateSubdirectory("Save");
 
-            // Get/Create File Store
-            string filepath = $"{SaveFolder.FullName}/{FileName}.json";
-            PersistentStorage = new(filepath);
-            if (!PersistentStorage.Exists)
-            {
-               SaveFileStream = PersistentStorage.Create();
-            }
+        }
 
-            //Setup Base Class
+        public JsonCustomerRepo(string fileName)
+        {
+            SaveFile = FindSaveFile(fileName);
+
             base.WriteRequest += HandleWriteRequest;
             base.ReadRequest += HandleReadRequest;
             base.DeleteRequest += HandleDeleteRequest;
         }
 
-        public JsonCustomerRepo()
+        private FileInfo FindSaveFile(string fileName)
         {
-            // Setup Directories
-            DirectoryInfo applicationRootDirectory = new(Directory.GetCurrentDirectory());
-            ApplicationFolder = applicationRootDirectory.CreateSubdirectory("Customer Manager Application");
-            SaveFolder = ApplicationFolder.CreateSubdirectory("Save");
+            //Find the Folder the File is located in
+            string documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            // Get/Create File Store
-            string filepath = $"{SaveFolder.FullName}/customer.json";
-            PersistentStorage = new(filepath);
-            if (!PersistentStorage.Exists)
+            var programFolder = Directory.CreateDirectory($"{documentsFolder}/Jacks Customer Manager Program");
+
+            var savelocation = programFolder.CreateSubdirectory("saves");
+
+            var files = savelocation.GetFiles(fileName);
+
+            if(files != null)
             {
-                SaveFileStream = PersistentStorage.Create();
+                foreach (var item in files)
+                {
+                    //return the first item that isn't null
+                    if (item != null)
+                    { 
+                        if(item.Exists) return item; 
+                    }
+                }
             }
 
-            //Setup Base Class
-            base.WriteRequest += HandleWriteRequest;
-            base.ReadRequest += HandleReadRequest;
-            base.DeleteRequest += HandleDeleteRequest;
+            //No Existing File Was Found
+            var file = new FileInfo($"{savelocation.FullName}/{fileName}.json");
+            if(!file.Exists)
+            {
+                file.Create();
+            }
+            return file;
         }
-
        
 
         public async Task Create(CustomerEntity Model)
@@ -146,46 +144,39 @@ namespace CustomerManagerApp.Backend.Repository.Customer
             if (query.Customer == null)
             {
                 Entities = null;
-                if (SaveFileStream != null)
-                {
-                    SaveFileStream.Dispose();
-                }
-                PersistentStorage.Delete();
-                PersistentStorage.Refresh();
+                SaveFile.Delete();
+                return;
             }
-            else
-            {
-                while(Entities == null)
-                {
-                    await EnqueueQuery(new(QueueRequest.Read));
-                }
-                var sucessful = Entities.Remove(query.Customer);
 
-                if (!sucessful)
-                {
-                    throw new ArgumentException("CustomerEntity trying to be removed from the file doesn't exist", nameof(query.Customer));
-                }
+            while (Entities == null)
+            {
+                await EnqueueQuery(new(QueueRequest.Read));
             }
-            return;
+            var sucessful = Entities.Remove(query.Customer);
+
+            if (!sucessful)
+            {
+                throw new ArgumentException("CustomerEntity trying to be removed from the file doesn't exist", nameof(query.Customer));
+            }
         }
         private async Task HandleReadRequest(QueueQuery query) => Entities = await DeserializeFile();
         private async Task HandleWriteRequest(QueueQuery query) => await SerializeFile();
 
-        async Task SerializeFile()
+        private async Task SerializeFile()
         {
             try
             {
-                if (SaveFileStream == null)
+                using (var fileStream = SaveFile.OpenWrite())
                 {
-                    SaveFileStream = PersistentStorage.Create();
+                    if(fileStream != null)
+                    {
+                        while (fileStream.CanWrite == false)
+                        {
+                            Thread.Sleep(500);
+                        }
+                        await JsonSerializer.SerializeAsync(fileStream, Entities);
+                    }
                 }
-
-                while (SaveFileStream.CanWrite == false)
-                {
-                    Thread.Sleep(500);
-                }
-
-                await JsonSerializer.SerializeAsync(SaveFileStream, Entities);
             }
             catch (IOException ex)
             {
@@ -193,28 +184,24 @@ namespace CustomerManagerApp.Backend.Repository.Customer
                 Thread.Sleep(500);
                 await EnqueueQuery(new(QueueRequest.Write));
             }
-
-            return;
         }
         private async Task<List<CustomerEntity>?> DeserializeFile()
         {
             try
             {
-                if(SaveFileStream == null)
+                using (var fileStream = SaveFile.OpenRead())
                 {
-                    SaveFileStream = PersistentStorage.Create();
-                }
+                    if (fileStream == null) throw new NullReferenceException(nameof(fileStream));
 
-                while (SaveFileStream.CanRead == false)
-                {
-                    Thread.Sleep(500);
-                }
+                    while (fileStream.CanRead == false)
+                    {
+                        Thread.Sleep(500);
+                    }
 
-                List<CustomerEntity>? customers;
-
-                customers = await JsonSerializer.DeserializeAsync(SaveFileStream, typeof(List<CustomerEntity>))
+                    return await JsonSerializer.DeserializeAsync
+                        (fileStream, typeof(List<CustomerEntity>)) 
                         as List<CustomerEntity>;
-                return customers;
+                }
             }
             catch(JsonException ex)
             {
