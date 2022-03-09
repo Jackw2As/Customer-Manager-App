@@ -79,7 +79,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
             customerList.RemoveCustomer(customer);
         }
         private void EditViewModel_RemoveSelectedCustomerEvent(CustomerWrapper? customer) => Remove(customer);
-        private async Task ListViewModel_OnRefreshRaised() => await Load();
-        private async Task SelectedCustomerChangedEvent(CustomerWrapper? customer) => await CustomerEdit!.CustomerSelected(customer);
+        private async void ListViewModel_OnRefreshRaised() => await Load();
+        private async void SelectedCustomerChangedEvent(CustomerWrapper? customer) => await CustomerEdit!.CustomerSelected(customer);
     }
 }

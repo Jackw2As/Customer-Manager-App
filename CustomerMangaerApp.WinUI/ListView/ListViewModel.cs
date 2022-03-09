@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.ViewModel
 {
-    public delegate Task RefreshEvent();
+    public delegate void RefreshEvent();
     public delegate void CustomerChangedEvent(CustomerWrapper customer);
     public class ListViewModel : ViewModelBase
     {

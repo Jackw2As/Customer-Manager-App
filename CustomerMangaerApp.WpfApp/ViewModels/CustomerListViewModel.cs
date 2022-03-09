@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace CustomerManagerApp.WpfApp.ViewModels
 {
-    internal delegate Task RefreshEvent();
-    internal delegate Task CustomerSelectionChangedEvent(CustomerWrapper? customer);
+    internal delegate void RefreshEvent();
+    internal delegate void CustomerSelectionChangedEvent(CustomerWrapper? customer);
     public class CustomerListViewModel : ViewModelBase
     {
         //fields
@@ -78,7 +78,7 @@ namespace CustomerManagerApp.WpfApp.ViewModels
         {
             if (OnRefresh != null)
             {
-                await OnRefresh!.Invoke();
+                OnRefresh!.Invoke();
             }
             else
             {

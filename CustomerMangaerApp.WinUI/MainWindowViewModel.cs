@@ -31,7 +31,7 @@ namespace CustomerManagerApp.ViewModel
             ListViewModel.OnRefreshRaised += ListViewModel_OnRefreshRaised;
 		}
 
-        private async Task ListViewModel_OnRefreshRaised() => await Load();
+        private async void ListViewModel_OnRefreshRaised() => await Load();
         private void ListViewModel_SelectedCustomerRaisedEvent(CustomerWrapper customer) => EditViewModel.SelectedCustomer = customer;
         
 
