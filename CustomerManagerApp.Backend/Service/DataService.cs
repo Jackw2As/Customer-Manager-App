@@ -11,45 +11,21 @@ namespace CustomerManagerApp.Backend.Service
 {
     public class DataService
     {
-        private static IDrinkRepository drinkRepository;
-        private static ICustomerRepository customerRepository;
-        public async static Task<DataService> CreateDataServiceObjectAsync()
+        private readonly static IDrinkRepository drinkRepository;
+        private readonly static ICustomerRepository customerRepository;
+
+        static DataService()
         {
-            if (drinkRepository == null)
-            {
-                drinkRepository = new MockDrinkRepository();
-            }
-            if (customerRepository == null)
-            {
-                customerRepository = await setupMockCustomerRepository();
-            }
-
-            return new DataService();
-
-            static async Task<MockCustomerRepository> setupMockCustomerRepository()
-            {
-                var drinks = await drinkRepository.ReadAll();
-                var drinkId = drinks.First().ID;
-                if (drinks == null) throw new ArgumentNullException($"{nameof(drinks)} is null. Something went wrong with {nameof(drinkRepository.ReadAll)} method");
-
-                List<CustomerEntity> list = new List<CustomerEntity>()
-            {
-                new CustomerEntity(Guid.NewGuid().ToString(), "Jack", "Yellow", drinkId, new DateTime(2020, 09, 05)),
-                new CustomerEntity(Guid.NewGuid().ToString(), "John", "Blue", drinkId, new DateTime(2011, 09, 05)),
-                new CustomerEntity(Guid.NewGuid().ToString(), "Sarah", "Purple", drinkId, new DateTime(2017, 08, 06))
-            };
-
-                return new MockCustomerRepository(list);
-            }
+            drinkRepository = new MockDrinkRepository();
+            customerRepository = new MockCustomerRepository(drinkRepository);
         }
 
 
-
-        private DataService()
+        public DataService()
         {
             //CreateTimer();
+            return;
         }
-
 
         //
         //  Drinks
