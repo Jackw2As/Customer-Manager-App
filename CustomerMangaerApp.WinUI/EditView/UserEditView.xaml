@@ -17,7 +17,7 @@
 
             <CheckBox x:Name="isDeveloper" Content="Is Developer" Margin="10" IsChecked="{x:Bind ViewModel.SelectedCustomer.IsDeveloper,Mode=TwoWay}"/>
 
-            <ComboBox x:Name="DrinkDropDown" Header="Faviourte Drink" Margin="10" HorizontalAlignment="Stretch" 
+            <ComboBox x:Name="DrinkDropDown" Header="Favourite Drink" Margin="10" HorizontalAlignment="Stretch" 
                       ItemsSource="{x:Bind ViewModel.DrinkTypes, Mode=OneWay}"
                       DisplayMemberPath="Name"   
                       SelectedValuePath="ID"

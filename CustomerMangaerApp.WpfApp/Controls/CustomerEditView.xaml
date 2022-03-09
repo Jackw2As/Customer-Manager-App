@@ -25,7 +25,7 @@
             <CheckBox x:Name="isDeveloper" Content="Is Developer" Margin="10" 
                       IsChecked="{Binding SelectedCustomer.IsDeveloper,Mode=TwoWay}"/>
 
-            <TextBlock Text="Faviourte Drink" />
+            <TextBlock Text="Favourite Drink" />
             <ComboBox x:Name="DrinkDropDown" Margin="10" HorizontalAlignment="Stretch" 
                       ItemsSource="{Binding DrinkTypes, Mode=OneWay}"
                       DisplayMemberPath="Name"   
