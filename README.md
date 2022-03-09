@@ -24,21 +24,21 @@ The simplest way to Run this project is to download the project into Visual Stud
 I might offer a deployed solution in the future. However as of writing this there are still a few bugs that need to be ironed out.
 
 By default the project uses the MockCustomerRepository, which only stores data in-memory and data won't be saved upon closing the application. 
-If you want to project to store data to a file on your computer then you'll have to make a small change in the DataService Class(See switching to JsonCustomerRepository).
-However this program doesn't have a feature to delete the file and you'll have to remove the file created for storage manually. 
-The File should be saved somewhere inside the project folder, however I offer no guarentee that it will be saved there. 
+If you would like to switch to using a presistent File Storage then follow the steps in Switching to JsonCustomerRepository. 
 
 ### Switching to JsonCustomerRepository
 The DataService Class is located in the namesplace CustomerManagerApp.Backend.Service or CustomerManagerApp/Backend/Service.
-Open this file and go to line 24. It should look something like:
+Open this file and go to line 20. It should look something like:
 
-    customerRepository = await setupMockCustomerRepository();
+    customerRepository = new MockCustomerRepository();
 
 Replace this line with:
 
     customerRepository = new JsonCustomerRepo();
 
 The program should now save any data to a File in a json format.
+
+Note: The file storage needs to be manually deleted. It can be found in the Documents\Jacks Customer Manager Program\saves folder.
 
 # Contributing
 Jackw2As - John Peter Aalders
