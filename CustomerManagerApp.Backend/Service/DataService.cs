@@ -23,7 +23,7 @@ namespace CustomerManagerApp.Backend.Service
 
         public DataService()
         {
-            //CreateTimer();
+            CreateTimer();
             return;
         }
 
@@ -128,14 +128,14 @@ namespace CustomerManagerApp.Backend.Service
         {
             SaveTimer = new(10000); //10 Second Timer
             
-            SaveTimer.Elapsed += AutoSave;
+            SaveTimer.Elapsed += OnSaveEvent;
             SaveTimer.AutoReset = true;
             SaveTimer.Enabled = true;
         }
 
-        private void AutoSave(object? sender, ElapsedEventArgs e)
+        private async void OnSaveEvent(object? sender, ElapsedEventArgs e)
         {
-           Task.Run(() => SaveCustomersToRepository());
+           await SaveCustomersToRepository();
         }
 
         #endregion
