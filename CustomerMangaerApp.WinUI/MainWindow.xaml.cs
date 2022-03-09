@@ -27,22 +27,8 @@ namespace CustomerManagerApp.WinUI
        public MainWindowViewModel ViewModel { get; set; }
         public MainWindow()
         {
-            Task.Run(() => Load());
-        }
-
-        private async Task Load()
-        {
-            var dataContainer = await DataService.CreateDataServiceObjectAsync();
-            ViewModel = new MainWindowViewModel(dataContainer);
-            await ViewModel.Load();
-            this.Activated += MainWindow_Activated;
+            ViewModel = new MainWindowViewModel();
             this.InitializeComponent();
-        }
-
-        //When the Window is activated we load the Customer Data
-        private void MainWindow_Activated(object sender, WindowActivatedEventArgs args)
-        {
-
         }
     }
 }

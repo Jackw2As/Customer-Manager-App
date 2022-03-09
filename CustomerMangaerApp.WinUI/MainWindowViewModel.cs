@@ -12,6 +12,11 @@ namespace CustomerManagerApp.ViewModel
 	{
 		private readonly DataService dataService;
 
+		public MainWindowViewModel() : this(new DataService())
+        {
+
+        }
+
 		public MainWindowViewModel(DataService DataService)
 		{
 			this.dataService = DataService;

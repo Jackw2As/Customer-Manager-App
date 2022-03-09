@@ -106,7 +106,5 @@ namespace CustomerManagerApp.ViewModel
                 DatabaseCustomerList.Add(customer);
             }
         }
-
-        
     }
 }
